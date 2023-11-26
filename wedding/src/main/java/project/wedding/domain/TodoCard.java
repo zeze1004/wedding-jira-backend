@@ -2,19 +2,14 @@ package project.wedding.domain;
 
 import java.util.Date;
 
-import lombok.Setter;
-
-@Setter
 public class TodoCard {
-	private static int cardCount = -1;
-	public String status;
-	public int id;
-	public String title;
-	public String todo;
-	public Date date;
+	private Status status;
+	private int id;
+	private String title;
+	private String todo;
+	private Date date;
 
 	public TodoCard() {
-		this.id = ++cardCount;
-		this.status = "Backlog";
+		this.status = Status.BACKLOG;
 	}
 }
