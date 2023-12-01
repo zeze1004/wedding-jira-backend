@@ -1,4 +1,4 @@
-package project.wedding.domain;
+package project.wedding.policy;
 
 public interface CreatePolicy {
     boolean isSatisfied();
