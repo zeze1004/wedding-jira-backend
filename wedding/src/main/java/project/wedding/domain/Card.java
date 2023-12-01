@@ -10,23 +10,17 @@ public class Card {
 	private String title;
 	private String todo;
 	private Date date;
+    private int id;
 
-    // 신규 카드 생성
-	public Card() {
-		this.status = Status.BACKLOG;
-	}
-
-    // 카드 이동
-    public Card(Status status) {
+    public Card(Status status, String title, String todo, Date date, int id) {
         this.status = status;
-    }
-
-    public Card(String title, String todo) {
         this.title = title;
         this.todo = todo;
+        this.date = date;
+        this.id = id;
     }
 
-    public Card(Date date) {
-        this.date = date;
+    public void setId(int id) {
+        this.id = id;
     }
 }
