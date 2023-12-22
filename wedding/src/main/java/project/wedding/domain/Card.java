@@ -1,26 +1,26 @@
 package project.wedding.domain;
 
-import java.util.Date;
+import lombok.Getter;
 
-/**
- * TodoCard의 속성을 지닌 객체
- */
+@Getter
 public class Card {
-	private Status status;
-	private String title;
-	private String todo;
-	private Date date;
-    private int id;
+    private final int MAX_TODO = 3;  // 한 카드당 투두는 최대 3개까지만 생성 가능
+    private final int id;
+    private String title;
+    private String[][] todos;       // [["unchecked", "todo"], ...]
+    private Status status;
 
-    public Card(Status status, String title, String todo, Date date, int id) {
-        this.status = status;
-        this.title = title;
-        this.todo = todo;
-        this.date = date;
-        this.id = id;
+    public Card() {
+        this.id = CardIdMamager.getLastId();
+        this.todos = new String[MAX_TODO][2];
+        this.status = Status.BACKLOG;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getCardId() {
+        return this.id;
+    }
+
+    public String[][] getTodos(int cardId) {
+        return this.todos;
     }
 }
