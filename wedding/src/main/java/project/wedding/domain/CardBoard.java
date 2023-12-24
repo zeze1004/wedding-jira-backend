@@ -1,11 +1,6 @@
 package project.wedding.domain;
 
-import static java.io.FileDescriptor.*;
-
-import java.io.BufferedReader;
-import java.io.Reader;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

@@ -1,16 +1,6 @@
 package project.wedding.domain;
 
-import static java.lang.System.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
-
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.BooleanAssert;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
