@@ -1,5 +1,7 @@
 package project.wedding.domain;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 
 @Getter
@@ -7,12 +9,12 @@ public class Card {
     private final int MAX_TODO = 3;  // 한 카드당 투두는 최대 3개까지만 생성 가능
     private final int id;
     private String title;
-    private String[][] todos;       // [["unchecked", "todo"], ...]
+    private ArrayList<String>[] todos;       // [["unchecked", "todo"], ...]
     private Status status;
 
     public Card() {
         this.id = CardIdMamager.getLastId();
-        this.todos = new String[MAX_TODO][2];
+        this.todos = new ArrayList[MAX_TODO];
         this.status = Status.BACKLOG;
     }
 
@@ -20,7 +22,7 @@ public class Card {
         return this.id;
     }
 
-    public String[][] getTodos(int cardId) {
+    public ArrayList<String>[] getTodos(int cardId) {
         return this.todos;
     }
 }
