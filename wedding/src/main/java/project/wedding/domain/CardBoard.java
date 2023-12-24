@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CardBoard {
-    LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();
+    private LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();
 
     public boolean createCard() {
         if (isSatisfied()) {
