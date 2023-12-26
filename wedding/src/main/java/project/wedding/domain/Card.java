@@ -1,6 +1,6 @@
 package project.wedding.domain;
 
-import java.util.ArrayList;
+import java.util.EnumMap;
 
 import lombok.Getter;
 
@@ -9,12 +9,12 @@ public class Card {
     private final int MAX_TODO = 3;  // 한 카드당 투두는 최대 3개까지만 생성 가능
     private final int id;
     private String title;
-    private ArrayList<String>[] todos;       // [["unchecked", "todo"], ...]
-    private Status status;
+    private final EnumMap<CheckBox, String> todoMap;
+    private final Status status;
 
     public Card() {
         this.id = CardIdMamager.getLastId();
-        this.todos = new ArrayList[MAX_TODO];
+        this.todoMap = new EnumMap<>(CheckBox.class);
         this.status = Status.BACKLOG;
     }
 
@@ -22,7 +22,7 @@ public class Card {
         return this.id;
     }
 
-    public ArrayList<String>[] getTodos(int cardId) {
-        return this.todos;
+    public EnumMap<CheckBox, String> getTodos(int cardId) {
+        return this.todoMap;
     }
 }
