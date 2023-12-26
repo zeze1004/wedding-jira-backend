@@ -1,20 +1,18 @@
 package project.wedding.domain;
 
-import java.util.EnumMap;
-
 import lombok.Getter;
 
 @Getter
 public class Card {
-    private final int MAX_TODO = 3;  // 한 카드당 투두는 최대 3개까지만 생성 가능
-    private final int id;
+    private static final int MAX_TODO = 3;
+    private final int id; // cardId
     private String title;
-    private final EnumMap<CheckBox, String> todoMap;
-    private final Status status;
+    private final TodoList todoList;
+    private final Status status; // cardStatus
 
     public Card() {
         this.id = CardIdMamager.getLastId();
-        this.todoMap = new EnumMap<>(CheckBox.class);
+        this.todoList = new TodoList();
         this.status = Status.BACKLOG;
     }
 
@@ -22,7 +20,24 @@ public class Card {
         return this.id;
     }
 
-    public EnumMap<CheckBox, String> getTodos(int cardId) {
-        return this.todoMap;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void writeTodo(TodoList.TodoEnum todoEnum, String todo) {
+        this.todoList.writeTodo(todoEnum, todo);
+    }
+
+    public void changeCheckStatus(TodoList.TodoEnum todoEnum) {
+        this.todoList.changeCheckStatus(todoEnum);
+    }
+
+    public String toString() {
+        return "Card{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", todoMap=" + todoList.getTodoMap() +
+            ", status=" + status +
+            '}';
     }
 }
