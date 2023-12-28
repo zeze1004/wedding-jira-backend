@@ -1,15 +1,19 @@
 package project.wedding.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CardBoard {
     private LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();
 
     public boolean createCard() {
         if (isSatisfied()) {
-            Card card = new Card();
+            // Card card = new Card();
+            Card card = CardFactory.getCardInstance();
             cardList.put(card.getCardId(), card);
             return true;
         }
@@ -20,18 +24,17 @@ public class CardBoard {
         return cardList.size() <= 20;
     }
 
-    public String getAllValues() {
-        StringBuilder result = new StringBuilder("[");
-        for (Map.Entry<Integer, Card> entrySet : cardList.entrySet()) {
-            result.append(Arrays.deepToString(
-                new String[] {entrySet.getKey() + ": " + Arrays.deepToString(
-                    entrySet.getValue().getTodos(entrySet.getKey()))})).append(", ");
+    public ArrayList getAllTodoCards() {
+        ArrayList<Card> todoCards = new ArrayList<>(cardList.values());
+        for (Map.Entry<Integer, Card> integerCardEntry : cardList.entrySet()) {
+            System.out.println(integerCardEntry.getKey() + " " + integerCardEntry.getValue());
         }
-        if (result.length() > 1) {
-            result.delete(result.length() - 2, result.length()); // 마지막 쉼표 제거
-        }
-        result.append("]");
-        System.out.println(result.toString());
-        return result.toString();
+        return todoCards;
+    }
+
+    public ArrayList getAllProgressCards() {
+        List<Card> progressCards = new ArrayList<>(cardList.values());
+        return progressCards.stream()
+            .filter(card -> card.getStatus().equals(Status.PROGRESS)).collect(Collectors.toCollection(ArrayList::new));
     }
 }
