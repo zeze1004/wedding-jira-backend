@@ -51,11 +51,13 @@ public class Card {
     }
 
     public String toString() {
-        return "Card{" +
-            "id=" + cardId +
-            ", title='" + title + '\'' +
-            ", todoList=" + todoList +
-            ", status=" + cardStatus +
-            '}';
+        return """
+            Card{
+                CardId=%d,
+                title='%s',
+                todoList=%s,
+                status=%s
+            }
+            """.formatted(cardId, title, todoList, cardStatus);
     }
 }
