@@ -1,7 +1,6 @@
 package project.wedding.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ public class CardBoard {
 
     public boolean createCard() {
         if (isSatisfied()) {
-            // Card card = new Card();
             Card card = CardFactory.getCardInstance();
             cardList.put(card.getCardId(), card);
             return true;
@@ -35,6 +33,6 @@ public class CardBoard {
     public ArrayList getAllProgressCards() {
         List<Card> progressCards = new ArrayList<>(cardList.values());
         return progressCards.stream()
-            .filter(card -> card.getStatus().equals(Status.PROGRESS)).collect(Collectors.toCollection(ArrayList::new));
+            .filter(card -> card.getCardStatus().equals(CardStatus.PROGRESS)).collect(Collectors.toCollection(ArrayList::new));
     }
 }
