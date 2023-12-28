@@ -30,6 +30,11 @@ public class Card {
         this.todoList.add(todoArray);
     }
 
+    public List<Object> getTodo(String todoId) {
+        return findTodoList(todoId);
+    }
+
+
     public void changeCheckStatus(String todoId) {
         List<Object> todoArray = findTodoList(todoId);
         boolean checkStatus = (boolean) todoArray.get(1);
