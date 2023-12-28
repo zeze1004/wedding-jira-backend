@@ -1,5 +1,5 @@
 package project.wedding.domain;
 
-public enum Status {
+public enum CardStatus {
     BACKLOG, PROGRESS, DONE
 }
