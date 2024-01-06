@@ -3,11 +3,10 @@ package project.wedding.domain;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CardBoard {
-    private LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();
+    private final LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();
 
     public boolean createCard() {
         if (isSatisfied()) {
@@ -15,24 +14,43 @@ public class CardBoard {
             cardList.put(card.getCardId(), card);
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("카드는 최대 20개까지만 만들 수 있습니다.");
     }
 
     private boolean isSatisfied() {
         return cardList.size() <= 20;
     }
 
-    public ArrayList getAllTodoCards() {
-        ArrayList<Card> todoCards = new ArrayList<>(cardList.values());
-        for (Map.Entry<Integer, Card> integerCardEntry : cardList.entrySet()) {
-            System.out.println(integerCardEntry.getKey() + " " + integerCardEntry.getValue());
-        }
-        return todoCards;
+    public ArrayList<Card> getAllCards() {
+        return new ArrayList<>(cardList.values());
     }
 
-    public ArrayList getAllProgressCards() {
-        List<Card> progressCards = new ArrayList<>(cardList.values());
-        return progressCards.stream()
-            .filter(card -> card.getCardStatus().equals(CardStatus.PROGRESS)).collect(Collectors.toCollection(ArrayList::new));
+    public ArrayList<Card> getAllBacklogCards() {
+        List<Card> backlogCards = new ArrayList<>(cardList.values());
+        return backlogCards.stream()
+            .filter(card -> card.getCardStatus().equals(CardStatus.BACKLOG)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Card getCardById(int cardId) {
+        if (cardList.get(cardId) == null) {
+            throw new IllegalArgumentException("해당 cardId가 존재하지 않습니다.");
+        }
+        return cardList.get(cardId);
+    }
+
+    public List<Integer> getAllCardId() {
+        List<Card> allCards = new ArrayList<>(cardList.values());
+        return allCards.stream()
+            .map(Card::getCardId)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return """
+            CardBoard{
+                cardList=%s
+            }
+            """.formatted(cardList);
     }
 }
