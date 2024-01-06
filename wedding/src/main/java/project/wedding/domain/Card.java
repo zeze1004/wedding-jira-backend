@@ -2,14 +2,15 @@ package project.wedding.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.Getter;
 
 @Getter
 public class Card {
     private final int cardId;
-    private String title;
-    private final List<List<Object>> todoList;
+    private String cardTitle;
+    private final List<Todo> todoList;
     private final CardStatus cardStatus;
 
     public Card() {
@@ -18,41 +19,38 @@ public class Card {
         this.cardStatus = CardStatus.BACKLOG;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCardTitle(String cardTitle) {
+        this.cardTitle = cardTitle;
     }
 
-    public void addTodo(String todoId, boolean checkStatus, String todo) {
-        List<Object> todoArray = new ArrayList<>();
-        todoArray.add(todoId);
-        todoArray.add(checkStatus);
-        todoArray.add(todo);
-        this.todoList.add(todoArray);
+    public void addTodoList(String todoId, String todoDescription) {
+        todoList.add(new Todo(todoId, todoDescription));
     }
 
-    public List<Object> getTodo(String todoId) {
-        return findTodoList(todoId);
+    // todoList에 담겨진 Todo 객체의 todoDescription 수정
+    public void modifyTodoDescription(String todoId, String todoDescription) {
+        getTodoById(todoId).modifyTodoDescription(todoDescription);
     }
 
-
+    // todoList에 담겨진 Todo 객체의 checkStatus 수정
     public void changeCheckStatus(String todoId) {
-        List<Object> todoArray = findTodoList(todoId);
-        boolean checkStatus = (boolean) todoArray.get(1);
-        todoArray.set(1, !checkStatus);
+        getTodoById(todoId).changeCheckStatus();
     }
 
-    public void changeTodo(String todoId, String todo) {
-        List<Object> todoArray = findTodoList(todoId);
-        todoArray.set(2, todo);
+    // todoList에 담겨진 Todo 객체 삭제
+    public void deleteTodo(String todoId) {
+        todoList.remove(getTodoById(todoId));
     }
 
-    public List<Object> findTodoList(String todoId) {
-        for (List<Object> todoArray : todoList) {
-            if (todoArray.get(0).equals(todoId)) {
-                return todoArray;
-            }
+    public Todo getTodoById(String todoId) {
+        Optional<Todo> oneTodo = todoList.stream()
+            .filter(todo -> todo.getTodoId().equals(todoId))
+            .findFirst();
+        if (oneTodo.isPresent()) {
+            return oneTodo.get();
+        } else {
+            throw new IllegalArgumentException("해당 todoId가 존재하지 않습니다.");
         }
-        throw new IllegalArgumentException("해당하는 todo가 없습니다.");
     }
 
     public String toString() {
@@ -60,9 +58,8 @@ public class Card {
             Card{
                 CardId=%d,
                 title='%s',
-                todoList=%s,
-                status=%s
+                cardStatus=%s
             }
-            """.formatted(cardId, title, todoList, cardStatus);
+            """.formatted(cardId, cardTitle, cardStatus);
     }
 }
