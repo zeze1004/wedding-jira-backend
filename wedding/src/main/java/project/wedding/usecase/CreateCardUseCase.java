@@ -18,10 +18,7 @@ public class CreateCardUseCase {
 
     public void createCard(String userId) {
         CardBoard container = cardContainerRepository.findByUserId(userId);
-        boolean isCreated = container.createCard();
+        container.createCard();
         logger.info("ID: " + userId + "의 카드가 생성됐습니다.");
-        if (!isCreated) {
-            throw new RuntimeException("카드 생성이 실패했습니다.");
-        }
     }
 }

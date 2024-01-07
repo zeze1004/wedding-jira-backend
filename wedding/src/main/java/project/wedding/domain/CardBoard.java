@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 public class CardBoard {
     private final LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();
 
-    public boolean createCard() {
+    public void createCard() {
         if (isSatisfied()) {
             Card card = CardFactory.getCardInstance();
             cardList.put(card.getCardId(), card);
-            return true;
+            return;
         }
         throw new IllegalArgumentException("카드는 최대 20개까지만 만들 수 있습니다.");
     }
