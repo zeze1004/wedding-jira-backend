@@ -21,14 +21,13 @@ public class CardBoard {
         return cardList.size() <= 20;
     }
 
-    public ArrayList<Card> getAllCards() {
-        return new ArrayList<>(cardList.values());
-    }
+    public List<Card> getAllCards() { return List.copyOf(cardList.values()); }
 
-    public ArrayList<Card> getAllBacklogCards() {
-        List<Card> backlogCards = new ArrayList<>(cardList.values());
+    public List<Card> getAllBacklogCards() {
+        List<Card> backlogCards = List.copyOf(cardList.values());
         return backlogCards.stream()
-            .filter(card -> card.getCardStatus().equals(CardStatus.BACKLOG)).collect(Collectors.toCollection(ArrayList::new));
+            .filter(card -> card.getCardStatus() == CardStatus.BACKLOG)
+            .collect(Collectors.toList());
     }
 
     public Card getCardById(int cardId) {
