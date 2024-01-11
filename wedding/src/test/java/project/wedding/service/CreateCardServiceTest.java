@@ -1,4 +1,4 @@
-package project.wedding.usecase;
+package project.wedding.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,7 +17,7 @@ import project.wedding.domain.CardBoard;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("user가 카드를 생성합니다.")
-class CreateCardUseCaseTest {
+class CreateCardServiceTest {
     @Mock
     CardContainerRepository cardContainerRepository;
 
@@ -26,10 +26,10 @@ class CreateCardUseCaseTest {
 
         User user1 = new User("ODEE1");
 
-        CreateCardUseCase createCardUseCase = new CreateCardUseCase(cardContainerRepository);
+        CreateCardService createCardService = new CreateCardService(cardContainerRepository);
 
         when(cardContainerRepository.findByUserId(user1.getUserId())).thenReturn(new CardBoard());
-        createCardUseCase.createCard("ODEE1");
+        createCardService.createCard("ODEE1");
 
         verify(cardContainerRepository, times(1)).findByUserId(user1.getUserId());
 

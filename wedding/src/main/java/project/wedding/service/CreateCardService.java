@@ -1,18 +1,21 @@
-package project.wedding.usecase;
+package project.wedding.service;
 
 import java.util.logging.Logger;
+
+import org.springframework.stereotype.Service;
 
 import project.wedding.domain.CardBoard;
 import project.wedding.domain.CardContainerRepository;
 
 import lombok.extern.log4j.Log4j;
 
+@Service
 @Log4j
-public class CreateCardUseCase {
+public class CreateCardService {
     private final CardContainerRepository cardContainerRepository;
-    private final Logger logger = Logger.getLogger(CreateCardUseCase.class.getName());
+    private final Logger logger = Logger.getLogger(CreateCardService.class.getName());
 
-    public CreateCardUseCase(CardContainerRepository cardContainerRepository) {
+    public CreateCardService(CardContainerRepository cardContainerRepository) {
         this.cardContainerRepository = cardContainerRepository;
     }
 
