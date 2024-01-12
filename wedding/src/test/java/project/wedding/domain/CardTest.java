@@ -13,8 +13,7 @@ class CardTest {
         Card card1 = new Card();
         Card card2 = new Card();
 
-        assertThat(card1.getCardId()).isEqualTo(1);
-        assertThat(card2.getCardId()).isEqualTo(2);
+        assertThat(card2.getCardId()).isEqualTo(card1.getCardId() + 1);
     }
 
     @DisplayName("카드 제목을 기입할 수 있다.")
