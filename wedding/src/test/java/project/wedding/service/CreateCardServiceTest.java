@@ -10,7 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import project.wedding.domain.CardContainerRepository;
+import project.wedding.api.service.card.CreateCardService;
+import project.wedding.repository.CardContainerRepository;
 import project.wedding.domain.User;
 
 import project.wedding.domain.CardBoard;
