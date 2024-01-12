@@ -23,12 +23,14 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'commons-logging:commons-logging:1.2'
     implementation group: 'log4j', name: 'log4j', version: '1.2.17'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
+    implementation 'mysql:mysql-connector-java:8.0.28'
 }
 
 tasks.named('bootBuildImage') {
