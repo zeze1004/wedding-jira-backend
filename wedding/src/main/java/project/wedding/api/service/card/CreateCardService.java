@@ -1,11 +1,12 @@
-package project.wedding.service;
+package project.wedding.api.service.card;
 
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project.wedding.domain.CardBoard;
-import project.wedding.domain.CardContainerRepository;
+import project.wedding.repository.CardContainerRepository;
 
 import lombok.extern.log4j.Log4j;
 
@@ -15,6 +16,7 @@ public class CreateCardService {
     private final CardContainerRepository cardContainerRepository;
     private final Logger logger = Logger.getLogger(CreateCardService.class.getName());
 
+    @Autowired
     public CreateCardService(CardContainerRepository cardContainerRepository) {
         this.cardContainerRepository = cardContainerRepository;
     }
