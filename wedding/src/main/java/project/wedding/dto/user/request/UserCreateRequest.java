@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class UserCreateRequest {
-    String userId;
-    String loverId;
+    private String userId;
+    private String loverId;
 }

@@ -9,7 +9,7 @@ import project.wedding.repository.UserRepository;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    CardBoard cardBoardId;
+    private CardBoard cardBoardId;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
