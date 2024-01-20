@@ -1,4 +1,4 @@
-package project.wedding.domain;
+package project.wedding.todo.domain;
 
 import lombok.Getter;
 

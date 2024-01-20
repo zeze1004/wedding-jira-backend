@@ -1,9 +1,13 @@
-package project.wedding.domain;
+package project.wedding.cardboard.domain;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import project.wedding.card.domain.Card;
+import project.wedding.card.domain.CardFactory;
+import project.wedding.card.constant.CardStatus;
 
 public class CardBoard {
     private final LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();

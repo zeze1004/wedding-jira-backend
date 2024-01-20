@@ -2,8 +2,8 @@ package project.wedding.usecase;
 
 import java.util.logging.Logger;
 
-import project.wedding.domain.CardBoard;
-import project.wedding.domain.CardContainerRepository;
+import project.wedding.cardboard.domain.CardBoard;
+import project.wedding.cardboard.repository.CardContainerRepository;
 
 import lombok.extern.log4j.Log4j;
 

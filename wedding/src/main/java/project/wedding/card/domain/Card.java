@@ -1,10 +1,12 @@
-package project.wedding.domain;
+package project.wedding.card.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import lombok.Getter;
+import project.wedding.card.constant.CardStatus;
+import project.wedding.todo.domain.Todo;
 
 @Getter
 public class Card {
