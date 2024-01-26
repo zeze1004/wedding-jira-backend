@@ -1,5 +1,8 @@
 package project.wedding.common.exception;
 
+import lombok.Getter;
+
+@Getter
 public class WeddingProjectException extends RuntimeException {
 
     private final CommonError commonError;
