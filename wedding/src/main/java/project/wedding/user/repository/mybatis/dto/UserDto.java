@@ -1,24 +1,28 @@
-package project.wedding.user.domain;
+package project.wedding.user.repository.mybatis.dto;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.wedding.user.domain.User;
 
 @Getter
 @NoArgsConstructor
-public class User {
+public class UserDto {
     private int id;
     private String email;
     private String password;
     private String name;
     private String nickName;
     private String partnerEmail;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
 
     @Builder
-    public User(int id, String email, String password, String name, String nickName, String partnerEmail, LocalDateTime createdDate) {
+    public UserDto(int id, String email, String password, String name, String nickName, String partnerEmail, LocalDateTime createdDate) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -28,13 +32,21 @@ public class User {
         this.createdDate = createdDate;
     }
 
-    public User(String name) {
-        this.name = name;
+    public static UserDto of(User user) {
+        return UserDto.builder()
+            .id(user.getId())
+            .email(user.getEmail())
+            .password(user.getPassword())
+            .name(user.getName())
+            .nickName(user.getNickName())
+            .partnerEmail(user.getPartnerEmail())
+            .createdDate(user.getCreatedDate())
+            .build();
     }
 
     public String toString() {
         return """
-            User{
+            UserDto{
                 id='%s',
                 email='%s',
                 password='%s',
