@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Getter;
 import project.wedding.common.annotation.ValidPassword;
 import project.wedding.user.domain.User;
 import project.wedding.user.exception.UserError;
@@ -28,6 +27,11 @@ public record SignUpRequest (
     @Email(message = "PARTNER_EMAIL_FORMAT_NOT_VALID", payload = UserError.class)
     String partnerEmail
 ) {
+
+    public SignUpRequest(String email, String password, String name, String nickName) {
+        this(email, password, name, nickName, null);
+    }
+
     public static User toEntity(SignUpRequest signUpRequest) {
         return User.builder()
             .email(signUpRequest.email())
