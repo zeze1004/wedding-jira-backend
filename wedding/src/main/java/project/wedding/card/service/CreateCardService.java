@@ -1,12 +1,12 @@
-package project.wedding.card.usecase;
+package project.wedding.card.service;
 
 import project.wedding.cardboard.domain.CardBoard;
 import project.wedding.cardboard.repository.CardContainerRepository;
 
-public class CreateCardUseCase {
+public class CreateCardService {
     private final CardContainerRepository cardContainerRepository;
 
-    public CreateCardUseCase(CardContainerRepository cardContainerRepository) {
+    public CreateCardService(CardContainerRepository cardContainerRepository) {
         this.cardContainerRepository = cardContainerRepository;
     }
 

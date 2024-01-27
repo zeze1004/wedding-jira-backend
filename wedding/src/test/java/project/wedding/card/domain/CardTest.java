@@ -1,4 +1,4 @@
-package project.wedding.domain;
+package project.wedding.card.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class CardTest {
-
     @DisplayName("카드 인스턴스가 생성될 때마다 카드 id값이 1씩 증가한다.")
     @Test
     void createCardInstance() {
@@ -61,4 +60,5 @@ class CardTest {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("해당 todoId가 존재하지 않습니다.");
     }
+
 }

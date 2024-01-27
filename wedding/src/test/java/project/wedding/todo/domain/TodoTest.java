@@ -1,5 +1,4 @@
-package project.wedding.domain;
-
+package project.wedding.todo.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
