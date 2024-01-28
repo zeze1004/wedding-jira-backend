@@ -47,7 +47,7 @@ public class WeddingProjectExceptionHandler {
      */
     @ExceptionHandler(WeddingProjectException.class)
     public ResponseEntity<ApiResponse<Void>> handleWeddingProjectException(WeddingProjectException ex) {
-        String message = String.format("[WeddingProjectException] %s",
+        String message = String.format("%s",
             ObjectUtils.isEmpty(ex.getMessage()) ? ex.getCommonError().getMessage() : ex.getMessage());
         ApiResponse<Void> response = ApiResponse.createApiResponseFromCommonError(ex.getCommonError(), message);
         log.error(response.message(), ex);
