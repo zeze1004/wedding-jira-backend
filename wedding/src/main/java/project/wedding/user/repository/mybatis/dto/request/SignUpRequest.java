@@ -45,7 +45,7 @@ public record SignUpRequest (
 
     public String toString() {
         return """
-            SignUpRequest{리
+            SignUpRequest{
                 email='%s',
                 password='%s',
                 name='%s',
