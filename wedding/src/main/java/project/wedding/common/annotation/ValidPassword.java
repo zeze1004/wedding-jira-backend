@@ -13,7 +13,7 @@ import project.wedding.common.validator.PasswordConstraintValidator;
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidPassword {
-    String message() default "Invalid password";
+    String message() default "{project.wedding.common.annotation.ValidPassword.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

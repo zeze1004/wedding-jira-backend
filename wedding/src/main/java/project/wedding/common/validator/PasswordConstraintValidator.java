@@ -12,12 +12,12 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(
             "^(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,20}$");
 
-    @Override
-    public void initialize(ValidPassword constraintAnnotation) {
-    }
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
-        return password != null && PASSWORD_PATTERN.matcher(password).matches();
+        if (password == null) {
+            return true;
+        }
+        return PASSWORD_PATTERN.matcher(password).matches();
     }
 }
