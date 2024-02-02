@@ -5,34 +5,37 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import lombok.Builder;
 import project.wedding.common.exception.CommonError;
 
 @Builder
 public record ApiResponse<T>(
-    @JsonIgnore
     HttpStatus status,
     String message,
-    @JsonUnwrapped
     @JsonInclude(value = NON_NULL)
     T body
 ) {
 
-    public static ApiResponse<Void> createEmptyApiResponse() {
-        return ApiResponse.<Void>builder()
-            .status(HttpStatus.OK)
-            .message("SUCCESS")
+    public static <T> ApiResponse<T> successApiResponse(HttpStatus status) {
+        return ApiResponse.<T>builder()
+            .status(status)
+            .message("요청이 성공했습니다.")
             .build();
     }
 
-    public static <T> ApiResponse<T> createApiResponse(T body) {
+    public static <T> ApiResponse<T> successApiResponse(HttpStatus status, String message) {
         return ApiResponse.<T>builder()
-            .status(HttpStatus.OK)
-            .message("SUCCESS")
+            .status(status)
+            .message(message)
+            .build();
+    }
+
+    public static <T> ApiResponse<T> successApiResponse(HttpStatus status, String message, T body) {
+        return ApiResponse.<T>builder()
+            .status(status)
+            .message(message)
             .body(body)
             .build();
     }

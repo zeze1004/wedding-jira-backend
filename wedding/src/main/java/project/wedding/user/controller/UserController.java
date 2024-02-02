@@ -31,10 +31,11 @@ public class UserController {
     // 회원가입
     @PostMapping("/sign-up")
     @Operation(summary = "회원가입", description = "회원가입")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ApiResponse<Void>> signUp(@RequestBody @Valid SignUpRequest request) {
         userService.signUp(request);
-        return new ResponseEntity<>(ApiResponse.createEmptyApiResponse(), HttpStatus.CREATED);
+        ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.CREATED, "회원가입이 완료되었습니다.");
+        return new ResponseEntity<>(response, response.status());
     }
 
 }
