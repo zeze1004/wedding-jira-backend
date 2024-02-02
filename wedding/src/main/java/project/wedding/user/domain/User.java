@@ -2,11 +2,14 @@ package project.wedding.user.domain;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
     private int id;
@@ -16,17 +19,6 @@ public class User {
     private String nickName;
     private String partnerEmail;
     private LocalDateTime createdDate;
-
-    @Builder
-    public User(int id, String email, String password, String name, String nickName, String partnerEmail, LocalDateTime createdDate) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.nickName = nickName;
-        this.partnerEmail = partnerEmail;
-        this.createdDate = createdDate;
-    }
 
     public User(String name) {
         this.name = name;

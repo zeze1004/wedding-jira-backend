@@ -5,20 +5,18 @@ import static project.wedding.user.exception.UserError.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
 import project.wedding.user.domain.User;
 import project.wedding.user.exception.UserException;
 import project.wedding.user.repository.UserRepository;
 import project.wedding.user.repository.mybatis.dto.request.SignUpRequest;
 
+
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public int signUp(SignUpRequest request) {
