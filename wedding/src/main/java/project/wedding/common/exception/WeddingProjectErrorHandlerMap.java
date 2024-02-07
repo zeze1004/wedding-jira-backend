@@ -15,5 +15,5 @@ import lombok.Setter;
 @Builder
 public class WeddingProjectErrorHandlerMap {
 
-    private Map<String, ErrorHandler> errorHandlerMap;
+    private Map<String, DomainError> errorHandlerMap;
 }

@@ -6,7 +6,7 @@ import project.wedding.user.exception.UserError;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorHandler {
+public enum DomainError {
 
     USER_ERROR {
         @Override
