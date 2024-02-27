@@ -1,105 +1,94 @@
 package project.wedding.common.exception;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
-import static project.wedding.common.exception.WeddingProjectError.*;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.support.StaticApplicationContext;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
-@WebMvcTest(WeddingProjectExceptionHandler.class)
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
+import project.wedding.common.response.ApiResponse;
+import project.wedding.user.exception.UserError;
+
 class WeddingProjectExceptionHandlerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-    @InjectMocks
-    private TestController testController;
-    @MockBean
+    private WeddingProjectExceptionHandler weddingProjectExceptionHandler;
     private WeddingProjectErrorHandlerMap weddingProjectErrorHandlerMap;
-
-    private static final StaticApplicationContext applicationContext = new StaticApplicationContext();
-    private static final WebMvcConfigurationSupport webMvcConfigurationSupport = new WebMvcConfigurationSupport();
 
     @BeforeEach
     void setUp() {
-        applicationContext.registerSingleton("WeddingProjectExceptionHandler", WeddingProjectExceptionHandler.class);
-        webMvcConfigurationSupport.setApplicationContext(applicationContext);
 
-        mockMvc = standaloneSetup(testController)
-            .setControllerAdvice(new WeddingProjectExceptionHandler(weddingProjectErrorHandlerMap))
+        Map<String, DomainError> errorHandlerMap = new HashMap<>();
+        errorHandlerMap.put(UserError.class.getName(), DomainError.USER_ERROR);
+
+        weddingProjectErrorHandlerMap = WeddingProjectErrorHandlerMap.builder()
+            .errorHandlerMap(errorHandlerMap)
             .build();
+
+        weddingProjectExceptionHandler = new WeddingProjectExceptionHandler(weddingProjectErrorHandlerMap);
     }
 
-    @RestController
-    private static class TestController {
+    @Test
+    void handleRuntimeError() {
+        WeddingProjectException weddingProjectException = new WeddingProjectException(WeddingProjectError.INTERNAL_SERVER_ERROR, WeddingProjectError.INTERNAL_SERVER_ERROR.getMessage());
 
-        @GetMapping("/test/{exception}")
-        String show(@PathVariable String exception) {
-            return switch (exception) {
-                case "BAD_REQUEST" -> throw new WeddingProjectException(BAD_REQUEST);
-                case "METHOD_NOT_ALLOWED" -> throw new WeddingProjectException(METHOD_NOT_ALLOWED);
-                case "INTERNAL_SERVER_ERROR" -> throw new WeddingProjectException(INTERNAL_SERVER_ERROR);
-                case "NOT_FOUND" -> throw new WeddingProjectException(NOT_FOUND);
+        ResponseEntity<ApiResponse<Void>> response = weddingProjectExceptionHandler.handleException(weddingProjectException);
+        assertThat(response.getStatusCode()).isEqualTo(WeddingProjectError.INTERNAL_SERVER_ERROR.getHttpStatus());
+    }
 
-                default -> HttpStatus.OK.getReasonPhrase();
-            };
+    @Test
+    void handleWeddingProjectException() {
+        WeddingProjectException weddingProjectException = new WeddingProjectException(WeddingProjectError.BAD_REQUEST, WeddingProjectError.BAD_REQUEST.getMessage());
+
+        ResponseEntity<ApiResponse<Void>> response = weddingProjectExceptionHandler.handleWeddingProjectException(weddingProjectException);
+        assertThat(response.getStatusCode()).isEqualTo(WeddingProjectError.BAD_REQUEST.getHttpStatus());
+    }
+
+    @Test
+    void handleValidationException() throws Exception {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        Validator javaxValidator = validatorFactory.getValidator();
+
+        SpringValidatorAdapter validatorAdapter = new SpringValidatorAdapter(javaxValidator);
+
+        Person person = new Person("ODEEKIM", 28);
+
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(person, "person");
+        MethodParameter methodParameter = new MethodParameter(Handler.class.getDeclaredMethod("handle", Person.class), -1);
+
+        validatorAdapter.validate(person, bindingResult);
+
+        MethodArgumentNotValidException ex = new MethodArgumentNotValidException(methodParameter, bindingResult);
+
+        ResponseEntity<ApiResponse<Void>> response = weddingProjectExceptionHandler.handleValidationException(ex);
+        assertThat(response.getStatusCode()).isEqualTo(WeddingProjectError.BAD_REQUEST.getHttpStatus());
+    }
+
+
+    @SuppressWarnings("unused")
+    private static class Handler {
+
+        @SuppressWarnings("unused")
+        void handle(Person person) {
         }
     }
 
-    @Nested
-    class RestTests {
-        @Test
-        void noException() throws Exception {
-
-            mockMvc.perform(get("/test/ok").accept("application/json"))
-                .andExpect(status().isOk());
-        }
-
-        @Test
-        void badRequestException() throws Exception {
-            mockMvc.perform(get("/test/BAD_REQUEST").accept("application/json"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value(BAD_REQUEST.getMessage()));
-        }
-
-        @Test
-        void methodNotAllowedException() throws Exception {
-            mockMvc.perform(get("/test/METHOD_NOT_ALLOWED").accept("application/json"))
-                .andExpect(status().isMethodNotAllowed())
-                .andExpect(jsonPath("$.message").value(METHOD_NOT_ALLOWED.getMessage()));
-        }
-
-        @Test
-        void ServerException() throws Exception {
-            mockMvc.perform(get("/test/INTERNAL_SERVER_ERROR").accept("application/json"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.message").value(INTERNAL_SERVER_ERROR.getMessage()));
-        }
-
-        @Test
-        void notFoundException() throws Exception {
-            mockMvc.perform(get("/test/NOT_FOUND").accept("application/json"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value(NOT_FOUND.getMessage()));
-        }
-
-        @Test
-        void iligalArgumentException() throws Exception {
-            mockMvc.perform(get("/test").accept("application/json"))
-                .andExpect(status().isNotFound());
-        }
-    }
+    @SuppressWarnings("unused")
+    public record Person(
+        @Size(max = 3, payload = UserError.class)
+        String name,
+        @Min(value = 25, payload = UserError.class)
+        int age
+    ) {}
 }
