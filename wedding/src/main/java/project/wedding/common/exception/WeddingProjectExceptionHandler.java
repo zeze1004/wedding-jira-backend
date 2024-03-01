@@ -35,7 +35,8 @@ public class WeddingProjectExceptionHandler {
             .status(WeddingProjectError.INTERNAL_SERVER_ERROR.getHttpStatus())
             .message(WeddingProjectError.INTERNAL_SERVER_ERROR.getMessage())
             .build();
-        log.error("[response message] {}", response.message(), ex);
+        log.error(response.message(), ex);
+        // log.error("[response message] {} - requestId: {} - requestURI: {}", response.message(), MDC.get("requestId"), MDC.get("requestURI"), ex);
         return new ResponseEntity<>(response, response.status());
     }
 
