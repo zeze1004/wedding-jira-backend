@@ -25,7 +25,7 @@
                 <onMismatch>DENY</onMismatch>
             </filter>
             <encoder>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{requestId} %X{requestURI} %msg %n</pattern>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %X{requestId} %X{requestURI} %X{clientIP} %msg %n</pattern>
                 <charset>UTF-8</charset>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
