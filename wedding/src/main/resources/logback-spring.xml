@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProfile name="local">
-        <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-        <property name="LOG_DIR" value = "logs"/>
-        <property name="LOG_FILE" value = "wedding.log"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property name="LOG_DIR" value = "logs"/>
+    <property name="LOG_FILE" value = "wedding.log"/>
 
+    <springProfile name="local">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-                <charset>utf8</charset>
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                    <charset>utf8</charset>
+                    <appendLineSeparator>true</appendLineSeparator>
+
+                    <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                        <prettyPrint>true</prettyPrint>
+                    </jsonFormatter>
+                    <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
+                </layout>
             </encoder>
         </appender>
+
+        <logger name="project.wedding.user.repository.mybatis.UserMapper">
+            <level value="error"/>
+        </logger>
         <root level="info">
             <appender-ref ref="CONSOLE" />
         </root>
