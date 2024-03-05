@@ -2,7 +2,6 @@ package project.wedding.common.exception;
 
 import java.util.Set;
 
-import org.slf4j.MDC;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.FieldError;
@@ -51,7 +50,6 @@ public class WeddingProjectExceptionHandler {
         String message = String.format("%s",
             ObjectUtils.isEmpty(ex.getMessage()) ? ex.getCommonError().getMessage() : ex.getMessage());
         ApiResponse<Void> response = ApiResponse.createApiResponseFromCommonError(ex.getCommonError(), message);
-        logging(ex, response);
         return new ResponseEntity<>(response, response.status());
     }
 
@@ -86,7 +84,6 @@ public class WeddingProjectExceptionHandler {
             response = ApiResponse.createApiResponseFromCommonError(commonError);
         }
 
-        logging(ex, response);
         return new ResponseEntity<>(response, response.status());
     }
 
@@ -103,7 +100,6 @@ public class WeddingProjectExceptionHandler {
     }
 
     private static void logging(Exception ex, ApiResponse<Void> response) {
-        log.error("[response message] {} \n   - requestId: {} \n   - requestURI: {} \n   - clientIP: {}", response.message(), MDC.get("requestId"), MDC.get("requestURI"), MDC.get("clientIP"),
-            ex);
+        log.error("{}", response.message(), ex);
     }
 }
