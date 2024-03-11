@@ -2,6 +2,7 @@ package project.wedding.common.logging;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.MDC;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.web.method.HandlerMethod;
 
 class MDCInterceptorTest {
 
@@ -19,7 +21,9 @@ class MDCInterceptorTest {
 
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
-    private final Object handler = new Object();
+
+    Method method = TestController.class.getMethod("testMethod");
+    HandlerMethod handler = new HandlerMethod(new TestController(), method);
 
     @BeforeEach
     void setUp() {
@@ -31,13 +35,17 @@ class MDCInterceptorTest {
     @Test
     void preHandle_SetMDCContext() throws Exception {
         // given
+
         request.setRequestURI("/test/uri");
+
         request.addHeader("X-Forwarded-For", "172.0.0.10");
 
         assertTrue(mdcInterceptor.preHandle(request, response, handler));
         assertNotNull(MDC.get("requestId"));
         assertEquals("/test/uri", MDC.get("requestURI"));
         assertEquals("172.0.0.10", MDC.get("clientIp"));
+        assertEquals("testMethod", MDC.get("methodName"));
+        assertEquals("TestController", MDC.get("handlerName"));
     }
 
     @Test
@@ -51,5 +59,12 @@ class MDCInterceptorTest {
         assertNull(MDC.get("requestId"));
         assertNull(MDC.get("requestURI"));
         assertNull(MDC.get("clientIp"));
+    }
+
+    static class TestController {
+        public void testMethod() {}
+    }
+
+    MDCInterceptorTest() throws NoSuchMethodException {
     }
 }
