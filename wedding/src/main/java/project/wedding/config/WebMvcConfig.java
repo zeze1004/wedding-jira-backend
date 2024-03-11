@@ -1,7 +1,6 @@
 package project.wedding.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -23,12 +22,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // TODO: Add other interceptors
     }
 
-    @Override
-    public void addCorsMappings(final CorsRegistry registry) {
-        registry.addMapping("/**")
-            .allowedOrigins("*")
-            .allowedMethods("*")
-            .allowedHeaders("*")
-            .maxAge(3600);
-    }
+    // TODO: Add cors handling before connecting front
 }
