@@ -35,7 +35,7 @@ public class WeddingProjectExceptionHandler {
             .status(WeddingProjectError.INTERNAL_SERVER_ERROR.getHttpStatus())
             .message(WeddingProjectError.INTERNAL_SERVER_ERROR.getMessage())
             .build();
-        log.error("[response message] {}", response.message(), ex);
+        logging(ex, response);
         return new ResponseEntity<>(response, response.status());
     }
 
@@ -50,7 +50,6 @@ public class WeddingProjectExceptionHandler {
         String message = String.format("%s",
             ObjectUtils.isEmpty(ex.getMessage()) ? ex.getCommonError().getMessage() : ex.getMessage());
         ApiResponse<Void> response = ApiResponse.createApiResponseFromCommonError(ex.getCommonError(), message);
-        log.error(response.message(), ex);
         return new ResponseEntity<>(response, response.status());
     }
 
@@ -62,7 +61,6 @@ public class WeddingProjectExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException ex) {
-        log.error("[MethodArgumentNotValidException] {}", ex.getMessage(), ex);
         CommonError commonError = null;
 
         // 발생한 필드 오류를 순회하며 Payload 서브 클래스를 사용해 에러 처리
@@ -86,7 +84,6 @@ public class WeddingProjectExceptionHandler {
             response = ApiResponse.createApiResponseFromCommonError(commonError);
         }
 
-        log.error("[response message] {}", response.message(), ex);
         return new ResponseEntity<>(response, response.status());
     }
 
@@ -100,5 +97,9 @@ public class WeddingProjectExceptionHandler {
         ConstraintDescriptor<?> constraintDescriptor = error.unwrap(ConstraintViolation.class)
             .getConstraintDescriptor();
         return constraintDescriptor.getPayload();
+    }
+
+    private static void logging(Exception ex, ApiResponse<Void> response) {
+        log.error("{}", response.message(), ex);
     }
 }
