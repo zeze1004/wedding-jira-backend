@@ -23,6 +23,9 @@
         <logger name="project.wedding.user.repository.mybatis.UserMapper">
             <level value="error"/>
         </logger>
+        <logger name="project/wedding/common/exception/WeddingProjectExceptionHandler">
+            <level value="error"/>
+        </logger>
         <root level="info">
             <appender-ref ref="CONSOLE" />
         </root>
