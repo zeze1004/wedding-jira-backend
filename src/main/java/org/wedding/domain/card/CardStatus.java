@@ -1,4 +1,4 @@
-package org.wedding.domain;
+package org.wedding.domain.card;
 
 public enum CardStatus {
     BACKLOG, PROGRESS, DONE

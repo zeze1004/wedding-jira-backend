@@ -1,4 +1,4 @@
-package project.wedding.common.logging;
+package org.wedding.common.logging;
 
 import static org.junit.jupiter.api.Assertions.*;
 

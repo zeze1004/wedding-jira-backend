@@ -1,4 +1,4 @@
-package org.wedding.domain;
+package org.wedding.domain.card;
 
 
 public class CardIdMamager {

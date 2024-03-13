@@ -1,5 +1,6 @@
-package project.wedding.usecase;
+package org.wedding.usecase;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Disabled;
@@ -9,10 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.wedding.domain.CardBoard;
+import org.wedding.domain.cardboard.CardBoard;
 import org.wedding.domain.CardContainerRepository;
 import org.wedding.usecase.CreateCardUseCase;
-import org.wedding.user.domain.User;
+import org.wedding.domain.user.User;
 
 @Disabled
 @ExtendWith(MockitoExtension.class)

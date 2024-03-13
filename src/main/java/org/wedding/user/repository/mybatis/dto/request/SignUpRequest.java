@@ -3,7 +3,7 @@ package org.wedding.user.repository.mybatis.dto.request;
 import java.time.LocalDateTime;
 
 import org.wedding.common.annotation.ValidPassword;
-import org.wedding.user.domain.User;
+import org.wedding.domain.user.User;
 import org.wedding.user.exception.UserError;
 
 import jakarta.validation.constraints.Email;

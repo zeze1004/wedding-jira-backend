@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.user.domain.User;
+import org.wedding.domain.user.User;
 import org.wedding.user.exception.UserError;
 import org.wedding.user.repository.UserRepository;
 

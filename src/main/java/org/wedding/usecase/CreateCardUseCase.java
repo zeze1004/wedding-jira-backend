@@ -3,7 +3,7 @@ package org.wedding.usecase;
 import java.util.logging.Logger;
 
 import org.wedding.domain.CardContainerRepository;
-import org.wedding.domain.CardBoard;
+import org.wedding.domain.cardboard.CardBoard;
 
 public class CreateCardUseCase {
     private final CardContainerRepository cardContainerRepository;

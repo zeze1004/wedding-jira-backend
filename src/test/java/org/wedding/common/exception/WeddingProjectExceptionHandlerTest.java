@@ -1,4 +1,4 @@
-package project.wedding.common.exception;
+package org.wedding.common.exception;
 
 import static org.assertj.core.api.Assertions.*;
 

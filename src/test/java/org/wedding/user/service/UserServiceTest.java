@@ -1,4 +1,4 @@
-package project.wedding.user.service;
+package org.wedding.user.service;
 
 import static org.mockito.Mockito.*;
 
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.wedding.user.domain.User;
+import org.wedding.domain.user.User;
 import org.wedding.user.repository.UserRepository;
 import org.wedding.user.repository.mybatis.dto.request.SignUpRequest;
 import org.wedding.user.service.UserService;

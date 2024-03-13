@@ -1,4 +1,4 @@
-package project.wedding.domain;
+package org.wedding.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.wedding.domain.Card;
-import org.wedding.domain.CardBoard;
-import org.wedding.domain.CardStatus;
+import org.wedding.domain.card.Card;
+import org.wedding.domain.cardboard.CardBoard;
+import org.wedding.domain.card.CardStatus;
 
 class CardBoardTest {
 
