@@ -4,7 +4,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.wedding.user.exception.UserError.*;
+import static org.wedding.domain.user.exception.UserError.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -22,9 +22,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.wedding.user.exception.UserException;
-import org.wedding.user.repository.mybatis.dto.request.SignUpRequest;
-import org.wedding.user.service.UserService;
+import org.wedding.domain.user.exception.UserException;
+import org.wedding.adapter.in.web.dto.SignUpDTO;
+import org.wedding.application.service.UserService;
 
 @Disabled
 @SpringBootTest
@@ -50,7 +50,7 @@ public class UserControllerTest {
     @DisplayName("회원가입 실패 - 유효하지 않은 이메일 주소인 경우")
     @Test
     void failSignUpWithInvalidEmail() throws Exception {
-        SignUpRequest signUpRequestWithInvalidEmail = SignUpRequest.builder()
+        SignUpDTO signUpDTOWithInvalidEmail = SignUpDTO.builder()
             .email("test")
             .password("password1234!!")
             .name("김커플")
@@ -59,7 +59,7 @@ public class UserControllerTest {
             .build();
         mockMvc.perform(post("/api/v1/users/sign-up")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(signUpRequestWithInvalidEmail)))
+                    .content(objectMapper.writeValueAsString(signUpDTOWithInvalidEmail)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(EMAIL_FORMAT_NOT_VALID.getMessage()))
@@ -69,7 +69,7 @@ public class UserControllerTest {
     @DisplayName("회원가입 실패 - 유효하지 않은 비밀번호인 경우")
     @Test
     void failSignUpWithInvalidPassword() throws Exception {
-        SignUpRequest signUpRequestWithInvalidPassword = SignUpRequest.builder()
+        SignUpDTO signUpDTOWithInvalidPassword = SignUpDTO.builder()
             .email("test@gmail.com")
             .password("1234") // 영문, 숫자, 특수문자 조합 8자리 이상
             .name("김커플")
@@ -77,7 +77,7 @@ public class UserControllerTest {
             .build();
         mockMvc.perform(post("/api/v1/users/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(signUpRequestWithInvalidPassword)))
+                .content(objectMapper.writeValueAsString(signUpDTOWithInvalidPassword)))
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value(PASSWORD_NOT_VALID.getMessage()))
@@ -89,7 +89,7 @@ public class UserControllerTest {
     @Test
     void failSignUpWithDuplicatedEmail() throws Exception {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
+        SignUpDTO signUpDTO = SignUpDTO.builder()
             .email("duplicate@gmail.com")
             .password("password1234!!")
             .name("김커플")
@@ -98,10 +98,10 @@ public class UserControllerTest {
 
         // when
         doThrow(new UserException(EMAIL_DUPLICATION))
-            .when(userService).signUp(signUpRequest);
+            .when(userService).signUp(signUpDTO);
         ResultActions resultActions = mockMvc.perform(post("/api/v1/users/sign-up")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(signUpRequest)));
+            .content(objectMapper.writeValueAsString(signUpDTO)));
 
         // then
         resultActions
@@ -115,7 +115,7 @@ public class UserControllerTest {
     @Test
     void successSignUp() throws Exception {
         // given
-        SignUpRequest signUpRequest = SignUpRequest.builder()
+        SignUpDTO signUpDTO = SignUpDTO.builder()
             .email("test@gmail.com")
             .password("password1234!!")
             .name("김커플")
@@ -125,10 +125,10 @@ public class UserControllerTest {
         // when
         mockMvc.perform(post("/api/v1/users/sign-up")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(signUpRequest)))
+            .content(objectMapper.writeValueAsString(signUpDTO)))
         .andExpect(status().isCreated());
 
         // then
-        verify(userService, times(1)).signUp(signUpRequest);
+        verify(userService, times(1)).signUp(signUpDTO);
     }
 }

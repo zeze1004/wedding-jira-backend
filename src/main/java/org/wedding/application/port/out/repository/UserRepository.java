@@ -1,9 +1,9 @@
-package org.wedding.user.repository;
+package org.wedding.application.port.out.repository;
 
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
-import org.wedding.domain.User;
+import org.wedding.domain.user.User;
 
 @Repository
 public interface UserRepository {

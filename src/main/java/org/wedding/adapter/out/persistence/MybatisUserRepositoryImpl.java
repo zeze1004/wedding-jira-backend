@@ -1,14 +1,13 @@
-package org.wedding.user.repository.mybatis;
+package org.wedding.adapter.out.persistence;
 
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.wedding.domain.User;
-import org.wedding.user.repository.UserRepository;
+import org.wedding.domain.user.User;
+import org.wedding.application.port.out.repository.UserRepository;
 
 @Mapper
-public interface UserMapper extends UserRepository {
-
+public interface MybatisUserRepositoryImpl extends UserRepository {
     @Override
     int save(User user);
 

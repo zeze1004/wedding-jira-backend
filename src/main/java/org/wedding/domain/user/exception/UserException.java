@@ -1,4 +1,4 @@
-package org.wedding.user.exception;
+package org.wedding.domain.user.exception;
 
 import org.wedding.common.exception.CommonError;
 import org.wedding.common.exception.WeddingProjectException;

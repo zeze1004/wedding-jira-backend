@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.wedding.domain.CardBoard;
 import org.wedding.domain.CardContainerRepository;
 import org.wedding.application.port.in.usecase.CreateCardUseCase;
-import org.wedding.domain.User;
+import org.wedding.domain.user.User;
 
 @Disabled
 @ExtendWith(MockitoExtension.class)

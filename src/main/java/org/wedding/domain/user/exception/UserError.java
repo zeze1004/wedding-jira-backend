@@ -1,4 +1,4 @@
-package org.wedding.user.exception;
+package org.wedding.domain.user.exception;
 
 import java.util.Arrays;
 

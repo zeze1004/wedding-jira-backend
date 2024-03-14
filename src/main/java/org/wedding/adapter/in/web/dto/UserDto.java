@@ -1,8 +1,8 @@
-package org.wedding.user.repository.mybatis.dto;
+package org.wedding.adapter.in.web.dto;
 
 import java.time.LocalDateTime;
 
-import org.wedding.domain.User;
+import org.wedding.domain.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

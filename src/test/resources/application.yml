@@ -7,6 +7,6 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
-  type-aliases-package: project.wedding.*
+  type-aliases-package: org.wedding.*
   configuration:
     map-underscore-to-camel-case: true

@@ -19,13 +19,8 @@ import jakarta.validation.ValidatorFactory;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
-import org.wedding.common.exception.DomainError;
-import org.wedding.common.exception.WeddingProjectError;
-import org.wedding.common.exception.WeddingProjectErrorHandlerMap;
-import org.wedding.common.exception.WeddingProjectException;
-import org.wedding.common.exception.WeddingProjectExceptionHandler;
 import org.wedding.common.response.ApiResponse;
-import org.wedding.user.exception.UserError;
+import org.wedding.domain.user.exception.UserError;
 
 class WeddingProjectExceptionHandlerTest {
 

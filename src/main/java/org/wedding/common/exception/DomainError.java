@@ -1,6 +1,6 @@
 package org.wedding.common.exception;
 
-import org.wedding.user.exception.UserError;
+import org.wedding.domain.user.exception.UserError;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

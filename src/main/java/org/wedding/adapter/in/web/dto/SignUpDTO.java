@@ -1,10 +1,10 @@
-package org.wedding.user.repository.mybatis.dto.request;
+package org.wedding.adapter.in.web.dto;
 
 import java.time.LocalDateTime;
 
 import org.wedding.common.annotation.ValidPassword;
-import org.wedding.domain.User;
-import org.wedding.user.exception.UserError;
+import org.wedding.domain.user.User;
+import org.wedding.domain.user.exception.UserError;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record SignUpRequest (
+public record SignUpDTO(
     @NotBlank(message = "EMAIL_IS_REQUIRED", payload = UserError.class)
     @Email(message = "EMAIL_FORMAT_NOT_VALID", payload = UserError.class)
     String email,
@@ -29,17 +29,17 @@ public record SignUpRequest (
     String partnerEmail
 ) {
 
-    public SignUpRequest(String email, String password, String name, String nickName) {
+    public SignUpDTO(String email, String password, String name, String nickName) {
         this(email, password, name, nickName, null);
     }
 
-    public static User toEntity(SignUpRequest signUpRequest) {
+    public static User toEntity(SignUpDTO signUpDTO) {
         return User.builder()
-            .email(signUpRequest.email())
-            .password(signUpRequest.password())
-            .name(signUpRequest.name())
-            .nickName(signUpRequest.nickName())
-            .partnerEmail(signUpRequest.partnerEmail())
+            .email(signUpDTO.email())
+            .password(signUpDTO.password())
+            .name(signUpDTO.name())
+            .nickName(signUpDTO.nickName())
+            .partnerEmail(signUpDTO.partnerEmail())
             .createdDate(LocalDateTime.now())
             .build();
     }

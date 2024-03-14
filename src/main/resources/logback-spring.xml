@@ -20,7 +20,7 @@
             </encoder>
         </appender>
 
-        <logger name="org.wedding.user.repository.mybatis.UserMapper">
+        <logger name="org.wedding.adapter.out.persistence.MybatisUserRepositoryImpl">
             <level value="error"/>
         </logger>
         <logger name="project/wedding/common/exception/WeddingProjectExceptionHandler">
