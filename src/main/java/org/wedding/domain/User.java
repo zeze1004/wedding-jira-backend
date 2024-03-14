@@ -1,4 +1,4 @@
-package org.wedding.domain.user;
+package org.wedding.domain;
 
 import java.time.LocalDateTime;
 

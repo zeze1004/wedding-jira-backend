@@ -3,7 +3,7 @@ package org.wedding.user.repository;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
-import org.wedding.domain.user.User;
+import org.wedding.domain.User;
 
 @Repository
 public interface UserRepository {

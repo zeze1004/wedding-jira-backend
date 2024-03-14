@@ -1,4 +1,4 @@
-package org.wedding.user.controller;
+package org.wedding.adapter.in.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

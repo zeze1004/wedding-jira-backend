@@ -10,10 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.wedding.domain.cardboard.CardBoard;
+import org.wedding.domain.CardBoard;
 import org.wedding.domain.CardContainerRepository;
-import org.wedding.usecase.CreateCardUseCase;
-import org.wedding.domain.user.User;
+import org.wedding.application.port.in.usecase.CreateCardUseCase;
+import org.wedding.domain.User;
 
 @Disabled
 @ExtendWith(MockitoExtension.class)

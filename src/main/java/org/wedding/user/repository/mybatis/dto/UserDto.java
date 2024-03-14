@@ -2,7 +2,7 @@ package org.wedding.user.repository.mybatis.dto;
 
 import java.time.LocalDateTime;
 
-import org.wedding.domain.user.User;
+import org.wedding.domain.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

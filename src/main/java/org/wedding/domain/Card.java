@@ -1,10 +1,8 @@
-package org.wedding.domain.card;
+package org.wedding.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import org.wedding.domain.user.Todo;
 
 import lombok.Getter;
 
