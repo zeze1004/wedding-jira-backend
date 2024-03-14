@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wedding.adapter.out.persistence.MybatisUserRepositoryImpl">
+    <insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (id, email, password, name, nick_name, partner_email, created_date)
+        VALUES (#{id}, #{email}, #{password}, #{name}, #{nickName}, #{partnerEmail}, NOW())
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <select id="findByEmail" parameterType="String" resultType="User">
+        SELECT * FROM user WHERE email = #{email}
+    </select>
+
+    <select id="existsById" parameterType="int" resultType="boolean">
+        SELECT EXISTS
+            ( SELECT 1 FROM user WHERE id = #{id} )
+    </select>
+
+    <select id="existsByEmail" parameterType="String" resultType="boolean">
+        SELECT EXISTS
+            ( SELECT 1 FROM user WHERE email = #{email} )
+    </select>
+</mapper>
