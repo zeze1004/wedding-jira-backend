@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.springframework.http.HttpStatus;
 import org.wedding.common.exception.CommonError;
-import org.wedding.domain.user.exception.UserError;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
