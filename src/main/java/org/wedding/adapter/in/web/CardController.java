@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
-import org.wedding.application.port.in.usecase.CreateCardUseCase;
-import org.wedding.application.port.in.usecase.ModifyCardUseCase;
+import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
+import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.common.response.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
