@@ -22,6 +22,23 @@ public class Card {
     private final List<Todo> todoList;
     private final CardStatus cardStatus;
 
+    public Card changeCardTitle(String cardTitle) {
+        return new Card(this.cardId, cardTitle, this.budget, this.deadline, this.todoList, this.cardStatus);
+    }
+
+    public Card changeBudget(Long budget) {
+        return new Card(this.cardId, this.cardTitle, budget, this.deadline, this.todoList, this.cardStatus);
+
+    }
+
+    public Card changeDeadline(LocalDateTime deadline) {
+        return new Card(this.cardId, this.cardTitle, this.budget, deadline, this.todoList, this.cardStatus);
+    }
+
+    public Card changeCardStatus(CardStatus cardStatus) {
+        return new Card(this.cardId, this.cardTitle, this.budget, this.deadline, this.todoList, cardStatus);
+    }
+
     public String toString() {
         return """
             Card{
