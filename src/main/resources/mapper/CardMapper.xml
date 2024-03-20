@@ -17,4 +17,8 @@
         SELECT EXISTS
             ( SELECT 1 FROM card WHERE card_id = #{cardId} )
     </select>
+
+    <select id="findByCardId" parameterType="int" resultType="Card">
+        SELECT * FROM card WHERE card_id = #{cardId}
+    </select>
 </mapper>

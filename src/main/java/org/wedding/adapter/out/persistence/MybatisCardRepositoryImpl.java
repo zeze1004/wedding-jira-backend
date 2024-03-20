@@ -16,4 +16,7 @@ public interface MybatisCardRepositoryImpl extends CardRepository {
 
     @Override
     boolean existsByCardId(int cardId);
+
+    @Override
+    Card findByCardId(int cardId);
 }

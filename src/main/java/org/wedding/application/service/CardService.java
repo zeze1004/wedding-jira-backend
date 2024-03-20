@@ -31,9 +31,10 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase {
 
     @Transactional
     @Override
-    public void modifyCard(Card card, ModifyCardRequest request) {
+    public void modifyCard(int cardId, ModifyCardRequest request) {
 
-        checkCardExistence(card.getCardId());
+        checkCardExistence(cardId);
+        Card card = cardRepository.findByCardId(cardId);
 
         if (request.cardTitle().isPresent()) {
             checkDuplicateCardTitle(request.cardTitle().get());

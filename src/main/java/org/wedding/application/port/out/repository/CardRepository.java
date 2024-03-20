@@ -5,11 +5,13 @@ import org.wedding.domain.card.Card;
 public interface CardRepository {
     int save(Card card);
 
-    void deleteById(int cardId);
+    Card deleteById(int cardId);
 
     void updateCardTitle(Card card, String cardTitle);
 
     boolean existsByCardId(int cardId);
 
     boolean existsByCardTitle(String cardTitle);
+
+    Card findByCardId(int cardId);
 }
