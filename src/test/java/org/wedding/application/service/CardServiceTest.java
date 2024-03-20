@@ -13,8 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
-import org.wedding.application.port.in.usecase.CreateCardUseCase;
+import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.application.port.out.repository.CardRepository;
+import org.wedding.domain.CardStatus;
+import org.wedding.domain.card.Card;
 import org.wedding.domain.card.exception.CardError;
 import org.wedding.domain.card.exception.CardException;
 
@@ -26,8 +28,9 @@ class CardServiceTest {
     @Mock
     private CardRepository cardRepository;
 
-    private CreateCardUseCase createCardUseCase;
+    private Card card;
     private CreateCardRequest createCardRequest;
+    private ModifyCardRequest modifyCardRequest;
 
     @BeforeEach
     void setUp() {
@@ -37,6 +40,7 @@ class CardServiceTest {
             null
         );
         cardService = new CardService(cardRepository);
+        card = CreateCardRequest.toEntity(createCardRequest);
         cardService.createCard(createCardRequest);
     }
 
@@ -85,5 +89,54 @@ class CardServiceTest {
         } catch (CardException e) {
             assertEquals(CardError.CARD_TITLE_IS_DUPLICATED, CardError.of("CARD_TITLE_IS_DUPLICATED"));
         }
+    }
+
+    @DisplayName("카드가 존재한다면 카드 이름 수정을 성공")
+    @Test
+    void modifyCard_Title() {
+
+        ModifyCardRequest modifyCardTitleRequest = new ModifyCardRequest(
+            "스드메 예약금 넣기 수정",
+            null,
+            null,
+            null
+        );
+        lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
+        lenient().when(cardRepository.existsByCardTitle(modifyCardTitleRequest.cardTitle().get())).thenReturn(false);
+        cardService.modifyCard(card, modifyCardTitleRequest);
+        verify(cardRepository, times(2)).save(any());
+    }
+
+    @DisplayName("카드가 존재하지 않을 때 카드 이름 수정할시 실패")
+    @Test
+    void modifyCard_Title_Fail() {
+
+        ModifyCardRequest modifyCardTitleRequest = new ModifyCardRequest(
+            "스드메 예약금 넣기 수정",
+            null,
+            null,
+            null
+        );
+        try {
+            cardService.checkCardExistence(-1); // 존재하지 않는 임의의 cardId
+        } catch (CardException e) {
+            assertEquals(CardError.CARD_NOT_FOUND, CardError.of("CARD_NOT_FOUND"));
+        }
+    }
+
+    @DisplayName("카드 상태 변경")
+    @Test
+    void modifyCard_Status() {
+
+        ModifyCardRequest modifyCardStatusRequest = new ModifyCardRequest(
+            null,
+            null,
+            null,
+            CardStatus.PROGRESS
+        );
+
+        lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
+        cardService.modifyCard(card, modifyCardStatusRequest);
+        verify(cardRepository, times(2)).save(any());
     }
 }
