@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,7 +105,8 @@ class CardServiceTest {
         );
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
         lenient().when(cardRepository.existsByCardTitle(modifyCardTitleRequest.cardTitle().get())).thenReturn(false);
-        cardService.modifyCard(card, modifyCardTitleRequest);
+        lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
+        cardService.modifyCard(card.getCardId(), modifyCardTitleRequest);
         verify(cardRepository, times(2)).save(any());
     }
 
@@ -136,7 +139,9 @@ class CardServiceTest {
         );
 
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
-        cardService.modifyCard(card, modifyCardStatusRequest);
+        Assertions.assertThat(modifyCardStatusRequest.cardTitle()).isEqualTo(Optional.empty());
+        lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
+        cardService.modifyCard(card.getCardId(), modifyCardStatusRequest);
         verify(cardRepository, times(2)).save(any());
     }
 }
