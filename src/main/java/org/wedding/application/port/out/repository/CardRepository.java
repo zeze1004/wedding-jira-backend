@@ -9,7 +9,7 @@ public interface CardRepository {
 
     void updateCardTitle(Card card, String cardTitle);
 
-    boolean existsById(int cardId);
+    boolean existsByCardId(int cardId);
 
     boolean existsByCardTitle(String cardTitle);
 }

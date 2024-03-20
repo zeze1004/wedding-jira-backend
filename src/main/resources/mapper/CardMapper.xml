@@ -12,4 +12,9 @@
         SELECT EXISTS
             ( SELECT 1 FROM card WHERE card_title = #{cardTitle} )
     </select>
+
+    <select id="existsByCardId" parameterType="int" resultType="boolean">
+        SELECT EXISTS
+            ( SELECT 1 FROM card WHERE card_id = #{cardId} )
+    </select>
 </mapper>
