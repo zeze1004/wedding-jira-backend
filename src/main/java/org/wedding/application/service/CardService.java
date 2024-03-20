@@ -3,7 +3,9 @@ package org.wedding.application.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
+import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.application.port.in.usecase.CreateCardUseCase;
+import org.wedding.application.port.in.usecase.ModifyCardUseCase;
 import org.wedding.application.port.out.repository.CardRepository;
 import org.wedding.domain.card.Card;
 import org.wedding.domain.card.exception.CardError;
@@ -13,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CardService implements CreateCardUseCase {
+public class CardService implements CreateCardUseCase, ModifyCardUseCase {
 
     private final CardRepository cardRepository;
 
@@ -24,7 +26,32 @@ public class CardService implements CreateCardUseCase {
         Card card = CreateCardRequest.toEntity(request);
 
         cardRepository.save(card);
+    }
 
+
+    @Transactional
+    @Override
+    public void modifyCard(Card card, ModifyCardRequest request) {
+
+        checkCardExistence(card.getCardId());
+
+        if (request.cardTitle().isPresent()) {
+            checkDuplicateCardTitle(request.cardTitle().get());
+        }
+
+        Card modifiedCard =
+            card.changeCardTitle(request.cardTitle().orElse(card.getCardTitle()))
+                .changeBudget(request.budget().orElse(card.getBudget()))
+                .changeDeadline(request.deadline().orElse(card.getDeadline()))
+                .changeCardStatus(request.cardStatus().orElse(card.getCardStatus()));
+
+        cardRepository.save(modifiedCard);
+    }
+
+    public void checkCardExistence(int cardId) {
+        if (!cardRepository.existsByCardId(cardId)) {
+            throw new CardException(CardError.CARD_NOT_FOUND);
+        }
     }
 
     public void checkDuplicateCardTitle(String cardTitle) {
