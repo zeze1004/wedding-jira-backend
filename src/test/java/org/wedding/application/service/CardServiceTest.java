@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
+import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
@@ -33,7 +34,7 @@ class CardServiceTest {
 
     private Card card;
     private CreateCardCommand createCommand;
-    private ModifyCardRequest modifyCardRequest;
+    private ModifyCardCommand modifyCommand;
 
     @BeforeEach
     void setUp() {
@@ -98,16 +99,16 @@ class CardServiceTest {
     @Test
     void modifyCard_Title() {
 
-        ModifyCardRequest modifyCardTitleRequest = new ModifyCardRequest(
+        ModifyCardCommand modifyCardTitleCommand = new ModifyCardCommand(
             "스드메 예약금 넣기 수정",
             null,
             null,
             null
         );
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
-        lenient().when(cardRepository.existsByCardTitle(modifyCardTitleRequest.cardTitle().get())).thenReturn(false);
+        lenient().when(cardRepository.existsByCardTitle(modifyCardTitleCommand.cardTitle().get())).thenReturn(false);
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
-        cardService.modifyCard(card.getCardId(), modifyCardTitleRequest);
+        cardService.modifyCard(card.getCardId(), modifyCardTitleCommand);
         verify(cardRepository, times(2)).save(any());
     }
 
@@ -132,7 +133,7 @@ class CardServiceTest {
     @Test
     void modifyCard_Status() {
 
-        ModifyCardRequest modifyCardStatusRequest = new ModifyCardRequest(
+        ModifyCardCommand modifyCardStatusCommand = new ModifyCardCommand(
             null,
             null,
             null,
@@ -140,9 +141,9 @@ class CardServiceTest {
         );
 
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
-        Assertions.assertThat(modifyCardStatusRequest.cardTitle()).isEqualTo(Optional.empty());
+        Assertions.assertThat(modifyCardStatusCommand.cardTitle()).isEqualTo(Optional.empty());
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
-        cardService.modifyCard(card.getCardId(), modifyCardStatusRequest);
+        cardService.modifyCard(card.getCardId(), modifyCardStatusCommand);
         verify(cardRepository, times(2)).save(any());
     }
 }
