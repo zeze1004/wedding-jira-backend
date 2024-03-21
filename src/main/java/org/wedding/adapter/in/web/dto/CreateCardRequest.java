@@ -2,8 +2,6 @@ package org.wedding.adapter.in.web.dto;
 
 import java.time.LocalDateTime;
 
-import org.wedding.domain.CardStatus;
-import org.wedding.domain.card.Card;
 import org.wedding.domain.card.exception.CardError;
 
 import jakarta.validation.constraints.NotBlank;
