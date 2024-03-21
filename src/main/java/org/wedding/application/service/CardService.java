@@ -2,10 +2,10 @@ package org.wedding.application.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
-import org.wedding.application.port.in.usecase.CreateCardUseCase;
-import org.wedding.application.port.in.usecase.ModifyCardUseCase;
+import org.wedding.application.port.in.command.card.CreateCardCommand;
+import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
+import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.out.repository.CardRepository;
 import org.wedding.domain.card.Card;
 import org.wedding.domain.card.exception.CardError;
@@ -21,9 +21,10 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase {
 
     @Transactional
     @Override
-    public void createCard(CreateCardRequest request) {
-        checkDuplicateCardTitle(request.cardTitle());
-        Card card = CreateCardRequest.toEntity(request);
+    public void createCard(CreateCardCommand command) {
+
+        checkDuplicateCardTitle(command.cardTitle());
+        Card card = CreateCardCommand.toEntity(command);
 
         cardRepository.save(card);
     }

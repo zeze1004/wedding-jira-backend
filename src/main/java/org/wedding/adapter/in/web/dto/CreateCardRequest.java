@@ -12,6 +12,7 @@ import lombok.Builder;
 
 @Builder
 public record CreateCardRequest (
+
     @NotBlank(message = "CARD_TITLE_IS_REQUIRED", payload = CardError.class)
     @Size(min = 1, max = 20, message = "CARD_TITLE_SIZE_NOT_VALID", payload = CardError.class)
     String cardTitle,
@@ -34,15 +35,6 @@ public record CreateCardRequest (
 
     public CreateCardRequest(String cardTitle, LocalDateTime deadline) {
         this(cardTitle, null, deadline);
-    }
-
-    public static Card toEntity(CreateCardRequest createCardRequest) {
-        return Card.builder()
-            .cardTitle(createCardRequest.cardTitle())
-            .budget(createCardRequest.budget())
-            .deadline(createCardRequest.deadline())
-            .cardStatus(CardStatus.BACKLOG)
-            .build();
     }
 
     public String toString() {
