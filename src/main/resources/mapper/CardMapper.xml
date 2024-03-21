@@ -3,6 +3,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.wedding.adapter.out.persistence.MybatisCardRepositoryImpl">
+
+    <resultMap id="CardResultMap" type="card">
+        <result property="cardId" column="card_id"/>
+        <result property="cardTitle" column="card_title"/>
+        <result property="budget" column="budget"/>
+        <result property="deadline" column="deadline"/>
+        <result property="cardStatus" column="card_status"/>
+        <!-- TODO: TodoListId column 조회, Todo 도메인 리팩토링시 추가하기 -->
+    </resultMap>
+
     <insert id="save" parameterType="Card" useGeneratedKeys="true" keyProperty="cardId">
         INSERT INTO card (card_id, card_title, budget, deadline, card_status)
         VALUES (#{cardId}, #{cardTitle}, #{budget}, #{deadline}, #{cardStatus})
@@ -20,5 +30,13 @@
 
     <select id="findByCardId" parameterType="int" resultType="Card">
         SELECT * FROM card WHERE card_id = #{cardId}
+    </select>
+
+    <select id="findByCardTitle" parameterType="String" resultType="Card">
+        SELECT * FROM card WHERE card_title = #{cardTitle}
+    </select>
+
+    <select id="findByCardStatus" parameterType="list" resultMap="CardResultMap">
+        SELECT * FROM card WHERE card_status = #{cardStatus}
     </select>
 </mapper>
