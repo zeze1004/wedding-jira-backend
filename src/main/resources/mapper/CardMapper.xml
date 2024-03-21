@@ -4,13 +4,15 @@
 
 <mapper namespace="org.wedding.adapter.out.persistence.MybatisCardRepositoryImpl">
 
-    <resultMap id="CardResultMap" type="card">
-        <result property="cardId" column="card_id"/>
-        <result property="cardTitle" column="card_title"/>
-        <result property="budget" column="budget"/>
-        <result property="deadline" column="deadline"/>
-        <result property="cardStatus" column="card_status"/>
-        <!-- TODO: TodoListId column 조회, Todo 도메인 리팩토링시 추가하기 -->
+    <resultMap id="cardResultMap" type="Card">
+        <constructor>
+            <idArg column="card_id" javaType="int"/>
+            <arg column="card_title" javaType="String"/>
+            <arg column="budget" javaType="long"/>
+            <arg column="deadline" javaType="java.time.LocalDate"/>
+            <arg column="card_status" javaType="org.wedding.domain.model.CardStatus"/>
+            <!-- TODO: TodoListId column 조회, Todo 도메인 리팩토링시 추가하기 -->
+        </constructor>
     </resultMap>
 
     <insert id="save" parameterType="Card" useGeneratedKeys="true" keyProperty="cardId">
@@ -36,7 +38,9 @@
         SELECT * FROM card WHERE card_title = #{cardTitle}
     </select>
 
-    <select id="findByCardStatus" parameterType="list" resultMap="CardResultMap">
-        SELECT * FROM card WHERE card_status = #{cardStatus}
+    <select id="findByCardStatus" resultType="list" resultMap="cardResultMap">
+        SELECT card_id, card_title, budget, deadline, card_status
+        FROM card
+        WHERE card_status = #{cardStatus}
     </select>
 </mapper>

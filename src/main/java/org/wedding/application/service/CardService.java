@@ -68,7 +68,7 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
 
     @Override
     public List<Card> readCardsByCardStatus(CardStatus cardStatus) {
-        return null;
+        return cardRepository.findByCardStatus(cardStatus);
     }
 
     public void checkCardExistence(int cardId) {

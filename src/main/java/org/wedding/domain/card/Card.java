@@ -6,14 +6,13 @@ import java.util.List;
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.Todo;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class Card {
     private final int cardId;
     private final String cardTitle;
@@ -21,6 +20,15 @@ public class Card {
     private final LocalDateTime deadline;   // TODO: Calendar 도메인으로 변경
     private final List<Todo> todoList;
     private final CardStatus cardStatus;
+
+    public Card(int cardId, String cardTitle, long budget, LocalDateTime deadline, CardStatus cardStatus) {
+        this.cardId = cardId;
+        this.cardTitle = cardTitle;
+        this.budget = budget;
+        this.deadline = deadline;
+        this.todoList = null;
+        this.cardStatus = cardStatus;
+    }
 
     public Card changeCardTitle(String cardTitle) {
         return new Card(this.cardId, cardTitle, this.budget, this.deadline, this.todoList, this.cardStatus);
