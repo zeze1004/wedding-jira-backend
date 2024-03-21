@@ -1,12 +1,14 @@
 package org.wedding.application.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -139,9 +141,45 @@ class CardServiceTest {
         );
 
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
-        Assertions.assertThat(modifyCardStatusRequest.cardTitle()).isEqualTo(Optional.empty());
+        assertThat(modifyCardStatusRequest.cardTitle()).isEqualTo(Optional.empty());
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
         cardService.modifyCard(card.getCardId(), modifyCardStatusRequest);
         verify(cardRepository, times(2)).save(any());
     }
+
+    @DisplayName("카드 제목에 따른 카드 조회")
+    @Test
+    void readCardsByCardTitle() {
+
+        // given
+        String cardTitle = "스드메 예약금 넣기";
+        lenient().when(cardRepository.existsByCardTitle(cardTitle)).thenReturn(true);
+        lenient().when(cardRepository.findByCardTitle(cardTitle)).thenReturn(card);
+
+        // when
+        Card actualCard = cardService.readCardsByCardTitle(cardTitle);
+
+        // then
+        verify(cardRepository, times(1)).findByCardTitle(cardTitle);
+        assertThat(actualCard).isEqualTo(card);
+    }
+
+    @DisplayName("카드 상태에 따른 카드 조회")
+    @Test
+    void readCardsByCardStatus() {
+
+        // given
+        List<Card> expectedCards = Arrays.asList(
+            new Card(1, "스드메 예약금 넣기", 100000L, null, CardStatus.BACKLOG),
+            new Card(2, "상견례하기", 100000L, null, CardStatus.BACKLOG));
+        lenient().when(cardRepository.findByCardStatus(CardStatus.BACKLOG)).thenReturn(expectedCards);
+
+        // when
+        List<Card> actualCards = cardService.readCardsByCardStatus(CardStatus.BACKLOG);
+
+        // then
+        verify(cardRepository, times(1)).findByCardStatus(CardStatus.BACKLOG);
+        assertThat(actualCards).isEqualTo(expectedCards);
+    }
+
 }
