@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.adapter.in.web.dto.CreateCardRequest;
-import org.wedding.adapter.in.web.dto.ModifyCardRequest;
+import org.wedding.application.port.in.command.card.CreateCardCommand;
+import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
 import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
@@ -25,29 +25,31 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
 
     @Transactional
     @Override
-    public void createCard(CreateCardRequest request) {
-        checkDuplicateCardTitle(request.cardTitle());
-        Card card = CreateCardRequest.toEntity(request);
+    public void createCard(CreateCardCommand command) {
+
+        checkDuplicateCardTitle(command.cardTitle());
+        Card card = CreateCardCommand.toEntity(command);
 
         cardRepository.save(card);
     }
 
+
     @Transactional
     @Override
-    public void modifyCard(int cardId, ModifyCardRequest request) {
+    public void modifyCard(int cardId, ModifyCardCommand command) {
 
         checkCardExistence(cardId);
-        Card card = readCardByCardId(cardId);
+        Card card = cardRepository.findByCardId(cardId);
 
-        if (request.cardTitle().isPresent()) {
-            checkDuplicateCardTitle(request.cardTitle().get());
+        if (command.cardTitle().isPresent()) {
+            checkDuplicateCardTitle(command.cardTitle().get());
         }
 
         Card modifiedCard =
-            card.changeCardTitle(request.cardTitle().orElse(card.getCardTitle()))
-                .changeBudget(request.budget().orElse(card.getBudget()))
-                .changeDeadline(request.deadline().orElse(card.getDeadline()))
-                .changeCardStatus(request.cardStatus().orElse(card.getCardStatus()));
+            card.changeCardTitle(command.cardTitle().orElse(card.getCardTitle()))
+                .changeBudget(command.budget().orElse(card.getBudget()))
+                .changeDeadline(command.deadline().orElse(card.getDeadline()))
+                .changeCardStatus(command.cardStatus().orElse(card.getCardStatus()));
 
         cardRepository.save(modifiedCard);
     }

@@ -1,8 +1,8 @@
 package org.wedding.application.port.in.usecase.card;
 
-import org.wedding.adapter.in.web.dto.CreateCardRequest;
+import org.wedding.application.port.in.command.card.CreateCardCommand;
 
 public interface CreateCardUseCase {
 
-    void createCard(CreateCardRequest request);
+    void createCard(CreateCardCommand command);
 }
