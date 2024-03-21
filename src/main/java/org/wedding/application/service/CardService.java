@@ -1,12 +1,16 @@
 package org.wedding.application.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
 import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
+import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
 import org.wedding.application.port.out.repository.CardRepository;
+import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
 import org.wedding.domain.card.exception.CardError;
 import org.wedding.domain.card.exception.CardException;
@@ -15,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CardService implements CreateCardUseCase, ModifyCardUseCase {
+public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCardUseCase {
 
     private final CardRepository cardRepository;
 
@@ -28,13 +32,12 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase {
         cardRepository.save(card);
     }
 
-
     @Transactional
     @Override
     public void modifyCard(int cardId, ModifyCardRequest request) {
 
         checkCardExistence(cardId);
-        Card card = cardRepository.findByCardId(cardId);
+        Card card = readCardByCardId(cardId);
 
         if (request.cardTitle().isPresent()) {
             checkDuplicateCardTitle(request.cardTitle().get());
@@ -47,6 +50,25 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase {
                 .changeCardStatus(request.cardStatus().orElse(card.getCardStatus()));
 
         cardRepository.save(modifiedCard);
+    }
+
+    @Override
+    public Card readCardByCardId(int cardId) {
+        return cardRepository.findByCardId(cardId);
+    }
+
+    @Override
+    public Card readCardsByCardTitle(String cardTitle) {
+        if (!cardRepository.existsByCardTitle(cardTitle)) {
+            throw new CardException(CardError.CARD_NOT_FOUND);
+        }
+
+        return cardRepository.findByCardTitle(cardTitle);
+    }
+
+    @Override
+    public List<Card> readCardsByCardStatus(CardStatus cardStatus) {
+        return null;
     }
 
     public void checkCardExistence(int cardId) {
