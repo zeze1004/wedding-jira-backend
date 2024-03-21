@@ -9,6 +9,7 @@ import lombok.Builder;
 
 @Builder
 public record ModifyCardRequest (
+
     Optional<String> cardTitle,
     Optional<Long> budget,
     Optional<LocalDateTime> deadline,

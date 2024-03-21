@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
+import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
 import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.common.response.ApiResponse;
@@ -51,7 +52,11 @@ public class CardController {
     public ResponseEntity<ApiResponse<Void>> modifyCard(
         @PathVariable int cardId,
         @RequestBody @Valid ModifyCardRequest request) {
-        modifyCardUseCase.modifyCard(cardId, request);
+
+        ModifyCardCommand command = new ModifyCardCommand(request.cardTitle(), request.budget(), request.deadline(), request.cardStatus());
+
+        modifyCardUseCase.modifyCard(cardId, command);
+
         ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "카드가 수정되었습니다.");
         return new ResponseEntity<>(response, response.status());
     }
