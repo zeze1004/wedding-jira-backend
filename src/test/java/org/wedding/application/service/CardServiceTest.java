@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
+import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
@@ -31,19 +32,19 @@ class CardServiceTest {
     private CardRepository cardRepository;
 
     private Card card;
-    private CreateCardRequest createCardRequest;
+    private CreateCardCommand createCommand;
     private ModifyCardRequest modifyCardRequest;
 
     @BeforeEach
     void setUp() {
-        createCardRequest = new CreateCardRequest(
+        createCommand = new CreateCardCommand(
             "스드메 예약금 넣기",
             100000L,
             null
         );
         cardService = new CardService(cardRepository);
-        card = CreateCardRequest.toEntity(createCardRequest);
-        cardService.createCard(createCardRequest);
+        card = CreateCardCommand.toEntity(createCommand);
+        cardService.createCard(createCommand);
     }
 
     @DisplayName("카드 제목과 예산 그리고 마감일를 넣으면 카드 생성 성공")
@@ -56,7 +57,7 @@ class CardServiceTest {
             LocalDateTime.now()
         );
         when(cardRepository.existsByCardTitle(allValidCreateCardRequest.cardTitle())).thenReturn(false);
-        cardService.createCard(createCardRequest);
+        cardService.createCard(createCommand);
         verify(cardRepository, times(2)).save(any());
     }
 
@@ -64,13 +65,13 @@ class CardServiceTest {
     @Test
     void createCardWithOnlyTitle() {
 
-        CreateCardRequest createCardWithOnlyTitleRequest = new CreateCardRequest(
+        CreateCardCommand createCardWithOnlyTitleCommand = new CreateCardCommand(
             "결혼식 리허설하기",
             null,
             null
         );
-        when(cardRepository.existsByCardTitle(createCardWithOnlyTitleRequest.cardTitle())).thenReturn(false);
-        cardService.createCard(createCardWithOnlyTitleRequest);
+        when(cardRepository.existsByCardTitle(createCardWithOnlyTitleCommand.cardTitle())).thenReturn(false);
+        cardService.createCard(createCardWithOnlyTitleCommand);
         verify(cardRepository, times(2)).save(any());
     }
 
