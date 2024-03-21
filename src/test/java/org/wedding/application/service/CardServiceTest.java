@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
+import org.wedding.application.port.in.command.card.CreateCardCommand;
+import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
@@ -31,19 +33,19 @@ class CardServiceTest {
     private CardRepository cardRepository;
 
     private Card card;
-    private CreateCardRequest createCardRequest;
-    private ModifyCardRequest modifyCardRequest;
+    private CreateCardCommand createCommand;
+    private ModifyCardCommand modifyCommand;
 
     @BeforeEach
     void setUp() {
-        createCardRequest = new CreateCardRequest(
+        createCommand = new CreateCardCommand(
             "스드메 예약금 넣기",
             100000L,
             null
         );
         cardService = new CardService(cardRepository);
-        card = CreateCardRequest.toEntity(createCardRequest);
-        cardService.createCard(createCardRequest);
+        card = CreateCardCommand.toEntity(createCommand);
+        cardService.createCard(createCommand);
     }
 
     @DisplayName("카드 제목과 예산 그리고 마감일를 넣으면 카드 생성 성공")
@@ -56,7 +58,7 @@ class CardServiceTest {
             LocalDateTime.now()
         );
         when(cardRepository.existsByCardTitle(allValidCreateCardRequest.cardTitle())).thenReturn(false);
-        cardService.createCard(createCardRequest);
+        cardService.createCard(createCommand);
         verify(cardRepository, times(2)).save(any());
     }
 
@@ -64,13 +66,13 @@ class CardServiceTest {
     @Test
     void createCardWithOnlyTitle() {
 
-        CreateCardRequest createCardWithOnlyTitleRequest = new CreateCardRequest(
+        CreateCardCommand createCardWithOnlyTitleCommand = new CreateCardCommand(
             "결혼식 리허설하기",
             null,
             null
         );
-        when(cardRepository.existsByCardTitle(createCardWithOnlyTitleRequest.cardTitle())).thenReturn(false);
-        cardService.createCard(createCardWithOnlyTitleRequest);
+        when(cardRepository.existsByCardTitle(createCardWithOnlyTitleCommand.cardTitle())).thenReturn(false);
+        cardService.createCard(createCardWithOnlyTitleCommand);
         verify(cardRepository, times(2)).save(any());
     }
 
@@ -97,16 +99,16 @@ class CardServiceTest {
     @Test
     void modifyCard_Title() {
 
-        ModifyCardRequest modifyCardTitleRequest = new ModifyCardRequest(
+        ModifyCardCommand modifyCardTitleCommand = new ModifyCardCommand(
             "스드메 예약금 넣기 수정",
             null,
             null,
             null
         );
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
-        lenient().when(cardRepository.existsByCardTitle(modifyCardTitleRequest.cardTitle().get())).thenReturn(false);
+        lenient().when(cardRepository.existsByCardTitle(modifyCardTitleCommand.cardTitle().get())).thenReturn(false);
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
-        cardService.modifyCard(card.getCardId(), modifyCardTitleRequest);
+        cardService.modifyCard(card.getCardId(), modifyCardTitleCommand);
         verify(cardRepository, times(2)).save(any());
     }
 
@@ -131,7 +133,7 @@ class CardServiceTest {
     @Test
     void modifyCard_Status() {
 
-        ModifyCardRequest modifyCardStatusRequest = new ModifyCardRequest(
+        ModifyCardCommand modifyCardStatusCommand = new ModifyCardCommand(
             null,
             null,
             null,
@@ -139,9 +141,9 @@ class CardServiceTest {
         );
 
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
-        Assertions.assertThat(modifyCardStatusRequest.cardTitle()).isEqualTo(Optional.empty());
+        Assertions.assertThat(modifyCardStatusCommand.cardTitle()).isEqualTo(Optional.empty());
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
-        cardService.modifyCard(card.getCardId(), modifyCardStatusRequest);
+        cardService.modifyCard(card.getCardId(), modifyCardStatusCommand);
         verify(cardRepository, times(2)).save(any());
     }
 }

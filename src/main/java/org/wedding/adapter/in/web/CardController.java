@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
-import org.wedding.application.port.in.usecase.CreateCardUseCase;
-import org.wedding.application.port.in.usecase.ModifyCardUseCase;
+import org.wedding.application.port.in.command.card.CreateCardCommand;
+import org.wedding.application.port.in.command.card.ModifyCardCommand;
+import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
+import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.common.response.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +37,11 @@ public class CardController {
     @Operation(summary = "카드 생성", description = "카드 생성")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ApiResponse<Void>> createCard(@RequestBody @Valid CreateCardRequest request) {
-        createCardUseCase.createCard(request);
+
+        CreateCardCommand command = new CreateCardCommand(request.cardTitle(), request.budget(), request.deadline());
+
+        createCardUseCase.createCard(command);
+
         ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.CREATED, "카드가 생성되었습니다.");
         return new ResponseEntity<>(response, response.status());
     }
@@ -46,7 +52,11 @@ public class CardController {
     public ResponseEntity<ApiResponse<Void>> modifyCard(
         @PathVariable int cardId,
         @RequestBody @Valid ModifyCardRequest request) {
-        modifyCardUseCase.modifyCard(cardId, request);
+
+        ModifyCardCommand command = new ModifyCardCommand(request.cardTitle(), request.budget(), request.deadline(), request.cardStatus());
+
+        modifyCardUseCase.modifyCard(cardId, command);
+
         ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "카드가 수정되었습니다.");
         return new ResponseEntity<>(response, response.status());
     }
