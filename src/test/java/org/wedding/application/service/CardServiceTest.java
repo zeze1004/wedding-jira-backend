@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
+import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
 import org.wedding.domain.card.exception.CardError;
@@ -35,7 +35,6 @@ class CardServiceTest {
 
     private Card card;
     private CreateCardCommand createCommand;
-    private ModifyCardCommand modifyCommand;
 
     @BeforeEach
     void setUp() {
@@ -56,7 +55,7 @@ class CardServiceTest {
         CreateCardCommand allValidCreateCardCommand = new CreateCardCommand(
             "스드메 예약금 넣기",
             100000L,
-            LocalDateTime.now()
+            LocalDate.now()
         );
         when(cardRepository.existsByCardTitle(allValidCreateCardCommand.cardTitle())).thenReturn(false);
         cardService.createCard(createCommand);
@@ -69,7 +68,7 @@ class CardServiceTest {
 
         CreateCardCommand createCardWithOnlyTitleCommand = new CreateCardCommand(
             "결혼식 리허설하기",
-            null,
+            0L,
             null
         );
         when(cardRepository.existsByCardTitle(createCardWithOnlyTitleCommand.cardTitle())).thenReturn(false);
@@ -83,7 +82,7 @@ class CardServiceTest {
 
         CreateCardCommand createCardDuplicateTitleRequest = new CreateCardCommand(
             "스드메 예약금 넣기",
-            null,
+            0L,
             null
         );
 
@@ -102,7 +101,7 @@ class CardServiceTest {
 
         ModifyCardCommand modifyCardTitleCommand = new ModifyCardCommand(
             "스드메 예약금 넣기 수정",
-            null,
+            0L,
             null,
             null
         );
@@ -110,7 +109,7 @@ class CardServiceTest {
         lenient().when(cardRepository.existsByCardTitle(modifyCardTitleCommand.cardTitle().get())).thenReturn(false);
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
         cardService.modifyCard(card.getCardId(), modifyCardTitleCommand);
-        verify(cardRepository, times(2)).save(any());
+        verify(cardRepository, times(1)).save(any());
     }
 
     @DisplayName("카드가 존재하지 않을 때 카드 이름 수정할시 실패")
@@ -119,7 +118,7 @@ class CardServiceTest {
 
         ModifyCardCommand modifyCardTitleCommand = new ModifyCardCommand(
             "스드메 예약금 넣기 수정",
-            null,
+            0L,
             null,
             null
         );
@@ -136,7 +135,7 @@ class CardServiceTest {
 
         ModifyCardCommand modifyCardStatusCommand = new ModifyCardCommand(
             null,
-            null,
+            0L,
             null,
             CardStatus.PROGRESS
         );
@@ -145,7 +144,7 @@ class CardServiceTest {
         Assertions.assertThat(modifyCardStatusCommand.cardTitle()).isEqualTo(Optional.empty());
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
         cardService.modifyCard(card.getCardId(), modifyCardStatusCommand);
-        verify(cardRepository, times(2)).save(any());
+        verify(cardRepository, times(1)).save(any());
     }
 
 
@@ -159,11 +158,11 @@ class CardServiceTest {
         lenient().when(cardRepository.findByCardTitle(cardTitle)).thenReturn(card);
 
         // when
-        Card actualCard = cardService.readCardsByCardTitle(cardTitle);
+        ReadCardResponse actualCard = cardService.readCardsByCardTitle(cardTitle);
 
         // then
         verify(cardRepository, times(1)).findByCardTitle(cardTitle);
-        assertThat(actualCard).isEqualTo(card);
+        assertThat(actualCard).isEqualTo(new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus()));
     }
 
     @DisplayName("카드 상태에 따른 카드 조회")
@@ -171,16 +170,18 @@ class CardServiceTest {
     void readCardsByCardStatus() {
 
         // given
-        List<Card> expectedCards = Arrays.asList(
-            new Card(1, "스드메 예약금 넣기", 100000L, null, CardStatus.BACKLOG),
-            new Card(2, "상견례하기", 100000L, null, CardStatus.BACKLOG));
+        List<Card> expectedCards = List.of(
+            new Card(0, "스드메 예약금 넣기", 100000L, null, CardStatus.BACKLOG));
         lenient().when(cardRepository.findByCardStatus(CardStatus.BACKLOG)).thenReturn(expectedCards);
 
         // when
-        List<Card> actualCards = cardService.readCardsByCardStatus(CardStatus.BACKLOG);
+        List<ReadCardResponse> actualCards = cardService.readCardsByCardStatus(CardStatus.BACKLOG);
 
         // then
         verify(cardRepository, times(1)).findByCardStatus(CardStatus.BACKLOG);
-        assertThat(actualCards).isEqualTo(expectedCards);
+        assertThat(actualCards).containsExactly(
+            new ReadCardResponse(expectedCards.get(0).getCardId(), expectedCards.get(0).getCardTitle(),
+                expectedCards.get(0).getBudget(), expectedCards.get(0).getDeadline(),
+                expectedCards.get(0).getCardStatus()));
     }
 }
