@@ -15,6 +15,9 @@ public interface MybatisCardRepositoryImpl extends CardRepository {
     int save(Card card);
 
     @Override
+    void update(Card card);
+
+    @Override
     boolean existsByCardTitle(String cardTitle);
 
     @Override
@@ -28,6 +31,4 @@ public interface MybatisCardRepositoryImpl extends CardRepository {
 
     @Override
     List<Card> findByCardStatus(CardStatus cardStatus);
-
-
 }

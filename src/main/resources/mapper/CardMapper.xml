@@ -5,20 +5,23 @@
 <mapper namespace="org.wedding.adapter.out.persistence.MybatisCardRepositoryImpl">
 
     <resultMap id="cardResultMap" type="Card">
-        <constructor>
-            <idArg column="card_id" javaType="int"/>
-            <arg column="card_title" javaType="String"/>
-            <arg column="budget" javaType="long"/>
-            <arg column="deadline" javaType="java.time.LocalDate"/>
-            <arg column="card_status" javaType="org.wedding.domain.model.CardStatus"/>
-            <!-- TODO: TodoListId column 조회, Todo 도메인 리팩토링시 추가하기 -->
-        </constructor>
+        <id column="card_id" property="cardId"/>
+        <result column="card_title" property="cardTitle"/>
+        <result column="budget" property="budget"/>
+        <result column="deadline" property="deadline"/>
+        <result column="card_status" property="cardStatus"/>
     </resultMap>
 
     <insert id="save" parameterType="Card" useGeneratedKeys="true" keyProperty="cardId">
         INSERT INTO card (card_id, card_title, budget, deadline, card_status)
         VALUES (#{cardId}, #{cardTitle}, #{budget}, #{deadline}, #{cardStatus})
     </insert>
+
+    <update id="update" parameterType="Card">
+        UPDATE card
+        SET card_title = #{cardTitle}, budget = #{budget}, deadline = #{deadline}, card_status = #{cardStatus}
+        WHERE card_id = #{cardId}
+    </update>
 
     <select id="existsByCardTitle" parameterType="String" resultType="boolean">
         SELECT EXISTS
@@ -42,5 +45,10 @@
         SELECT card_id, card_title, budget, deadline, card_status
         FROM card
         WHERE card_status = #{cardStatus}
+    </select>
+
+    <select id="findAll" resultType="list" resultMap="cardResultMap">
+        SELECT card_id, card_title, budget, deadline, card_status
+        FROM card
     </select>
 </mapper>
