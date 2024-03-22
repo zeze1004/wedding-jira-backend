@@ -184,4 +184,17 @@ class CardServiceTest {
                 expectedCards.get(0).getBudget(), expectedCards.get(0).getDeadline(),
                 expectedCards.get(0).getCardStatus()));
     }
+
+    @DisplayName("카드 삭제 성공")
+    @Test
+    void deleteCard() {
+
+        // given
+        int cardId = 0;
+        lenient().when(cardRepository.existsByCardId(cardId)).thenReturn(true);
+        // when
+        cardService.deleteCard(cardId);
+        // then
+        verify(cardRepository, times(1)).deleteByCardId(cardId);
+    }
 }
