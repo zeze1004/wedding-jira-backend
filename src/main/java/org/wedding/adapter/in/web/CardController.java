@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
+import org.wedding.application.port.in.usecase.card.DeleteCardUseCase;
 import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
 import org.wedding.application.service.response.card.ReadCardResponse;
@@ -39,6 +41,7 @@ public class CardController {
     private final CreateCardUseCase createCardUseCase;
     private final ModifyCardUseCase modifyCardUseCase;
     private final ReadCardUseCase   readCardUseCase;
+    private final DeleteCardUseCase deleteCardUseCase;
 
     @PostMapping()
     @Operation(summary = "카드 생성", description = "카드 생성")
@@ -93,5 +96,16 @@ public class CardController {
 
         List<ReadCardResponse> response = readCardUseCase.readCardsByCardStatus(cardStatus);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{cardId}")
+    @Operation(summary = "카드 삭제", description = "카드 삭제")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ApiResponse<Void>> deleteCard(@PathVariable int cardId) {
+
+        deleteCardUseCase.deleteCard(cardId);
+
+        ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "카드가 삭제되었습니다.");
+        return new ResponseEntity<>(response, response.status());
     }
 }

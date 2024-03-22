@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
+import org.wedding.application.port.in.usecase.card.DeleteCardUseCase;
 import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
 import org.wedding.application.port.out.repository.CardRepository;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCardUseCase {
+public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCardUseCase, DeleteCardUseCase {
 
     private final CardRepository cardRepository;
 
@@ -91,6 +92,15 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
     @Override
     public List<ReadCardResponse> readAllCardsByCardBoardId(int cardBoardId) {}
      */
+
+    @Transactional
+    @Override
+    public void deleteCard(int cardId) {
+
+        checkCardExistence(cardId);
+        cardRepository.deleteByCardId(cardId);
+    }
+
 
     public void checkCardTitleExistence(String cardTitle) {
         if (!cardRepository.existsByCardTitle(cardTitle)) {

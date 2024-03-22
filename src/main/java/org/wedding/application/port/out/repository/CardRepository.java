@@ -20,6 +20,8 @@ public interface CardRepository {
 
     List<Card> findByCardStatus(CardStatus cardStatus);
 
+    void deleteByCardId(int cardId);
+
     // List<Card> findAll(int cardBoardId); // TODO: 카드보드 리팩토링 후 추가
 
     // List<TodoListPort> findTodoByCardId(int cardId); // TODO: 투두 도메인 리팩토링 후 추가
