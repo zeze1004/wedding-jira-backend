@@ -1,7 +1,10 @@
 package org.wedding.adapter.in.web;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +18,10 @@ import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
 import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
+import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
+import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.common.response.ApiResponse;
+import org.wedding.domain.CardStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +38,7 @@ public class CardController {
 
     private final CreateCardUseCase createCardUseCase;
     private final ModifyCardUseCase modifyCardUseCase;
+    private final ReadCardUseCase   readCardUseCase;
 
     @PostMapping()
     @Operation(summary = "카드 생성", description = "카드 생성")
@@ -61,4 +68,30 @@ public class CardController {
         return new ResponseEntity<>(response, response.status());
     }
 
+    @GetMapping("/id/{cardId}")
+    @Operation(summary = "카드 ID로 조회", description = "카드 ID로 조회")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ReadCardResponse> readCardByCardId(@PathVariable int cardId) {
+
+        ReadCardResponse response = readCardUseCase.readCardByCardId(cardId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/title/{cardTitle}")
+    @Operation(summary = "카드 제목으로 조회", description = "카드 제목으로 조회")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ReadCardResponse> readCardByCardTitle(@PathVariable String cardTitle) {
+
+        ReadCardResponse response = readCardUseCase.readCardsByCardTitle(cardTitle);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/status/{cardStatus}")
+    @Operation(summary = "카드 상태로 조회", description = "카드 상태로 조회")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<ReadCardResponse>> readCardsByCardStatus(@PathVariable CardStatus cardStatus) {
+
+        List<ReadCardResponse> response = readCardUseCase.readCardsByCardStatus(cardStatus);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

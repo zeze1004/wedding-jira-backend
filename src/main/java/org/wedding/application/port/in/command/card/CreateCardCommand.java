@@ -1,6 +1,6 @@
 package org.wedding.application.port.in.command.card;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
@@ -14,10 +14,10 @@ public record CreateCardCommand (
     @NotNull
     String cardTitle,
     Long budget,
-    LocalDateTime deadline
+    LocalDate deadline
 ) {
 
-    public CreateCardCommand(String cardTitle, Long budget, LocalDateTime deadline) {
+    public CreateCardCommand(String cardTitle, Long budget, LocalDate deadline) {
         this.cardTitle = cardTitle;
         this.budget = budget;
         this.deadline = deadline;

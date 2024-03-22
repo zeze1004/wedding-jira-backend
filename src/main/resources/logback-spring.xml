@@ -6,17 +6,10 @@
 
     <springProfile name="local">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
-                    <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-                    <charset>utf8</charset>
-                    <appendLineSeparator>true</appendLineSeparator>
-
-                    <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
-                        <prettyPrint>true</prettyPrint>
-                    </jsonFormatter>
-                    <timestampFormat>yyyy-MM-dd HH:mm:ss.SSS</timestampFormat>
-                </layout>
+            <encoder >
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>utf8</charset>
+                <appendLineSeparator>true</appendLineSeparator>
             </encoder>
         </appender>
 

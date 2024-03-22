@@ -3,10 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.wedding.adapter.out.persistence.MybatisCardRepositoryImpl">
+
+    <resultMap id="cardResultMap" type="Card">
+        <id column="card_id" property="cardId"/>
+        <result column="card_title" property="cardTitle"/>
+        <result column="budget" property="budget"/>
+        <result column="deadline" property="deadline"/>
+        <result column="card_status" property="cardStatus"/>
+    </resultMap>
+
     <insert id="save" parameterType="Card" useGeneratedKeys="true" keyProperty="cardId">
         INSERT INTO card (card_id, card_title, budget, deadline, card_status)
         VALUES (#{cardId}, #{cardTitle}, #{budget}, #{deadline}, #{cardStatus})
     </insert>
+
+    <update id="update" parameterType="Card">
+        UPDATE card
+        SET card_title = #{cardTitle}, budget = #{budget}, deadline = #{deadline}, card_status = #{cardStatus}
+        WHERE card_id = #{cardId}
+    </update>
 
     <select id="existsByCardTitle" parameterType="String" resultType="boolean">
         SELECT EXISTS
@@ -20,5 +35,20 @@
 
     <select id="findByCardId" parameterType="int" resultType="Card">
         SELECT * FROM card WHERE card_id = #{cardId}
+    </select>
+
+    <select id="findByCardTitle" parameterType="String" resultType="Card">
+        SELECT * FROM card WHERE card_title = #{cardTitle}
+    </select>
+
+    <select id="findByCardStatus" resultType="list" resultMap="cardResultMap">
+        SELECT card_id, card_title, budget, deadline, card_status
+        FROM card
+        WHERE card_status = #{cardStatus}
+    </select>
+
+    <select id="findAll" resultType="list" resultMap="cardResultMap">
+        SELECT card_id, card_title, budget, deadline, card_status
+        FROM card
     </select>
 </mapper>

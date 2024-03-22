@@ -1,6 +1,6 @@
 package org.wedding.adapter.in.web.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.wedding.domain.CardStatus;
@@ -12,11 +12,11 @@ public record ModifyCardRequest (
 
     Optional<String> cardTitle,
     Optional<Long> budget,
-    Optional<LocalDateTime> deadline,
+    Optional<LocalDate> deadline,
     Optional<CardStatus> cardStatus
 ) {
 
-    public ModifyCardRequest(String cardTitle, Long budget, LocalDateTime deadline, CardStatus cardStatus) {
+    public ModifyCardRequest(String cardTitle, Long budget, LocalDate deadline, CardStatus cardStatus) {
         this(Optional.ofNullable(cardTitle), Optional.ofNullable(budget), Optional.ofNullable(deadline), Optional.ofNullable(cardStatus));
     }
 
