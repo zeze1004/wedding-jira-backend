@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.wedding.domain.card.exception.CardError;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
@@ -14,6 +15,7 @@ public record CreateCardRequest (
     @NotBlank(message = "CARD_TITLE_IS_REQUIRED", payload = CardError.class)
     @Size(min = 1, max = 20, message = "CARD_TITLE_SIZE_NOT_VALID", payload = CardError.class)
     String cardTitle,
+    @PositiveOrZero(message = "BUDGET_MUST_BE_POSITIVE", payload = CardError.class)
     long budget,
     LocalDate deadline
 ) {
