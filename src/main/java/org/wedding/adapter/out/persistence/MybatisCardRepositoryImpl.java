@@ -31,4 +31,7 @@ public interface MybatisCardRepositoryImpl extends CardRepository {
 
     @Override
     List<Card> findByCardStatus(CardStatus cardStatus);
+
+    @Override
+    void deleteByCardId(int cardId);
 }

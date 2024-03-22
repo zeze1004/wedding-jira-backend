@@ -51,4 +51,8 @@
         SELECT card_id, card_title, budget, deadline, card_status
         FROM card
     </select>
+
+    <delete id="deleteByCardId" parameterType="int">
+        DELETE FROM card WHERE card_id = #{cardId}
+    </delete>
 </mapper>
