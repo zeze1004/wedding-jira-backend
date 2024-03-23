@@ -1,9 +1,7 @@
 package org.wedding.domain.card;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import org.wedding.application.port.in.TodoListPort;
 import org.wedding.domain.CardStatus;
 
 import lombok.AllArgsConstructor;
@@ -18,32 +16,23 @@ public class Card {
     private final String cardTitle;
     private final long budget;
     private final LocalDate deadline;   // TODO: Calendar 도메인으로 변경
-    private List<TodoListPort> todoList;
     private final CardStatus cardStatus;
 
-    public Card(int cardId, String cardTitle, long budget, LocalDate deadline, CardStatus cardStatus) {
-        this.cardId = cardId;
-        this.cardTitle = cardTitle;
-        this.budget = budget;
-        this.deadline = deadline;
-        this.cardStatus = cardStatus;
-    }
-
     public Card changeCardTitle(String cardTitle) {
-        return new Card(this.cardId, cardTitle, this.budget, this.deadline, this.todoList, this.cardStatus);
+        return new Card(this.cardId, cardTitle, this.budget, this.deadline, this.cardStatus);
     }
 
     public Card changeBudget(Long budget) {
-        return new Card(this.cardId, this.cardTitle, budget, this.deadline, this.todoList, this.cardStatus);
+        return new Card(this.cardId, this.cardTitle, budget, this.deadline, this.cardStatus);
 
     }
 
     public Card changeDeadline(LocalDate deadline) {
-        return new Card(this.cardId, this.cardTitle, this.budget, deadline, this.todoList, this.cardStatus);
+        return new Card(this.cardId, this.cardTitle, this.budget, deadline, this.cardStatus);
     }
 
     public Card changeCardStatus(CardStatus cardStatus) {
-        return new Card(this.cardId, this.cardTitle, this.budget, this.deadline, this.todoList, cardStatus);
+        return new Card(this.cardId, this.cardTitle, this.budget, this.deadline, cardStatus);
     }
 
     public String toString() {
