@@ -12,6 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CardError implements CommonError {
 
+    CARD_ID_MUST_BE_POSITIVE(HttpStatus.BAD_REQUEST, "카드 ID를 전달해주세요."),
     CARD_TITLE_IS_REQUIRED(HttpStatus.BAD_REQUEST, "카드 제목에 할 일을 입력해주세요."),
     CARD_TITLE_SIZE_NOT_VALID(HttpStatus.BAD_REQUEST, "카드 제목은 1자 이상 20자 이하로 입력해주세요."),
     CARD_TITLE_IS_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 카드 제목입니다."),
