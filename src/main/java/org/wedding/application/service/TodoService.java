@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TodoService implements TodoUseCase {
 
-    final int MAX_TODOS_PER_CARD = 3;
+    static final int MAX_TODOS_PER_CARD = 3;
 
     private final TodoRepository todoRepository;
     private final CardService cardService;
