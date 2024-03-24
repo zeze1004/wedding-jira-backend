@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wedding.adapter.out.persistence.MybatisTodoRepositoryImpl">
+
+    <insert id="save" parameterType="Todo" useGeneratedKeys="true" keyProperty="todoId">
+        INSERT INTO todo (todo_id, todo_item, todo_check_status, card_id)
+        VALUES (#{todoId}, #{todoItem}, #{todoCheckStatus}, #{cardId})
+    </insert>
+    
+    <select id="countTodosByCardId" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM todo WHERE card_id = #{cardId}
+    </select>
+
+</mapper>
