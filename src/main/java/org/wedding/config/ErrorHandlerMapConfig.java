@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.wedding.domain.card.exception.CardError;
+import org.wedding.domain.todo.exception.TodoError;
 import org.wedding.domain.user.exception.UserError;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ public class ErrorHandlerMapConfig {
     public WeddingProjectErrorHandlerMap errorHandlerMap() {
         Map<String, DomainError> errorHandlerMap = Map.of(
             UserError.class.getName(), USER_ERROR,
-            CardError.class.getName(), CARD_ERROR
+            CardError.class.getName(), CARD_ERROR,
+            TodoError.class.getName(), TODO_ERROR
         );
 
         return WeddingProjectErrorHandlerMap.builder()
