@@ -34,9 +34,7 @@ class CardCheckAspectTest {
         doThrow(new CardException(CardError.CARD_NOT_FOUND)).when(cardService).checkCardExistence(99999);
 
         // when & then
-        assertThrows(CardException.class, () -> {
-            todoService.createTodo(new CreateTodoCommand(99999, "투두 생성 실패"));
-        });
+        assertThrows(CardException.class, () -> todoService.createTodo(new CreateTodoCommand(99999, "투두 생성 실패")));
     }
 
     @Test
@@ -45,8 +43,6 @@ class CardCheckAspectTest {
         doNothing().when(cardService).checkCardExistence(14);
 
         // when & then
-        assertDoesNotThrow(() -> {
-            todoService.createTodo(new CreateTodoCommand(14, "투두 생성 성공"));
-        });
+        assertDoesNotThrow(() -> todoService.createTodo(new CreateTodoCommand(14, "투두 생성 성공")));
     }
 }
