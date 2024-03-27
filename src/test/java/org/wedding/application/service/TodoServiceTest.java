@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.wedding.domain.todo.TodoCheckStatus.*;
 
+import java.util.ArrayList;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import org.wedding.application.port.in.command.todo.CreateTodoCommand;
 import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.port.out.repository.TodoRepository;
+import org.wedding.application.service.response.todo.TodoDto;
 import org.wedding.domain.todo.Todo;
 import org.wedding.domain.todo.exception.TodoException;
 
@@ -115,5 +119,30 @@ class TodoServiceTest {
 
         when(todoRepository.existsByTodoId(anyInt(), anyInt())).thenReturn(false);
         assertThrows(TodoException.class, () -> todoService.checkTodoExistence(anyInt(), anyInt()));
+    }
+
+    @DisplayName("특정 카드에 속한 모든 todo를 조회한다.")
+    @Test
+    void getAllTodos_Success() {
+
+        // given
+        ArrayList<Todo> todos = new ArrayList<>();
+        todos.add(todo);
+
+        // when
+        when(todoRepository.getAllTodos(1)).thenReturn(todos);
+        ArrayList<TodoDto> todoDto = todoService.getAllTodos(1);
+
+        // then
+        verify(todoRepository).getAllTodos(1);
+        Assertions.assertThat(todoDto.get(0).todoItem()).isEqualTo("할일");
+    }
+
+    @DisplayName("특정 카드에 속한 모든 todo를 조회할 때 todo가 없으면 예외를 발생시킨다.")
+    @Test
+    void getAllTodos_Fail_WhenTodoNotExist() {
+
+        when(todoRepository.getAllTodos(anyInt())).thenReturn(new ArrayList<>()); // todo가 없는 경우, 빈 리스트 반환
+        assertThrows(TodoException.class, () -> todoService.getAllTodos(anyInt()));
     }
 }
