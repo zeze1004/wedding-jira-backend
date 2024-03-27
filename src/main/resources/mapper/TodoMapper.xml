@@ -30,4 +30,8 @@
             ( SELECT 1 FROM todo WHERE todo_id = #{todoId} AND card_id = #{cardId} )
     </select>
 
+    <delete id="deleteTodo" parameterType="int">
+        DELETE FROM todo WHERE todo_id = #{todoId} AND card_id = #{cardId}
+    </delete>
+
 </mapper>
