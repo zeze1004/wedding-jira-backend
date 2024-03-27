@@ -9,8 +9,25 @@
         VALUES (#{todoId}, #{todoItem}, #{todoCheckStatus}, #{cardId})
     </insert>
     
-    <select id="countTodosByCardId" parameterType="int" resultType="int">
+    <select id="countTodoByCardId" parameterType="int" resultType="int">
         SELECT COUNT(*) FROM todo WHERE card_id = #{cardId}
+    </select>
+
+    <update id="update" parameterType="Todo">
+        UPDATE todo
+        SET todo_item = #{todoItem}, todo_check_status = #{todoCheckStatus}
+        WHERE todo_id = #{todoId}
+    </update>
+
+    <select id="findByTodoId" parameterType="int" resultType="Todo">
+        SELECT *
+        FROM todo
+        WHERE todo_id = #{todoId} AND card_id = #{cardId}
+    </select>
+
+    <select id="existsByTodoId" parameterType="int" resultType="boolean">
+        SELECT EXISTS
+            ( SELECT 1 FROM todo WHERE todo_id = #{todoId} AND card_id = #{cardId} )
     </select>
 
 </mapper>

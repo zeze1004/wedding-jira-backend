@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.TodoUseCase;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
+import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.port.out.repository.TodoRepository;
 import org.wedding.config.anotation.CheckCardExistence;
 import org.wedding.domain.todo.Todo;
@@ -31,11 +32,34 @@ public class TodoService implements TodoUseCase {
         todoRepository.save(todo);
     }
 
+    @Transactional
+    @CheckCardExistence
+    @Override
+    public void updateTodo(UpdateTodoCommand command) {
+
+        checkTodoExistence(command.cardId(), command.todoId());
+        Todo todo = todoRepository.findByTodoId(command.cardId(), command.todoId());
+
+        Todo updatedTodo =
+            todo.updateTodoItem(command.todoItem().orElse(todo.getTodoItem()))
+                .updateTodoCheckStatus(command.todoCheckStatus().orElse(todo.getTodoCheckStatus()));
+
+        todoRepository.update(updatedTodo);
+    }
+
     @Transactional(readOnly = true)
     public void checkTodoMaxCount(int cardId) {
 
-        if (todoRepository.countTodosByCardId(cardId) >= MAX_TODOS_PER_CARD) {
+        if (todoRepository.countTodoByCardId(cardId) >= MAX_TODOS_PER_CARD) {
             throw new TodoException(TodoError.TODO_MAX_NUMBER_EXCEEDED);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void checkTodoExistence(int cardId, int todoId) {
+
+        if (!todoRepository.existsByTodoId(cardId, todoId)) {
+            throw new TodoException(TodoError.TODO_NOT_FOUND);
         }
     }
 }

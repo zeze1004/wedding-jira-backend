@@ -13,6 +13,7 @@ import lombok.Getter;
 public enum TodoError implements CommonError {
 
     TODO_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 TODO가 존재하지 않습니다."),
+    TODO_ID_MUST_BE_POSITIVE(HttpStatus.BAD_REQUEST, "TODO ID는 0보다 커야합니다."),
     TODO_ITEM_IS_REQUIRED(HttpStatus.BAD_REQUEST, "TODO 내용을 입력해주세요."),
     TODO_ITEM_SIZE_NOT_VALID(HttpStatus.BAD_REQUEST, "TODO 내용은 2자 이상 30자 이하 입력해주세요."),
     TODO_CHECK_STATUS_EMPTY(HttpStatus.BAD_REQUEST, "TODO 체크 상태가 비어있습니다."),
