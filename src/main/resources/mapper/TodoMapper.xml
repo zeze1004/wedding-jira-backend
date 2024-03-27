@@ -4,6 +4,13 @@
 
 <mapper namespace="org.wedding.adapter.out.persistence.MybatisTodoRepositoryImpl">
 
+    <resultMap id="todoResultMap" type="Todo">
+        <id column="todo_id" property="todoId"/>
+        <result column="todo_item" property="todoItem"/>
+        <result column="todo_check_status" property="todoCheckStatus"/>
+        <result column="card_id" property="cardId"/>
+    </resultMap>
+
     <insert id="save" parameterType="Todo" useGeneratedKeys="true" keyProperty="todoId">
         INSERT INTO todo (todo_id, todo_item, todo_check_status, card_id)
         VALUES (#{todoId}, #{todoItem}, #{todoCheckStatus}, #{cardId})
@@ -33,5 +40,11 @@
     <delete id="deleteTodo" parameterType="int">
         DELETE FROM todo WHERE todo_id = #{todoId} AND card_id = #{cardId}
     </delete>
+    
+    <select id="getAllTodos" resultType="arraylist" resultMap="todoResultMap">
+        SELECT todo_id, todo_item, todo_check_status, card_id
+        FROM todo
+        WHERE card_id = #{cardId}
+    </select>
 
 </mapper>

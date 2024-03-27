@@ -1,5 +1,7 @@
 package org.wedding.adapter.out.persistence;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import org.wedding.application.port.out.repository.TodoRepository;
@@ -21,4 +23,7 @@ public interface MybatisTodoRepositoryImpl extends TodoRepository {
     boolean existsByTodoId(int cardId, int todoId);
     @Override
     void deleteTodo(int cardId, int todoId);
+    @Override
+    ArrayList<Todo> getAllTodos(int cardId);
+    // Todo readTodo(int cardId, int todoId);
 }

@@ -1,5 +1,7 @@
 package org.wedding.application.port.out.repository;
 
+import java.util.ArrayList;
+
 import org.wedding.domain.todo.Todo;
 
 public interface TodoRepository {
@@ -10,8 +12,7 @@ public interface TodoRepository {
     Todo findByTodoId(int cardId, int todoId);
     boolean existsByTodoId(int cardId, int todoId);
     void deleteTodo(int cardId, int todoId);
+    ArrayList<Todo> getAllTodos(int cardId);
+    // Todo readTodo(int cardId, int todoId);
 
-    /* TODO
-      List<Todo> getAllTodos(int cardId);
-     */
 }
