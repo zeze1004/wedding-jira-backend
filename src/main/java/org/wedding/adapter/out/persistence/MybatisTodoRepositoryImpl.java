@@ -19,4 +19,6 @@ public interface MybatisTodoRepositoryImpl extends TodoRepository {
     Todo findByTodoId(int cardId, int todoId);
     @Override
     boolean existsByTodoId(int cardId, int todoId);
+    @Override
+    void deleteTodo(int cardId, int todoId);
 }

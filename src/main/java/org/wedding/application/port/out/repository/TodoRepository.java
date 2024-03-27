@@ -9,9 +9,9 @@ public interface TodoRepository {
     void update(Todo todo);
     Todo findByTodoId(int cardId, int todoId);
     boolean existsByTodoId(int cardId, int todoId);
+    void deleteTodo(int cardId, int todoId);
 
     /* TODO
       List<Todo> getAllTodos(int cardId);
-      void deleteTodo(int cardId, int todoId);
      */
 }

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
+import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.port.out.repository.TodoRepository;
 import org.wedding.domain.todo.Todo;
@@ -28,6 +29,7 @@ class TodoServiceTest {
     private Todo todo;
     private CreateTodoCommand createCommand;
     private UpdateTodoCommand updateCommand;
+    private DeleteTodoCommand deleteCommand;
 
     @BeforeEach
     void setUp() {
@@ -92,5 +94,26 @@ class TodoServiceTest {
 
         todoService.updateTodo(updateCommand);
         verify(todoRepository).update(any(Todo.class));
+    }
+
+    @DisplayName("todo 삭제시 cardId와 todoId가 있으면 삭제가 성공한다.")
+    @Transactional
+    @Test
+    void deleteTodo_Success() {
+
+        when(todoRepository.existsByTodoId(anyInt(), anyInt())).thenReturn(true);
+
+        deleteCommand = new DeleteTodoCommand(anyInt(), anyInt());
+        todoService.deleteTodo(deleteCommand);
+        verify(todoRepository).deleteTodo(anyInt(), anyInt());
+    }
+
+    @DisplayName("todo 삭제시 todoId를 찾을 수 없으면 예외를 발생시킨다.")
+    @Transactional
+    @Test
+    void deleteTodo_Fail_WhenTodoNotExist() {
+
+        when(todoRepository.existsByTodoId(anyInt(), anyInt())).thenReturn(false);
+        assertThrows(TodoException.class, () -> todoService.checkTodoExistence(anyInt(), anyInt()));
     }
 }

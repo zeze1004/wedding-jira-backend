@@ -2,6 +2,7 @@ package org.wedding.adapter.in.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.wedding.adapter.in.web.dto.todo.CreateTodoRequest;
+import org.wedding.adapter.in.web.dto.todo.DeleteTodoRequest;
 import org.wedding.adapter.in.web.dto.todo.UpdateTodoRequset;
 import org.wedding.application.port.in.TodoUseCase;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
+import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.common.response.ApiResponse;
 
@@ -54,6 +57,19 @@ public class TodoController {
         todoUseCase.updateTodo(command);
 
         ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "투두가 수정되었습니다.");
+        return new ResponseEntity<>(response, response.status());
+    }
+
+    @DeleteMapping()
+    @Operation(summary = "투두 삭제", description = "투두 삭제")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ApiResponse<Void>> deleteTodo(@RequestBody @Valid DeleteTodoRequest request) {
+
+        DeleteTodoCommand command = new DeleteTodoCommand(request.cardId(), request.todoId());
+
+        todoUseCase.deleteTodo(command);
+
+        ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "투두가 삭제되었습니다.");
         return new ResponseEntity<>(response, response.status());
     }
 }
