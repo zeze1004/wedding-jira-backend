@@ -13,11 +13,11 @@ public class Todo {
     private final TodoCheckStatus todoCheckStatus;
     private final int cardId;
 
-    public Todo changeCheckStatus(TodoCheckStatus todoCheckStatus) {
+    public Todo updateTodoCheckStatus(TodoCheckStatus todoCheckStatus) {
         return new Todo(this.todoId, this.todoItem, todoCheckStatus, this.cardId);
     }
 
-    public Todo changeTodoItem(String todoItem) {
+    public Todo updateTodoItem(String todoItem) {
         return new Todo(this.todoId, todoItem, this.todoCheckStatus, this.cardId);
     }
 
