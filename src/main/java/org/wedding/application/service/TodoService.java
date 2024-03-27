@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.TodoUseCase;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
+import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.port.out.repository.TodoRepository;
 import org.wedding.config.anotation.CheckCardExistence;
@@ -45,6 +46,15 @@ public class TodoService implements TodoUseCase {
                 .updateTodoCheckStatus(command.todoCheckStatus().orElse(todo.getTodoCheckStatus()));
 
         todoRepository.update(updatedTodo);
+    }
+
+    @Transactional
+    @CheckCardExistence
+    @Override
+    public void deleteTodo(DeleteTodoCommand command) {
+
+        checkTodoExistence(command.cardId(), command.todoId());
+        todoRepository.deleteTodo(command.cardId(), command.todoId());
     }
 
     @Transactional(readOnly = true)
