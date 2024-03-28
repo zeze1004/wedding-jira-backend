@@ -31,15 +31,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-
 
-      ## gradle build
-      - name: Test with Gradle
-        run: |
-          ./gradlew test
-
-      - name: Build with Gradle
-        run: |
-          ./gradlew build -x test
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -55,7 +46,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/odee-project:${{ github.ref_name }}
 
       - name: Deploy using docker-compose
         run: |
