@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
 import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
+import org.wedding.application.port.in.command.todo.ReadTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.service.response.todo.TodoDto;
 
@@ -12,5 +13,5 @@ public interface TodoUseCase {
     void updateTodo(UpdateTodoCommand command);
     void deleteTodo(DeleteTodoCommand command);
     ArrayList<TodoDto> getAllTodos(int cardId);
-    // TodosDto readTodo(ReadTodoCommand command);
+    TodoDto readTodo(ReadTodoCommand command);
 }

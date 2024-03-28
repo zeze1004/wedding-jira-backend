@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.TodoUseCase;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
 import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
+import org.wedding.application.port.in.command.todo.ReadTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.port.out.repository.TodoRepository;
 import org.wedding.application.service.response.todo.TodoDto;
@@ -74,6 +75,16 @@ public class TodoService implements TodoUseCase {
         }
 
         return todoDto;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public TodoDto readTodo(ReadTodoCommand command) {
+
+        checkTodoExistence(command.cardId(), command.todoId());
+        Todo todo = todoRepository.findByTodoId(command.cardId(), command.todoId());
+
+        return TodoDto.fromEntity(todo);
     }
 
     @Transactional(readOnly = true)
