@@ -25,5 +25,4 @@ public interface MybatisTodoRepositoryImpl extends TodoRepository {
     void deleteTodo(int cardId, int todoId);
     @Override
     ArrayList<Todo> getAllTodos(int cardId);
-    // Todo readTodo(int cardId, int todoId);
 }
