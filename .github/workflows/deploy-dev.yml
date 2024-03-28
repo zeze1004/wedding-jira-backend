@@ -46,7 +46,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/odee-project:${{ github.ref_name }}
 
       - name: Deploy using docker-compose
         run: |
