@@ -1,12 +1,17 @@
 package org.wedding.application.service;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.TodoUseCase;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
 import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
+import org.wedding.application.port.in.command.todo.ReadTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.port.out.repository.TodoRepository;
+import org.wedding.application.service.response.todo.TodoDto;
 import org.wedding.config.anotation.CheckCardExistence;
 import org.wedding.domain.todo.Todo;
 import org.wedding.domain.todo.exception.TodoError;
@@ -55,6 +60,31 @@ public class TodoService implements TodoUseCase {
 
         checkTodoExistence(command.cardId(), command.todoId());
         todoRepository.deleteTodo(command.cardId(), command.todoId());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ArrayList<TodoDto> getAllTodos(int cardId) {
+
+        ArrayList<TodoDto> todoDto = todoRepository.getAllTodos(cardId).stream()
+                .map(TodoDto::fromEntity)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (todoDto.isEmpty()) {
+            throw new TodoException(TodoError.TODO_NOT_FOUND);
+        }
+
+        return todoDto;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public TodoDto readTodo(ReadTodoCommand command) {
+
+        checkTodoExistence(command.cardId(), command.todoId());
+        Todo todo = todoRepository.findByTodoId(command.cardId(), command.todoId());
+
+        return TodoDto.fromEntity(todo);
     }
 
     @Transactional(readOnly = true)
