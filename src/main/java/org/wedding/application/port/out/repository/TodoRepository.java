@@ -13,6 +13,4 @@ public interface TodoRepository {
     boolean existsByTodoId(int cardId, int todoId);
     void deleteTodo(int cardId, int todoId);
     ArrayList<Todo> getAllTodos(int cardId);
-    // Todo readTodo(int cardId, int todoId);
-
 }
