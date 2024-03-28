@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CardBoard {
+    /*
     private final LinkedHashMap<Integer, Card> cardList = new LinkedHashMap<>();
 
     public void createCard() {
@@ -52,4 +53,6 @@ public class CardBoard {
             }
             """.formatted(cardList);
     }
+
+     */
 }
