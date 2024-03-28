@@ -1,12 +1,12 @@
 package org.wedding.application.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.wedding.domain.todo.TodoCheckStatus.*;
 
 import java.util.ArrayList;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
 import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
+import org.wedding.application.port.in.command.todo.ReadTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.port.out.repository.TodoRepository;
 import org.wedding.application.service.response.todo.TodoDto;
@@ -34,6 +35,7 @@ class TodoServiceTest {
     private CreateTodoCommand createCommand;
     private UpdateTodoCommand updateCommand;
     private DeleteTodoCommand deleteCommand;
+    private ReadTodoCommand   readCommand;
 
     @BeforeEach
     void setUp() {
@@ -135,7 +137,7 @@ class TodoServiceTest {
 
         // then
         verify(todoRepository).getAllTodos(1);
-        Assertions.assertThat(todoDto.get(0).todoItem()).isEqualTo("할일");
+        assertThat(todoDto.get(0).todoItem()).isEqualTo("할일");
     }
 
     @DisplayName("특정 카드에 속한 모든 todo를 조회할 때 todo가 없으면 예외를 발생시킨다.")
@@ -144,5 +146,30 @@ class TodoServiceTest {
 
         when(todoRepository.getAllTodos(anyInt())).thenReturn(new ArrayList<>()); // todo가 없는 경우, 빈 리스트 반환
         assertThrows(TodoException.class, () -> todoService.getAllTodos(anyInt()));
+    }
+
+    @DisplayName("특정 카드에 속한 특정 todo를 조회한다.")
+    @Test
+    void readTodo_Success() {
+
+        // given
+        when(todoRepository.existsByTodoId(1, 1)).thenReturn(true);
+        when(todoRepository.findByTodoId(1, 1)).thenReturn(todo);
+
+        // when
+        readCommand = new ReadTodoCommand(1, 1);
+        TodoDto todoDto = todoService.readTodo(readCommand);
+
+        // then
+        verify(todoRepository).findByTodoId(1, 1);
+        assertThat(todoDto.todoItem()).isEqualTo("할일");
+    }
+
+    @DisplayName("특정 카드에 속한 특정 todo를 조회할 때 todo가 없으면 예외를 발생시킨다.")
+    @Test
+    void readTodo_Fail_WhenTodoNotExist() {
+
+        when(todoRepository.existsByTodoId(1, 1)).thenReturn(false);
+        assertThrows(TodoException.class, () -> todoService.checkTodoExistence(1, 1));
     }
 }
