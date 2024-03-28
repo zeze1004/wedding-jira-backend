@@ -20,6 +20,7 @@ import org.wedding.adapter.in.web.dto.todo.UpdateTodoRequset;
 import org.wedding.application.port.in.TodoUseCase;
 import org.wedding.application.port.in.command.todo.CreateTodoCommand;
 import org.wedding.application.port.in.command.todo.DeleteTodoCommand;
+import org.wedding.application.port.in.command.todo.ReadTodoCommand;
 import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.common.response.ApiResponse;
 
@@ -89,5 +90,16 @@ public class TodoController {
                     .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{cardId}/{todoId}")
+    @Operation(summary = "카드에 속한 특정 투두 조회" , description = "카드에 속한 특정 투두 조회")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<TodoResponse> readTodoByCardId(@PathVariable int cardId, @PathVariable int todoId) {
+
+        ReadTodoCommand command = new ReadTodoCommand(cardId, todoId);
+        TodoResponse response = TodoResponse.fromEntity(todoUseCase.readTodo(command));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
