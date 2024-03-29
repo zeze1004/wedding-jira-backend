@@ -67,9 +67,6 @@ jobs:
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.extract_tag.outputs.tag }}
             sudo docker image prune -f
             ps -ef | grep 
-            docker-compose -f docker-compose-dev.yml down
-            docker-compose -f docker-compose-dev.yml up -d
-          
 
       # - name: Deploy using docker-compose
       #   run: |
