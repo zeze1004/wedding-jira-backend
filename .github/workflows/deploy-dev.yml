@@ -46,7 +46,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/odee-project:${{ github.ref_name }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }:${{ github.ref_name }}
 
       - name: Set up SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -58,7 +58,6 @@ jobs:
 
       - name: Deploy using docker-compose
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << EOF
           docker-compose -f docker-compose-dev.yml down
           docker-compose -f docker-compose-dev.yml up -d
         env:
