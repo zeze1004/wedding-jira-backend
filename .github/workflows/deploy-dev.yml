@@ -46,7 +46,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.tags }}
 
       - name: Set up SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -55,11 +55,22 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker rm -f $(sudo docker ps -a -q)
+            sudo docker pull ${{ secrets.DOCKER_REPOSITORY }}/my-project
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}/my-project
+            sudo docker image prune -f
+            ps -ef | grep 
+            docker-compose -f docker-compose-dev.yml down
+            docker-compose -f docker-compose-dev.yml up -d
+          
 
-      - name: Deploy using docker-compose
-        run: |
-          docker-compose -f docker-compose-dev.yml down
-          docker-compose -f docker-compose-dev.yml up -d
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: Deploy using docker-compose
+      #   run: |
+      #     docker-compose -f docker-compose-dev.yml down
+      #     docker-compose -f docker-compose-dev.yml up -d
+      #   env:
+      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
