@@ -63,8 +63,8 @@ jobs:
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm -f $(sudo docker ps -a -q)
-            sudo docker pull ${{ secrets.DOCKER_REPOSITORY }}:${{ steps.extract_tag.outputs.tag }}
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPOSITORY }}:${{ steps.extract_tag.outputs.tag }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.extract_tag.outputs.tag }}
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.extract_tag.outputs.tag }}
             sudo docker image prune -f
             ps -ef | grep 
             docker-compose -f docker-compose-dev.yml down
