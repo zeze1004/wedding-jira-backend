@@ -68,10 +68,10 @@ jobs:
             sudo docker image prune -f
             ps -ef | grep 
 
-      # - name: Deploy using docker-compose
-      #   run: |
-      #     docker-compose -f docker-compose-dev.yml down
-      #     docker-compose -f docker-compose-dev.yml up -d
-      #   env:
-      #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      #     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Deploy using docker-compose
+        run: |
+          docker-compose -f docker-compose-dev.yml down
+          docker-compose -f docker-compose-dev.yml up -d
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
