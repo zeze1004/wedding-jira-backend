@@ -8,6 +8,7 @@ import org.wedding.domain.user.User;
 import org.wedding.domain.user.exception.UserError;
 import org.wedding.application.port.out.repository.UserRepository;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import org.wedding.domain.user.exception.UserException;
@@ -39,7 +40,7 @@ public class UserService {
     }
 
     // TODO: UserDto를 User로 바꾸기
-    public void login(LoginDTO request) {
+    public void login(LoginDTO request, HttpSession session) {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
 
@@ -49,8 +50,7 @@ public class UserService {
 
         UserDto.of(user);
 
-    //     session.setAttribute("user", user.getId());
-    //     System.out.println("session.getId() = " + session.getId());
+        session.setAttribute("userId", user.getId());
     }
 
     private boolean equals(String password, String password1) {

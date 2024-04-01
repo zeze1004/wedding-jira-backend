@@ -11,6 +11,7 @@ import org.wedding.application.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +40,9 @@ public class UserController {
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Void>> login(@RequestBody @Valid LoginDTO request) {
+    public ResponseEntity<ApiResponse<Void>> login(@RequestBody @Valid LoginDTO request, HttpSession session) {
         ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "로그인 성공했습니다.");
-        userService.login(request);
+        userService.login(request, session);
         return new ResponseEntity<>(response, response.status());
     }
 
