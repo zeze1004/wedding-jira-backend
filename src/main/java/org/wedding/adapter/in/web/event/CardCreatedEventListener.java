@@ -1,4 +1,4 @@
-package org.wedding.common.event;
+package org.wedding.adapter.in.web.event;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

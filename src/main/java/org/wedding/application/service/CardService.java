@@ -3,8 +3,10 @@ package org.wedding.application.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.wedding.adapter.in.web.security.SessionUtils;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
@@ -15,6 +17,7 @@ import org.wedding.application.port.out.repository.CardRepository;
 import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
+import org.wedding.domain.card.event.CardCreatedEvent;
 import org.wedding.domain.card.exception.CardError;
 import org.wedding.domain.card.exception.CardException;
 
@@ -25,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCardUseCase, DeleteCardUseCase {
 
     private final CardRepository cardRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     @Override
@@ -34,6 +38,7 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         Card card = CreateCardCommand.toEntity(command);
 
         cardRepository.save(card);
+        eventPublisher.publishEvent(new CardCreatedEvent(card.getCardId(), SessionUtils.getCurrentUserId()));
     }
 
     @Transactional
