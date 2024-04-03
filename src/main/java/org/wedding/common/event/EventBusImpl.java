@@ -7,17 +7,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class EventBusImpl implements EventBus {
+    private final Map<Class<?>, List<Consumer<?>>> subscribers = new HashMap<>();
 
-    private final Map<Class<?>, List<Consumer<Object>>> subscribers = new HashMap<>();
-
-    public void publish(Object event) {
+    @Override
+    public <T> void publish(T event) {
         if (subscribers.containsKey(event.getClass())) {
-            subscribers.get(event.getClass()).forEach(consumer -> consumer.accept(event));
+            subscribers.get(event.getClass()).forEach(
+                consumer -> ((Consumer<T>) consumer).accept(event));
         }
     }
 
-    public void subscribe(Object subscriber) {
+    @Override
+    public <T> void subscribe(T subscriber) {
         for (Method method : subscriber.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(Subscribe.class)) {
                 Class<?> eventType = method.getParameterTypes()[0];
@@ -26,7 +31,7 @@ public class EventBusImpl implements EventBus {
                         try {
                             method.invoke(subscriber, event);
                         } catch (Exception e) {
-                            // 예외 처리
+                            // TODO: 예외 처리 수정
                             throw new RuntimeException(e);
                         }
                     });
