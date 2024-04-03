@@ -8,20 +8,24 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+import org.wedding.adapter.in.web.security.SessionUtils;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
 import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.domain.CardStatus;
 import org.wedding.domain.card.Card;
+import org.wedding.domain.card.event.CardCreatedEvent;
 import org.wedding.domain.card.exception.CardError;
 import org.wedding.domain.card.exception.CardException;
 
@@ -32,9 +36,12 @@ class CardServiceTest {
     private CardService cardService;
     @Mock
     private CardRepository cardRepository;
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     private Card card;
     private CreateCardCommand createCommand;
+    private final int userId = 1;
 
     @BeforeEach
     void setUp() {
@@ -43,9 +50,9 @@ class CardServiceTest {
             100000L,
             null
         );
-        cardService = new CardService(cardRepository);
+
+        cardService = new CardService(cardRepository, eventPublisher);
         card = CreateCardCommand.toEntity(createCommand);
-        cardService.createCard(createCommand);
     }
 
     @DisplayName("카드 제목과 예산 그리고 마감일를 넣으면 카드 생성 성공")
@@ -58,8 +65,18 @@ class CardServiceTest {
             LocalDate.now()
         );
         when(cardRepository.existsByCardTitle(allValidCreateCardCommand.cardTitle())).thenReturn(false);
-        cardService.createCard(createCommand);
-        verify(cardRepository, times(2)).save(any());
+
+        // Mock SessionUtils.getCurrentUserId()
+        try (MockedStatic<SessionUtils> sessionUtilsMock = Mockito.mockStatic(SessionUtils.class)) {
+            sessionUtilsMock.when(SessionUtils::getCurrentUserId).thenReturn(userId);
+
+            // When
+            cardService.createCard(createCommand);
+
+            // Then
+            verify(cardRepository, times(1)).save(any());
+            verify(eventPublisher, times(1)).publishEvent(any(CardCreatedEvent.class));
+        }
     }
 
     @DisplayName("카드 제목만 넣고 예산, 마감일을 넣지 않아도 카드 생성 성공")
@@ -71,9 +88,19 @@ class CardServiceTest {
             0L,
             null
         );
+
         when(cardRepository.existsByCardTitle(createCardWithOnlyTitleCommand.cardTitle())).thenReturn(false);
-        cardService.createCard(createCardWithOnlyTitleCommand);
-        verify(cardRepository, times(2)).save(any());
+
+        try (MockedStatic<SessionUtils> sessionUtilsMock = Mockito.mockStatic(SessionUtils.class)) {
+            sessionUtilsMock.when(SessionUtils::getCurrentUserId).thenReturn(userId);
+
+            // When
+            cardService.createCard(createCardWithOnlyTitleCommand);
+
+            // Then
+            verify(cardRepository, times(1)).save(any());
+            verify(eventPublisher, times(1)).publishEvent(any(CardCreatedEvent.class));
+        }
     }
 
     @DisplayName("카드 제목이 중복되면 카드 생성 실패")
@@ -109,7 +136,7 @@ class CardServiceTest {
         lenient().when(cardRepository.existsByCardTitle(modifyCardTitleCommand.cardTitle().get())).thenReturn(false);
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
         cardService.modifyCard(card.getCardId(), modifyCardTitleCommand);
-        verify(cardRepository, times(1)).save(any());
+        verify(cardRepository, times(1)).update(any());
     }
 
     @DisplayName("카드가 존재하지 않을 때 카드 이름 수정할시 실패")
@@ -141,10 +168,10 @@ class CardServiceTest {
         );
 
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
-        Assertions.assertThat(modifyCardStatusCommand.cardTitle()).isEqualTo(Optional.empty());
+        assertThat(modifyCardStatusCommand.cardTitle()).isEqualTo(Optional.empty());
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
         cardService.modifyCard(card.getCardId(), modifyCardStatusCommand);
-        verify(cardRepository, times(1)).save(any());
+        verify(cardRepository, times(1)).update(any());
     }
 
 
