@@ -2,6 +2,7 @@ package org.wedding.adapter.in.web.dto;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wedding.common.annotation.ValidPassword;
 import org.wedding.domain.user.User;
 import org.wedding.domain.user.exception.UserError;
@@ -33,10 +34,10 @@ public record SignUpDTO(
         this(email, password, name, nickName, null);
     }
 
-    public static User toEntity(SignUpDTO signUpDTO) {
+    public static User toEntity(SignUpDTO signUpDTO, PasswordEncoder passwordEncoder) {
         return User.builder()
             .email(signUpDTO.email())
-            .password(signUpDTO.password())
+            .password(passwordEncoder.encode(signUpDTO.password()))
             .name(signUpDTO.name())
             .nickName(signUpDTO.nickName())
             .partnerEmail(signUpDTO.partnerEmail())
