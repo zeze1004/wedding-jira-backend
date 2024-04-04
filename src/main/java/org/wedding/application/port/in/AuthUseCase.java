@@ -7,5 +7,5 @@ import jakarta.servlet.http.HttpSession;
 
 public interface AuthUseCase {
     int signUp(SignUpDTO request);
-    void login(LoginDTO request, HttpSession session);
+    String login(LoginDTO request, HttpSession session);
 }

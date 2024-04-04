@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.wedding.adapter.in.web.dto.LoginDTO;
 import org.wedding.adapter.in.web.dto.SignUpDTO;
 import org.wedding.application.port.in.AuthUseCase;
+import org.wedding.application.service.response.LoginResponse;
 import org.wedding.common.response.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,10 +41,9 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Void>> login(@RequestBody @Valid LoginDTO request, HttpSession session) {
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginDTO request, HttpSession session) {
 
-        ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "로그인 성공했습니다.");
-        authUseCase.login(request, session);
-        return new ResponseEntity<>(response, response.status());
+        String token = authUseCase.login(request, session);
+        return ResponseEntity.ok(new LoginResponse(token));
     }
 }
