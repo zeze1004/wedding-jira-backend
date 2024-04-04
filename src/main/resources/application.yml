@@ -21,10 +21,6 @@ spring:
           max-idle: 8
           min-idle: 0
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: org.wedding.*
