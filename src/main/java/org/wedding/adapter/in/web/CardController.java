@@ -27,6 +27,7 @@ import org.wedding.domain.CardStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,9 +47,10 @@ public class CardController {
     @PostMapping()
     @Operation(summary = "카드 생성", description = "카드 생성")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ApiResponse<Void>> createCard(@RequestBody @Valid CreateCardRequest request) {
+    public ResponseEntity<ApiResponse<Void>> createCard(@RequestBody @Valid CreateCardRequest cardRequest, HttpServletRequest request) {
 
-        CreateCardCommand command = new CreateCardCommand(request.cardTitle(), request.budget(), request.deadline());
+        int userId = (int) request.getAttribute("userId");
+        CreateCardCommand command = new CreateCardCommand(userId, cardRequest.cardTitle(), cardRequest.budget(), cardRequest.deadline());
 
         createCardUseCase.createCard(command);
 

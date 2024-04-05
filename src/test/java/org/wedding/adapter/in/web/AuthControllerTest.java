@@ -1,4 +1,4 @@
-package org.wedding.user.controller;
+package org.wedding.adapter.in.web;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -19,17 +19,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.wedding.adapter.in.web.dto.SignUpDTO;
+import org.wedding.application.port.in.AuthUseCase;
+import org.wedding.domain.user.exception.UserException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.wedding.domain.user.exception.UserException;
-import org.wedding.adapter.in.web.dto.SignUpDTO;
-import org.wedding.application.service.UserService;
 
 @Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class AuthControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -38,7 +37,7 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-    private UserService userService;
+    private AuthUseCase authUseCase;
 
     @BeforeEach
     void init() {
@@ -57,7 +56,7 @@ public class UserControllerTest {
             .nickName("ODeeS2")
             .partnerEmail("testPartner@gmail.com")
             .build();
-        mockMvc.perform(post("/api/v1/users/sign-up")
+        mockMvc.perform(post("/api/v1/auth/sign-up")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(signUpDTOWithInvalidEmail)))
                 .andDo(print())
@@ -75,7 +74,7 @@ public class UserControllerTest {
             .name("김커플")
             .nickName("ODeeS2")
             .build();
-        mockMvc.perform(post("/api/v1/users/sign-up")
+        mockMvc.perform(post("/api/v1/auth/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(signUpDTOWithInvalidPassword)))
             .andDo(print())
@@ -98,8 +97,8 @@ public class UserControllerTest {
 
         // when
         doThrow(new UserException(EMAIL_DUPLICATION))
-            .when(userService).signUp(signUpDTO);
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/users/sign-up")
+            .when(authUseCase).signUp(signUpDTO);
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/sign-up")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(signUpDTO)));
 
@@ -123,12 +122,12 @@ public class UserControllerTest {
             .build();
 
         // when
-        mockMvc.perform(post("/api/v1/users/sign-up")
+        mockMvc.perform(post("/api/v1/auth/sign-up")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(signUpDTO)))
         .andExpect(status().isCreated());
 
         // then
-        verify(userService, times(1)).signUp(signUpDTO);
+        verify(authUseCase, times(1)).signUp(signUpDTO);
     }
 }

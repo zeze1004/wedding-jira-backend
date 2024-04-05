@@ -1,4 +1,4 @@
 package org.wedding.application.service.response;
 
-public record LoginResponse (String token) {
+public record LoginResponse (int userId) {
 }

@@ -5,21 +5,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.adapter.in.web.dto.LoginDTO;
 import org.wedding.adapter.in.web.dto.SignUpDTO;
-import org.wedding.adapter.out.security.JwtTokenProvider;
 import org.wedding.application.port.in.AuthUseCase;
 import org.wedding.application.port.out.repository.UserRepository;
+import org.wedding.application.service.response.LoginResponse;
 import org.wedding.domain.user.User;
 import org.wedding.domain.user.exception.UserError;
 import org.wedding.domain.user.exception.UserException;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService implements AuthUseCase {
     private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -38,7 +36,7 @@ public class AuthService implements AuthUseCase {
 
     @Transactional
     @Override
-    public String login(LoginDTO request, HttpSession session) {
+    public LoginResponse login(LoginDTO request) {
         User user = userRepository.findByEmail(request.email())
             .orElseThrow(() -> new UserException(UserError.USER_NOT_FOUND));
 
@@ -46,8 +44,6 @@ public class AuthService implements AuthUseCase {
             throw new UserException(UserError.PASSWORD_NOT_MATCH);
         }
 
-        session.setAttribute("userId", user.getId());
-
-        return jwtTokenProvider.generateToken(user.getId()); // TODO: Response DTO로 맵핑
+        return new LoginResponse(user.getId());
     }
 }
