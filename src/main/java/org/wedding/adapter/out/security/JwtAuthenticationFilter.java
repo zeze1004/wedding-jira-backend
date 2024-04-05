@@ -24,11 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             int userId = jwtTokenProvider.getUserIdFromToken(token);
+            request.setAttribute("userId", userId);
+            filterChain.doFilter(request, response);
         } else {
             SecurityContextHolder.clearContext();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
