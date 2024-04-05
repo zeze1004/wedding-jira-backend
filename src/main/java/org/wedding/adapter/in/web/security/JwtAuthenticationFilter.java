@@ -1,10 +1,11 @@
-package org.wedding.adapter.out.security;
+package org.wedding.adapter.in.web.security;
 
 import java.io.IOException;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.wedding.common.security.JwtUtils;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -22,8 +22,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = getTokenFromRequest(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            int userId = jwtTokenProvider.getUserIdFromToken(token);
+        if (token != null && JwtUtils.validateToken(token)) {
+            int userId = JwtUtils.getUserIdFromToken(token);
             request.setAttribute("userId", userId);
             filterChain.doFilter(request, response);
         } else {

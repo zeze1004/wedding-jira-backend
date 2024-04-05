@@ -1,4 +1,4 @@
-package org.wedding.adapter.out.security;
+package org.wedding.common.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -11,10 +11,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 @Component
-public class JwtTokenProvider {
-    private final SecretKey JWT_SECRET = Keys.hmacShaKeyFor("odee's-wedding-planner-secret-key".getBytes(StandardCharsets.UTF_8)); // TODO: 환경변수로 변경
+public class JwtUtils {
+    private static final SecretKey JWT_SECRET = Keys.hmacShaKeyFor("odee's-wedding-planner-secret-key".getBytes(StandardCharsets.UTF_8)); // TODO: 환경변수로 변경
 
-    public String generateToken(int userId) {
+    public static String generateToken(int userId) {
         long now = System.currentTimeMillis();
         long JWT_EXPIRATION_MS = 864000000;     // 10일
         long expiry = now + JWT_EXPIRATION_MS;
@@ -27,7 +27,7 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    public boolean validateToken(String token) {
+    public static boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                 .setSigningKey(JWT_SECRET)
@@ -39,7 +39,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public int getUserIdFromToken(String token) {
+    public static int getUserIdFromToken(String token) {
         return Integer.parseInt(Jwts.parserBuilder()
             .setSigningKey(JWT_SECRET)
             .build()
