@@ -2,10 +2,9 @@ package org.wedding.application.port.in;
 
 import org.wedding.adapter.in.web.dto.LoginDTO;
 import org.wedding.adapter.in.web.dto.SignUpDTO;
-
-import jakarta.servlet.http.HttpSession;
+import org.wedding.application.service.response.LoginResponse;
 
 public interface AuthUseCase {
     int signUp(SignUpDTO request);
-    String login(LoginDTO request, HttpSession session);
+    LoginResponse login(LoginDTO request);
 }

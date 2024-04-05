@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.wedding.adapter.in.web.dto.LoginDTO;
 import org.wedding.adapter.in.web.dto.SignUpDTO;
+import org.wedding.adapter.out.dto.TokenResponse;
 import org.wedding.application.port.in.AuthUseCase;
 import org.wedding.application.service.response.LoginResponse;
 import org.wedding.common.response.ApiResponse;
+import org.wedding.common.security.JwtUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,11 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginDTO request, HttpSession session) {
+    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginDTO loginRequest) {
 
-        String token = authUseCase.login(request, session);
-        return ResponseEntity.ok(new LoginResponse(token));
+        LoginResponse loginResponse = authUseCase.login(loginRequest);
+
+        String token = JwtUtils.generateToken(loginResponse.userId());
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 }
