@@ -10,14 +10,15 @@ import lombok.Builder;
 
 @Builder
 public record CreateCardCommand (
-
+    int userId,
     @NotNull
     String cardTitle,
     Long budget,
     LocalDate deadline
 ) {
 
-    public CreateCardCommand(String cardTitle, Long budget, LocalDate deadline) {
+    public CreateCardCommand(int userId, String cardTitle, Long budget, LocalDate deadline) {
+        this.userId = userId;
         this.cardTitle = cardTitle;
         this.budget = budget;
         this.deadline = deadline;

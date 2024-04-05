@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.adapter.in.web.security.SessionUtils;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
@@ -38,7 +37,7 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         Card card = CreateCardCommand.toEntity(command);
 
         cardRepository.save(card);
-        eventPublisher.publishEvent(new CardCreatedEvent(card.getCardId(), SessionUtils.getCurrentUserId()));
+        eventPublisher.publishEvent(new CardCreatedEvent(card.getCardId(), command.userId()));
     }
 
     @Transactional

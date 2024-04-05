@@ -14,11 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import org.wedding.adapter.in.web.security.SessionUtils;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
@@ -46,6 +43,7 @@ class CardServiceTest {
     @BeforeEach
     void setUp() {
         createCommand = new CreateCardCommand(
+            userId,
             "스드메 예약금 넣기",
             100000L,
             null
@@ -59,48 +57,42 @@ class CardServiceTest {
     @Test
     void createCardWithAllValidPath() {
 
+        // given
         CreateCardCommand allValidCreateCardCommand = new CreateCardCommand(
+            userId,
             "스드메 예약금 넣기",
             100000L,
             LocalDate.now()
         );
         when(cardRepository.existsByCardTitle(allValidCreateCardCommand.cardTitle())).thenReturn(false);
 
-        // Mock SessionUtils.getCurrentUserId()
-        try (MockedStatic<SessionUtils> sessionUtilsMock = Mockito.mockStatic(SessionUtils.class)) {
-            sessionUtilsMock.when(SessionUtils::getCurrentUserId).thenReturn(userId);
+        // when
+        cardService.createCard(createCommand);
 
-            // When
-            cardService.createCard(createCommand);
-
-            // Then
-            verify(cardRepository, times(1)).save(any());
-            verify(eventPublisher, times(1)).publishEvent(any(CardCreatedEvent.class));
-        }
+        // then
+        verify(cardRepository, times(1)).save(any());
+        verify(eventPublisher, times(1)).publishEvent(any(CardCreatedEvent.class));
     }
 
     @DisplayName("카드 제목만 넣고 예산, 마감일을 넣지 않아도 카드 생성 성공")
     @Test
     void createCardWithOnlyTitle() {
 
+        // given
         CreateCardCommand createCardWithOnlyTitleCommand = new CreateCardCommand(
+            userId,
             "결혼식 리허설하기",
             0L,
             null
         );
-
         when(cardRepository.existsByCardTitle(createCardWithOnlyTitleCommand.cardTitle())).thenReturn(false);
 
-        try (MockedStatic<SessionUtils> sessionUtilsMock = Mockito.mockStatic(SessionUtils.class)) {
-            sessionUtilsMock.when(SessionUtils::getCurrentUserId).thenReturn(userId);
+        // when
+        cardService.createCard(createCardWithOnlyTitleCommand);
 
-            // When
-            cardService.createCard(createCardWithOnlyTitleCommand);
-
-            // Then
-            verify(cardRepository, times(1)).save(any());
-            verify(eventPublisher, times(1)).publishEvent(any(CardCreatedEvent.class));
-        }
+        // then
+        verify(cardRepository, times(1)).save(any());
+        verify(eventPublisher, times(1)).publishEvent(any(CardCreatedEvent.class));
     }
 
     @DisplayName("카드 제목이 중복되면 카드 생성 실패")
@@ -108,6 +100,7 @@ class CardServiceTest {
     void checkDuplicateCardTitle() {
 
         CreateCardCommand createCardDuplicateTitleRequest = new CreateCardCommand(
+            userId,
             "스드메 예약금 넣기",
             0L,
             null
