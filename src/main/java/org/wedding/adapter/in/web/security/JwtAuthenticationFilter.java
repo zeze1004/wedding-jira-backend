@@ -20,6 +20,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
+        String requestURI = request.getRequestURI();
+
+        // 인증이 필요하지 않은 경로인 경우 바로 컨트롤러로 전달
+        if (requestURI.startsWith("/api/v1/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = getTokenFromRequest(request);
 
         if (token != null && JwtUtils.validateToken(token)) {
