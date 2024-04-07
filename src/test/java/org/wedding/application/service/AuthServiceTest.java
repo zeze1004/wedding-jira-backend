@@ -1,25 +1,29 @@
-package org.wedding.user.service;
+package org.wedding.application.service;
 
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import org.wedding.application.service.UserService;
-import org.wedding.domain.user.User;
-import org.wedding.application.port.out.repository.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.wedding.adapter.in.web.dto.SignUpDTO;
+import org.wedding.application.port.in.AuthUseCase;
+import org.wedding.application.port.out.repository.UserRepository;
+import org.wedding.domain.user.User;
 
-@ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class AuthServiceTest {
 
-    private UserService userService;
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+    @InjectMocks
+    private AuthUseCase authService;
 
     private SignUpDTO signUpDTOWithPartner;
     private SignUpDTO signUpDTOWithoutPartner;
@@ -39,7 +43,7 @@ class UserServiceTest {
             "최솔로",
             "ODee1004"
         );
-        userService = new UserService(userRepository);
+        authService = new AuthService(userRepository, eventPublisher, passwordEncoder);
     }
 
     @DisplayName("회원가입 성공 - 예비 배우자 이메일을 넣은 경우")
@@ -47,7 +51,7 @@ class UserServiceTest {
     void signUpWithPartnerEmail() {
         when(userRepository.existsByEmail(signUpDTOWithPartner.email())).thenReturn(false);
 
-        userService.signUp(signUpDTOWithPartner);
+        authService.signUp(signUpDTOWithPartner);
 
         verify(userRepository, times(1)).save(any(User.class));
     }
@@ -57,8 +61,12 @@ class UserServiceTest {
     void signUpWithoutPartnerEmail() {
         when(userRepository.existsByEmail(signUpDTOWithoutPartner.email())).thenReturn(false);
 
-        userService.signUp(signUpDTOWithoutPartner);
+        authService.signUp(signUpDTOWithoutPartner);
 
         verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    void login() {
     }
 }

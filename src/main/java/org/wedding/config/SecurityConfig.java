@@ -13,7 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.wedding.adapter.in.web.security.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,12 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/api/v1/auth/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(new JwtAuthenticationFilter(), ChannelProcessingFilter.class);
+            .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -50,8 +53,7 @@ public class SecurityConfig {
                 "/swagger-resources/**",
                 "/v3/api-docs/**",
                 "/error",
-                "/favicon.ico",
-                "/api/v1/auth/**"
+                "/favicon.ico"
             );
     }
 

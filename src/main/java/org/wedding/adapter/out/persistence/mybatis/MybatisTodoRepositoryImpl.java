@@ -1,4 +1,4 @@
-package org.wedding.adapter.out.persistence;
+package org.wedding.adapter.out.persistence.mybatis;
 
 import java.util.ArrayList;
 
