@@ -24,3 +24,4 @@ mybatis:
   type-aliases-package: org.wedding.*
   configuration:
     map-underscore-to-camel-case: true
+  type-handlers-package: org.wedding.adapter.out.persistence.mybatis
