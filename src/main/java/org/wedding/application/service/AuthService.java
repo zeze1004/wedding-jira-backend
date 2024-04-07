@@ -1,5 +1,6 @@
 package org.wedding.application.service;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import org.wedding.application.port.in.AuthUseCase;
 import org.wedding.application.port.out.repository.UserRepository;
 import org.wedding.application.service.response.LoginResponse;
 import org.wedding.domain.user.User;
+import org.wedding.domain.user.event.UserCreatedEvent;
 import org.wedding.domain.user.exception.UserError;
 import org.wedding.domain.user.exception.UserException;
 
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService implements AuthUseCase {
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -30,6 +33,7 @@ public class AuthService implements AuthUseCase {
         User user = SignUpDTO.toEntity(request, passwordEncoder);
 
         userRepository.save(user);
+        eventPublisher.publishEvent(new UserCreatedEvent(user.getId()));
 
         return user.getId();
     }
