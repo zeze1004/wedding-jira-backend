@@ -1,7 +1,5 @@
 package org.wedding.adapter.in.web;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +21,6 @@ import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
 import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.common.response.ApiResponse;
-import org.wedding.domain.CardStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -88,15 +85,6 @@ public class CardController {
     public ResponseEntity<ReadCardResponse> readCardByCardTitle(@PathVariable String cardTitle) {
 
         ReadCardResponse response = readCardUseCase.readCardsByCardTitle(cardTitle);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/status/{cardStatus}")
-    @Operation(summary = "카드 상태로 조회", description = "카드 상태로 조회")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<ReadCardResponse>> readCardsByCardStatus(@PathVariable CardStatus cardStatus) {
-
-        List<ReadCardResponse> response = readCardUseCase.readCardsByCardStatus(cardStatus);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
