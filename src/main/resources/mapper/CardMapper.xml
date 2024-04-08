@@ -41,15 +41,19 @@
         SELECT * FROM card WHERE card_title = #{cardTitle}
     </select>
 
-    <select id="findByCardStatus" resultType="list" resultMap="cardResultMap">
-        SELECT card_id, card_title, budget, deadline, card_status
-        FROM card
-        WHERE card_status = #{cardStatus}
-    </select>
-
     <select id="findAll" resultType="list" resultMap="cardResultMap">
         SELECT card_id, card_title, budget, deadline, card_status
         FROM card
+    </select>
+    
+    <select id="findByCardIdsAndCardStatus" resultType="list" resultMap="cardResultMap">
+        SELECT card_id, card_title, budget, deadline, card_status
+        FROM card
+        WHERE card_id IN
+        <foreach collection="cardIds" item="cardId" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+        AND card_status = #{cardStatus}
     </select>
 
     <delete id="deleteByCardId" parameterType="int">

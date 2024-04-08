@@ -78,24 +78,20 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus());
     }
 
-    @Override
-    public List<ReadCardResponse> readCardsByCardStatus(CardStatus cardStatus) {
-
-        List<Card> cards = cardRepository.findByCardStatus(cardStatus);
-
-        if (cards.isEmpty()) {
-            throw new CardException(CardError.CARD_NOT_FOUND);
-        }
-
-        return cards.stream()
-            .map(card -> new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus()))
-            .collect(Collectors.toList());
-    }
-
     /* TODO: 카드보드 리팩토링 후 추가
     @Override
     public List<ReadCardResponse> readAllCardsByCardBoardId(int cardBoardId) {}
      */
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ReadCardResponse> readCardsStausByIdsAndStatus(List<Integer> cardIds, CardStatus cardStatus) {
+        List<Card> cards = cardRepository.findByCardIdsAndCardStatus(cardIds, cardStatus);
+
+        return cards.stream()
+            .map(this::toReadCardResponse)
+            .collect(Collectors.toList());
+    }
 
     @Transactional
     @Override
@@ -105,6 +101,9 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         cardRepository.deleteByCardId(cardId);
     }
 
+    private ReadCardResponse toReadCardResponse(Card card) {
+        return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus());
+    }
 
     public void checkCardTitleExistence(String cardTitle) {
         if (!cardRepository.existsByCardTitle(cardTitle)) {
