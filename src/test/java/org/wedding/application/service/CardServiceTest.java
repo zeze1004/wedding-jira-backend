@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,7 @@ class CardServiceTest {
     private Card card;
     private CreateCardCommand createCommand;
     private final int userId = 1;
+    private List<Card> cards;
 
     @BeforeEach
     void setUp() {
@@ -51,6 +54,12 @@ class CardServiceTest {
 
         cardService = new CardService(cardRepository, eventPublisher);
         card = CreateCardCommand.toEntity(createCommand);
+
+        cards = Arrays.asList(
+            new Card(1, "Card 1", 1000, LocalDate.of(2023, 6, 30), CardStatus.BACKLOG),
+            new Card(2, "Card 2", 2000, LocalDate.of(2023, 7, 15), CardStatus.PROGRESS),
+            new Card(3, "Card 3", 3000, LocalDate.of(2023, 8, 31), CardStatus.DONE)
+        );
     }
 
     @DisplayName("카드 제목과 예산 그리고 마감일를 넣으면 카드 생성 성공")
@@ -136,12 +145,6 @@ class CardServiceTest {
     @Test
     void modifyCard_Title_Fail() {
 
-        ModifyCardCommand modifyCardTitleCommand = new ModifyCardCommand(
-            "스드메 예약금 넣기 수정",
-            0L,
-            null,
-            null
-        );
         try {
             cardService.checkCardExistence(-1); // 존재하지 않는 임의의 cardId
         } catch (CardException e) {
@@ -185,26 +188,6 @@ class CardServiceTest {
         assertThat(actualCard).isEqualTo(new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus()));
     }
 
-    @DisplayName("카드 상태에 따른 카드 조회")
-    @Test
-    void readCardsByCardStatus() {
-
-        // given
-        List<Card> expectedCards = List.of(
-            new Card(0, "스드메 예약금 넣기", 100000L, null, CardStatus.BACKLOG));
-        lenient().when(cardRepository.findByCardStatus(CardStatus.BACKLOG)).thenReturn(expectedCards);
-
-        // when
-        List<ReadCardResponse> actualCards = cardService.readCardsByCardStatus(CardStatus.BACKLOG);
-
-        // then
-        verify(cardRepository, times(1)).findByCardStatus(CardStatus.BACKLOG);
-        assertThat(actualCards).containsExactly(
-            new ReadCardResponse(expectedCards.get(0).getCardId(), expectedCards.get(0).getCardTitle(),
-                expectedCards.get(0).getBudget(), expectedCards.get(0).getDeadline(),
-                expectedCards.get(0).getCardStatus()));
-    }
-
     @DisplayName("카드 삭제 성공")
     @Test
     void deleteCard() {
@@ -216,5 +199,29 @@ class CardServiceTest {
         cardService.deleteCard(cardId);
         // then
         verify(cardRepository, times(1)).deleteByCardId(cardId);
+    }
+
+    @DisplayName("카드Ids 중 Backlog 상태인 카드 조회 성공")
+    @Test
+    void readCardsStausByIdsAndStatus_success() {
+        // given
+        List<Integer> cardIds = Arrays.asList(1, 2, 3);
+        CardStatus cardStatus = CardStatus.BACKLOG;
+
+        when(cardRepository.findByCardIdsAndCardStatus(cardIds, cardStatus))
+            .thenReturn(Collections.singletonList(cards.get(0))); // 인수가 하나
+
+        // when
+        List<ReadCardResponse> cardResponses = cardService.readCardsStausByIdsAndStatus(cardIds, cardStatus);
+
+        // then
+        assertEquals(1, cardResponses.size());
+
+        ReadCardResponse backlogCard = cardResponses.get(0);
+        assertEquals(1, backlogCard.cardId());
+        assertEquals("Card 1", backlogCard.cardTitle());
+        assertEquals(1000, backlogCard.budget());
+        assertEquals(LocalDate.of(2023, 6, 30), backlogCard.deadline());
+        assertEquals(CardStatus.BACKLOG, backlogCard.cardStatus());
     }
 }
