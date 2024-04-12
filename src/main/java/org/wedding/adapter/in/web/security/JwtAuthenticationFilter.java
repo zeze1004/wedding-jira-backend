@@ -1,7 +1,9 @@
 package org.wedding.adapter.in.web.security;
 
 import java.io.IOException;
+import java.util.Collections;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,7 +34,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && JwtUtils.validateToken(token)) {
             int userId = JwtUtils.getUserIdFromToken(token);
-            request.setAttribute("userId", userId);
+
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userId, null, Collections.emptyList());
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         } else {
             SecurityContextHolder.clearContext();

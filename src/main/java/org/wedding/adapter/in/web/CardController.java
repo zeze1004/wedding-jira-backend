@@ -2,6 +2,7 @@ package org.wedding.adapter.in.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,7 +25,6 @@ import org.wedding.common.response.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,9 +44,9 @@ public class CardController {
     @PostMapping()
     @Operation(summary = "카드 생성", description = "카드 생성")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ApiResponse<Void>> createCard(@RequestBody @Valid CreateCardRequest cardRequest, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Void>> createCard(@RequestBody @Valid CreateCardRequest cardRequest) {
 
-        int userId = (int) request.getAttribute("userId");
+        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CreateCardCommand command = new CreateCardCommand(userId, cardRequest.cardTitle(), cardRequest.budget(), cardRequest.deadline());
 
         createCardUseCase.createCard(command);
