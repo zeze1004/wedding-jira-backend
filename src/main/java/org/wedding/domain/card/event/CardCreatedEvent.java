@@ -9,7 +9,7 @@ public class CardCreatedEvent extends ApplicationEvent {
     private final int cardId;
     private final int userId;
 
-    public CardCreatedEvent(int userId, int cardId) {
+    public CardCreatedEvent(int cardId, int userId) {
         super(cardId);
         this.cardId = cardId;
         this.userId = userId;
