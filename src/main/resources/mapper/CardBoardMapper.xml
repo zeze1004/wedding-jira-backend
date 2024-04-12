@@ -26,4 +26,10 @@
     <select id="findCardIdsByUserId" parameterType="int" resultMap="CardIdsResultMap">
         SELECT card_ids FROM cardboard WHERE user_id = #{userId}
     </select>
+
+    <update id="addCardIds" parameterType="map">
+        UPDATE cardboard
+        SET card_ids = JSON_ARRAY_APPEND(card_ids, '$', #{cardId})
+        WHERE cardboard_id = #{cardBoardId}
+    </update>
 </mapper>
