@@ -1,5 +1,7 @@
 package org.wedding.adapter.out.persistence.mybatis;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import org.wedding.application.port.out.repository.CardBoardRepository;
@@ -15,4 +17,6 @@ public interface MybatisCardBoardRepositoryImpl extends CardBoardRepository {
     void addCardIds(int cardBoardId, int cardId);
     @Override
     CardBoard findCardBoardByUserId(int userId);
+    @Override
+    List<Integer> findCardIdsByUserId(int userId);
 }
