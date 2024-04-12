@@ -10,12 +10,20 @@
         <result column="card_ids" property="cardIds" javaType="List" typeHandler="org.wedding.adapter.out.persistence.mybatis.JsonTypeHandler"/>
     </resultMap>
 
+    <resultMap id="CardIdsResultMap" type="string">
+        <result column="card_ids" typeHandler="org.wedding.adapter.out.persistence.mybatis.JsonTypeHandler"/>
+    </resultMap>
+
     <insert id="save" parameterType="CardBoard" useGeneratedKeys="true" keyProperty="cardBoardId">
         INSERT INTO cardboard (cardboard_id, user_id, card_ids)
         VALUES (#{cardBoardId}, #{userId}, #{cardIds, typeHandler=org.wedding.adapter.out.persistence.mybatis.JsonTypeHandler})
     </insert>
 
     <select id="findCardBoardByUserId" parameterType="int" resultMap="CardBoardResultMap">
-        SELECT * FROM cardboard WHERE user_id = #{userId}
+        SELECT cardboard_id, user_id, card_ids FROM cardboard WHERE user_id = #{userId}
+    </select>
+
+    <select id="findCardIdsByUserId" parameterType="int" resultMap="CardIdsResultMap">
+        SELECT card_ids FROM cardboard WHERE user_id = #{userId}
     </select>
 </mapper>
