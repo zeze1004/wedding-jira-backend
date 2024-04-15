@@ -10,24 +10,26 @@ import lombok.Builder;
 @Builder
 public record ModifyCardCommand(
 
+    int userId,
     Optional<String> cardTitle,
     Optional<Long> budget,
     Optional<LocalDate> deadline,
     Optional<CardStatus> cardStatus
 ) {
 
-        public ModifyCardCommand(String cardTitle, Long budget, LocalDate deadline, CardStatus cardStatus) {
-            this(Optional.ofNullable(cardTitle), Optional.ofNullable(budget), Optional.ofNullable(deadline), Optional.ofNullable(cardStatus));
+        public ModifyCardCommand(int userId, String cardTitle, Long budget, LocalDate deadline, CardStatus cardStatus) {
+            this(userId, Optional.ofNullable(cardTitle), Optional.ofNullable(budget), Optional.ofNullable(deadline), Optional.ofNullable(cardStatus));
         }
 
         public String toString() {
             return """
                 ModifyCardCommand{
+                    userId='%s',
                     cardTitle='%s',
                     budget='%s',
                     deadline='%s',
                     cardStatus='%s'
                 }
-                """.formatted(cardTitle, budget, deadline, cardStatus);
+                """.formatted(userId, cardTitle, budget, deadline, cardStatus);
         }
 }

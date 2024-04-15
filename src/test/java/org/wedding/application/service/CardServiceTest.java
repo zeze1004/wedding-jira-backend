@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.wedding.application.port.in.CardBoardUseCase;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
@@ -37,6 +38,8 @@ class CardServiceTest {
     private CardRepository cardRepository;
     @Mock
     private ApplicationEventPublisher eventPublisher;
+    @Mock
+    private CardBoardUseCase cardBoardUseCase;
 
     private Card card;
     private CreateCardCommand createCommand;
@@ -52,7 +55,7 @@ class CardServiceTest {
             null
         );
 
-        cardService = new CardService(cardRepository, eventPublisher);
+        cardService = new CardService(cardRepository, eventPublisher, cardBoardUseCase);
         card = CreateCardCommand.toEntity(createCommand);
 
         cards = Arrays.asList(
@@ -127,8 +130,8 @@ class CardServiceTest {
     @DisplayName("카드가 존재한다면 카드 이름 수정을 성공")
     @Test
     void modifyCard_Title() {
-
         ModifyCardCommand modifyCardTitleCommand = new ModifyCardCommand(
+            userId,
             "스드메 예약금 넣기 수정",
             0L,
             null,
@@ -137,6 +140,7 @@ class CardServiceTest {
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
         lenient().when(cardRepository.existsByCardTitle(modifyCardTitleCommand.cardTitle().get())).thenReturn(false);
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
+        when(cardBoardUseCase.checkCardOwner(userId, card.getCardId())).thenReturn(true);
         cardService.modifyCard(card.getCardId(), modifyCardTitleCommand);
         verify(cardRepository, times(1)).update(any());
     }
@@ -144,12 +148,16 @@ class CardServiceTest {
     @DisplayName("카드가 존재하지 않을 때 카드 이름 수정할시 실패")
     @Test
     void modifyCard_Title_Fail() {
+        ModifyCardCommand modifyCardTitleCommand = new ModifyCardCommand(
+            userId,
+            "스드메 예약금 넣기 수정",
+            0L,
+            null,
+            null
+        );
+        when(cardBoardUseCase.checkCardOwner(userId, card.getCardId())).thenReturn(false);
 
-        try {
-            cardService.checkCardExistence(-1); // 존재하지 않는 임의의 cardId
-        } catch (CardException e) {
-            assertEquals(CardError.CARD_NOT_FOUND, CardError.of("CARD_NOT_FOUND"));
-        }
+        assertThrows(CardException.class, () -> cardService.modifyCard(card.getCardId(), modifyCardTitleCommand));
     }
 
     @DisplayName("카드 상태 변경")
@@ -157,6 +165,7 @@ class CardServiceTest {
     void modifyCard_Status() {
 
         ModifyCardCommand modifyCardStatusCommand = new ModifyCardCommand(
+            userId,
             null,
             0L,
             null,
@@ -166,6 +175,7 @@ class CardServiceTest {
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
         assertThat(modifyCardStatusCommand.cardTitle()).isEqualTo(Optional.empty());
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
+        when(cardBoardUseCase.checkCardOwner(userId, card.getCardId())).thenReturn(true);
         cardService.modifyCard(card.getCardId(), modifyCardStatusCommand);
         verify(cardRepository, times(1)).update(any());
     }
