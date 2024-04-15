@@ -32,6 +32,14 @@ public class CardBoard {
         }
     }
 
+    public boolean isCardOwner(int userId, int cardId) {
+        if (this.userId != userId) {
+            return false;
+        }
+
+        return cardIds.contains(cardId);
+    }
+
     public List<Integer> getAllCardId() {
         synchronized (cardIds) {
             return new ArrayList<>(cardIds);
