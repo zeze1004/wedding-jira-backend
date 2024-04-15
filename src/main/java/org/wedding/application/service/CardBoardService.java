@@ -39,9 +39,7 @@ public class CardBoardService implements CardBoardUseCase {
     @Override
     public void addCardToCardBoard(int cardId, int userId) {
         CardBoard cardBoard = cardBoardRepository.findCardBoardByUserId(userId);
-        if (cardBoard == null) {
-            throw new CardBoardException(CardBoardError.CARD_BOARD_NOT_FOUND);
-        }
+        isCardBoardNotFound(cardBoard);
         cardBoard.addCard(cardId);
         cardBoardRepository.addCardIds(cardBoard.getCardBoardId(), cardId);
     }
@@ -58,6 +56,20 @@ public class CardBoardService implements CardBoardUseCase {
         List<ReadCardResponse> cardResponses =
             readCardUseCase.readCardsStausByIdsAndStatus(cardIds, command.cardStatus());
         return toCardBoardCardInfo(cardResponses);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean checkCardOwner(int userId, int cardId) {
+        CardBoard cardBoard = cardBoardRepository.findCardBoardByUserId(userId);
+        isCardBoardNotFound(cardBoard);
+        return cardBoard.isCardOwner(userId, cardId);
+    }
+
+    private void isCardBoardNotFound(CardBoard cardBoard) {
+        if (cardBoard == null) {
+            throw new CardBoardException(CardBoardError.CARD_BOARD_NOT_FOUND);
+        }
     }
 
     private List<CardInfo> toCardBoardCardInfo(List<ReadCardResponse> cardResponses) {
