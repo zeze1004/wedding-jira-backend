@@ -61,8 +61,8 @@ public class CardController {
     public ResponseEntity<ApiResponse<Void>> modifyCard(
         @PathVariable int cardId,
         @RequestBody @Valid ModifyCardRequest request) {
-
-        ModifyCardCommand command = new ModifyCardCommand(request.cardTitle(), request.budget(), request.deadline(), request.cardStatus());
+        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ModifyCardCommand command = new ModifyCardCommand(userId, request.cardTitle(), request.budget(), request.deadline(), request.cardStatus());
 
         modifyCardUseCase.modifyCard(cardId, command);
 
