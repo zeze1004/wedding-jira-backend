@@ -23,7 +23,8 @@ public enum CardError implements CommonError {
     CARD_NOT_UPDATED(HttpStatus.INTERNAL_SERVER_ERROR, "카드 수정에 실패했습니다."),
     CARD_NOT_DELETED(HttpStatus.INTERNAL_SERVER_ERROR, "카드 삭제에 실패했습니다."),
     CARD_NOT_MOVED_STATUS(HttpStatus.INTERNAL_SERVER_ERROR, "카드 상태 변경에 실패했습니다."),
-    BUDGET_MUST_BE_POSITIVE(HttpStatus.BAD_REQUEST, "예산은 0 이상으로 입력해주세요.")
+    BUDGET_MUST_BE_POSITIVE(HttpStatus.BAD_REQUEST, "예산은 0 이상으로 입력해주세요."),
+    CARD_OWNER_NOT_MATCH(HttpStatus.FORBIDDEN, "카드 소유자가 일치하지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;
