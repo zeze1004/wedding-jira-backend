@@ -68,4 +68,37 @@ class CardBoardServiceTest {
         verify(cardBoardRepository, times(1)).findCardBoardByUserId(userId);
         verify(cardBoardRepository, never()).addCardIds(anyInt(), anyInt());
     }
+
+    @DisplayName("카드 소유자 확인: 카드보드에 카드ID가 존재하면 true를 반환한다")
+    @Test
+    void checkCardOwner_Success() {
+        // given
+        when(cardBoardRepository.findCardBoardByUserId(userId)).thenReturn(cardBoard);
+
+        // when
+        boolean result1 = cardBoardUseCase.checkCardOwner(userId, 1);
+        boolean result2 = cardBoardUseCase.checkCardOwner(userId, 2);
+        boolean result3 = cardBoardUseCase.checkCardOwner(userId, 3);
+
+        // then
+        assertTrue(result1);
+        assertTrue(result2);
+        assertTrue(result3);
+        verify(cardBoardRepository, times(3)).findCardBoardByUserId(userId);
+    }
+
+    @DisplayName("카드 소유자 확인: 카드보드에 카드ID가 존재하지 않으면 false를 반환한다")
+    @Test
+    void checkCardOwner_Fail() {
+        // given
+        int nonExistentCardId = 999;
+        when(cardBoardRepository.findCardBoardByUserId(userId)).thenReturn(cardBoard);
+
+        // when
+        boolean result = cardBoardUseCase.checkCardOwner(userId, nonExistentCardId);
+
+        // then
+        assertFalse(result);
+        verify(cardBoardRepository, times(1)).findCardBoardByUserId(userId);
+    }
 }
