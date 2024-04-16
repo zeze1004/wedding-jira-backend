@@ -10,6 +10,7 @@ import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.CreateCardBoardCommand;
 import org.wedding.application.port.in.command.cardboard.ReadCardCommand;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
+import org.wedding.application.port.in.usecase.cardboard.CardOwnerShipValidator;
 import org.wedding.application.port.out.repository.CardBoardRepository;
 import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.application.service.response.cardboard.CardInfo;
@@ -24,7 +25,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CardBoardService implements CardBoardUseCase {
+public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidator {
 
     private final CardBoardRepository cardBoardRepository;
     private final ReadCardUseCase readCardUseCase;
