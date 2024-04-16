@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
@@ -29,7 +28,6 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
 
     private final CardRepository cardRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final CardBoardUseCase cardBoardUseCase;
 
     @Transactional
     @Override
@@ -45,10 +43,6 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
     @Transactional
     @Override
     public void modifyCard(int cardId, ModifyCardCommand command) {
-
-        if (!cardBoardUseCase.checkCardOwner(command.userId(), cardId)) {
-            throw new CardException(CardError.CARD_OWNER_NOT_MATCH);
-        }
         Card card = cardRepository.findByCardId(cardId);
 
         if (command.cardTitle().isPresent()) {

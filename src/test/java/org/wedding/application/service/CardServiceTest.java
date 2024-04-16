@@ -18,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;
@@ -38,8 +37,6 @@ class CardServiceTest {
     private CardRepository cardRepository;
     @Mock
     private ApplicationEventPublisher eventPublisher;
-    @Mock
-    private CardBoardUseCase cardBoardUseCase;
 
     private Card card;
     private CreateCardCommand createCommand;
@@ -55,7 +52,7 @@ class CardServiceTest {
             null
         );
 
-        cardService = new CardService(cardRepository, eventPublisher, cardBoardUseCase);
+        cardService = new CardService(cardRepository, eventPublisher);
         card = CreateCardCommand.toEntity(createCommand);
 
         cards = Arrays.asList(
@@ -140,7 +137,6 @@ class CardServiceTest {
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
         lenient().when(cardRepository.existsByCardTitle(modifyCardTitleCommand.cardTitle().get())).thenReturn(false);
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
-        when(cardBoardUseCase.checkCardOwner(userId, card.getCardId())).thenReturn(true);
         cardService.modifyCard(card.getCardId(), modifyCardTitleCommand);
         verify(cardRepository, times(1)).update(any());
     }
@@ -155,7 +151,6 @@ class CardServiceTest {
             null,
             null
         );
-        when(cardBoardUseCase.checkCardOwner(userId, card.getCardId())).thenReturn(false);
 
         assertThrows(CardException.class, () -> cardService.modifyCard(card.getCardId(), modifyCardTitleCommand));
     }
@@ -175,7 +170,6 @@ class CardServiceTest {
         lenient().when(cardRepository.existsByCardId(card.getCardId())).thenReturn(true);
         assertThat(modifyCardStatusCommand.cardTitle()).isEqualTo(Optional.empty());
         lenient().when(cardRepository.findByCardId(card.getCardId())).thenReturn(card);
-        when(cardBoardUseCase.checkCardOwner(userId, card.getCardId())).thenReturn(true);
         cardService.modifyCard(card.getCardId(), modifyCardStatusCommand);
         verify(cardRepository, times(1)).update(any());
     }
