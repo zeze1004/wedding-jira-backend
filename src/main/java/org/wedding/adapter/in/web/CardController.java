@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,12 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.wedding.adapter.in.web.dto.CreateCardRequest;
-import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
-import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
 import org.wedding.application.port.in.usecase.card.DeleteCardUseCase;
-import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
 import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.common.response.ApiResponse;
@@ -37,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 public class CardController {
 
     private final CreateCardUseCase createCardUseCase;
-    private final ModifyCardUseCase modifyCardUseCase;
     private final ReadCardUseCase   readCardUseCase;
     private final DeleteCardUseCase deleteCardUseCase;
 
@@ -52,21 +47,6 @@ public class CardController {
         createCardUseCase.createCard(command);
 
         ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.CREATED, "카드가 생성되었습니다.");
-        return new ResponseEntity<>(response, response.status());
-    }
-
-    @PatchMapping("/{cardId}")
-    @Operation(summary = "카드 수정", description = "카드 수정")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Void>> modifyCard(
-        @PathVariable int cardId,
-        @RequestBody @Valid ModifyCardRequest request) {
-        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ModifyCardCommand command = new ModifyCardCommand(userId, request.cardTitle(), request.budget(), request.deadline(), request.cardStatus());
-
-        modifyCardUseCase.modifyCard(cardId, command);
-
-        ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "카드가 수정되었습니다.");
         return new ResponseEntity<>(response, response.status());
     }
 
