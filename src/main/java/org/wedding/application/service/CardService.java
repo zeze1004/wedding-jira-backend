@@ -1,5 +1,7 @@
 package org.wedding.application.service;
 
+import static org.springframework.transaction.annotation.Propagation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,7 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         eventPublisher.publishEvent(new CardCreatedEvent(card.getCardId(), command.userId()));
     }
 
-    @Transactional
+    @Transactional(propagation = MANDATORY)
     @Override
     public void modifyCard(int cardId, ModifyCardCommand command) {
         Card card = cardRepository.findByCardId(cardId);
