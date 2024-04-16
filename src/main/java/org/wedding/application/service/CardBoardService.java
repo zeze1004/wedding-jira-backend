@@ -13,6 +13,7 @@ import org.wedding.application.port.in.command.cardboard.CreateCardBoardCommand;
 import org.wedding.application.port.in.command.cardboard.ReadCardCommand;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
 import org.wedding.application.port.in.usecase.cardboard.CardOwnerShipValidator;
+import org.wedding.application.port.in.usecase.cardboard.RequestCardUseCase;
 import org.wedding.application.port.out.repository.CardBoardRepository;
 import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.application.service.response.cardboard.CardInfo;
@@ -27,7 +28,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidator {
+public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidator, RequestCardUseCase {
 
     private final CardBoardRepository cardBoardRepository;
     private final ReadCardUseCase readCardUseCase;
@@ -63,7 +64,8 @@ public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidato
     }
 
     @Transactional
-    public void modifyCard(int cardId, ModifyCardCommand command) {
+    @Override
+    public void requestModifyCard(int cardId, ModifyCardCommand command) {
         if(!checkCardOwner(command.userId(), cardId)) {
             throw new CardBoardException(CardBoardError.CARD_OWNER_NOT_MATCH);
         }
