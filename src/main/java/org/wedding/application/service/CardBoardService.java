@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.wedding.application.port.in.command.card.ModifyCardCommand;
+import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.CreateCardBoardCommand;
 import org.wedding.application.port.in.command.cardboard.ReadCardCommand;
@@ -29,6 +31,7 @@ public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidato
 
     private final CardBoardRepository cardBoardRepository;
     private final ReadCardUseCase readCardUseCase;
+    private final ModifyCardUseCase modifyCardUseCase;
 
     @Override
     public void createCardBoard(CreateCardBoardCommand command) {
@@ -57,6 +60,14 @@ public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidato
         List<ReadCardResponse> cardResponses =
             readCardUseCase.readCardsStausByIdsAndStatus(cardIds, command.cardStatus());
         return toCardBoardCardInfo(cardResponses);
+    }
+
+    @Transactional
+    public void modifyCard(int cardId, ModifyCardCommand command) {
+        if(!checkCardOwner(command.userId(), cardId)) {
+            throw new CardBoardException(CardBoardError.CARD_OWNER_NOT_MATCH);
+        }
+        modifyCardUseCase.modifyCard(cardId, command);
     }
 
     @Transactional(readOnly = true)
