@@ -6,10 +6,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.application.port.in.CardBoardUseCase;
+import org.wedding.application.port.in.command.card.ModifyCardCommand;
+import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
+import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.CreateCardBoardCommand;
 import org.wedding.application.port.in.command.cardboard.ReadCardCommand;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
+import org.wedding.application.port.in.usecase.cardboard.CardOwnerShipValidator;
+import org.wedding.application.port.in.usecase.cardboard.RequestCardUseCase;
 import org.wedding.application.port.out.repository.CardBoardRepository;
 import org.wedding.application.service.response.card.ReadCardResponse;
 import org.wedding.application.service.response.cardboard.CardInfo;
@@ -24,10 +28,11 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CardBoardService implements CardBoardUseCase {
+public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidator, RequestCardUseCase {
 
     private final CardBoardRepository cardBoardRepository;
     private final ReadCardUseCase readCardUseCase;
+    private final ModifyCardUseCase modifyCardUseCase;
 
     @Override
     public void createCardBoard(CreateCardBoardCommand command) {
@@ -56,6 +61,15 @@ public class CardBoardService implements CardBoardUseCase {
         List<ReadCardResponse> cardResponses =
             readCardUseCase.readCardsStausByIdsAndStatus(cardIds, command.cardStatus());
         return toCardBoardCardInfo(cardResponses);
+    }
+
+    @Transactional
+    @Override
+    public void requestModifyCard(int cardId, ModifyCardCommand command) {
+        if(!checkCardOwner(command.userId(), cardId)) {
+            throw new CardBoardException(CardBoardError.CARD_OWNER_NOT_MATCH);
+        }
+        modifyCardUseCase.modifyCard(cardId, command);
     }
 
     @Transactional(readOnly = true)

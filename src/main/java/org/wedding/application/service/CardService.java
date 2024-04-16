@@ -1,12 +1,13 @@
 package org.wedding.application.service;
 
+import static org.springframework.transaction.annotation.Propagation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.application.port.in.CardBoardUseCase;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;
@@ -29,7 +30,6 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
 
     private final CardRepository cardRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final CardBoardUseCase cardBoardUseCase;
 
     @Transactional
     @Override
@@ -42,13 +42,9 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         eventPublisher.publishEvent(new CardCreatedEvent(card.getCardId(), command.userId()));
     }
 
-    @Transactional
+    @Transactional(propagation = MANDATORY)
     @Override
     public void modifyCard(int cardId, ModifyCardCommand command) {
-
-        if (!cardBoardUseCase.checkCardOwner(command.userId(), cardId)) {
-            throw new CardException(CardError.CARD_OWNER_NOT_MATCH);
-        }
         Card card = cardRepository.findByCardId(cardId);
 
         if (command.cardTitle().isPresent()) {

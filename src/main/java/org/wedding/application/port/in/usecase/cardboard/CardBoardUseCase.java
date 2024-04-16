@@ -1,4 +1,4 @@
-package org.wedding.application.port.in;
+package org.wedding.application.port.in.usecase.cardboard;
 
 import java.util.List;
 
@@ -10,5 +10,4 @@ public interface CardBoardUseCase {
     void createCardBoard(CreateCardBoardCommand command);
     void addCardToCardBoard(int cardId, int userId);
     List<CardInfo> readCardsByStatus(ReadCardCommand command);
-    boolean checkCardOwner(int userId, int cardId);
 }

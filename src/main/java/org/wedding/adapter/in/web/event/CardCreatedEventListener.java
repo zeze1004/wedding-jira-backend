@@ -2,7 +2,7 @@ package org.wedding.adapter.in.web.event;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.wedding.application.port.in.CardBoardUseCase;
+import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.domain.card.event.CardCreatedEvent;
 
 import lombok.AllArgsConstructor;
