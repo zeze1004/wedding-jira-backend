@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wedding.application.port.in.CardBoardUseCase;
+import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.card.CreateCardUseCase;

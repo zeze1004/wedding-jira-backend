@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import org.wedding.application.port.in.CardBoardUseCase;
+import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.card.CreateCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.out.repository.CardRepository;

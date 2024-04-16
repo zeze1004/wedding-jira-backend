@@ -1,4 +1,4 @@
-package org.wedding.application.port.in;
+package org.wedding.application.port.in.usecase.cardboard;
 
 import java.util.List;
 
