@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.wedding.adapter.in.web.dto.DeleteCardRequest;
 import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.adapter.out.dto.CardsResponse;
+import org.wedding.application.port.in.command.card.DeleteCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
 import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.ReadCardCommand;
@@ -73,6 +76,20 @@ public class CardBoardController {
         requestCardUseCase.requestModifyCard(cardId, command);
 
         ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "카드가 수정되었습니다.");
+        return new ResponseEntity<>(response, response.status());
+    }
+
+    @DeleteMapping("{cardId}")
+    @Operation(summary = "카드 삭제", description = "카드보드가 카드에게 삭제를 요청한다")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ApiResponse<Void>> deleteCard(
+        @RequestBody @Valid DeleteCardRequest request) {
+        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        DeleteCardCommand command = new DeleteCardCommand(userId, request.cardId());
+
+        requestCardUseCase.requestDeleteCard(command);
+
+        ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "카드가 삭제되었습니다.");
         return new ResponseEntity<>(response, response.status());
     }
 }

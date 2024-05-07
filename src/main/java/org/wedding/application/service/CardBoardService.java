@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.wedding.application.port.in.command.card.DeleteCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
+import org.wedding.application.port.in.usecase.card.DeleteCardUseCase;
 import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.CreateCardBoardCommand;
@@ -33,6 +35,7 @@ public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidato
     private final CardBoardRepository cardBoardRepository;
     private final ReadCardUseCase readCardUseCase;
     private final ModifyCardUseCase modifyCardUseCase;
+    private final DeleteCardUseCase deleteCardUseCase;
 
     @Override
     public void createCardBoard(CreateCardBoardCommand command) {
@@ -70,6 +73,15 @@ public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidato
             throw new CardBoardException(CardBoardError.CARD_OWNER_NOT_MATCH);
         }
         modifyCardUseCase.modifyCard(cardId, command);
+    }
+
+    @Transactional
+    @Override
+    public void requestDeleteCard(DeleteCardCommand command) {
+        if(!checkCardOwner(command.userId(), command.cardId())) {
+            throw new CardBoardException(CardBoardError.CARD_OWNER_NOT_MATCH);
+        }
+        deleteCardUseCase.deleteCard(command.cardId());
     }
 
     @Transactional(readOnly = true)

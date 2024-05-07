@@ -3,7 +3,6 @@ package org.wedding.adapter.in.web;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,16 +65,5 @@ public class CardController {
 
         ReadCardResponse response = readCardUseCase.readCardsByCardTitle(cardTitle);
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{cardId}")
-    @Operation(summary = "카드 삭제", description = "카드 삭제")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ApiResponse<Void>> deleteCard(@PathVariable int cardId) {
-
-        deleteCardUseCase.deleteCard(cardId);
-
-        ApiResponse<Void> response = ApiResponse.successApiResponse(HttpStatus.OK, "카드가 삭제되었습니다.");
-        return new ResponseEntity<>(response, response.status());
     }
 }
