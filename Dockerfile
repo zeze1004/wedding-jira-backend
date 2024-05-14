@@ -19,5 +19,8 @@ WORKDIR /app
 # 빌드 스테이지에서 생성된 JAR 파일 복사
 COPY --from=build /workspace/app/build/libs/wedding-0.0.1-SNAPSHOT.jar app.jar
 
-# 애플리케이션 실행
-ENTRYPOINT ["java","-jar","app.jar"]
+# init.sql 파일 복사
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
+
+# 애플리케이션 실행 시 dev 프로파일 활성화
+ENTRYPOINT ["java", "-Dspring.profiles.active=dev", "-jar", "app.jar"]
