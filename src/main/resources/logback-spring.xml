@@ -25,6 +25,13 @@
     </springProfile>
 
     <springProfile name="prod,dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>utf8</charset>
+                <appendLineSeparator>true</appendLineSeparator>
+            </encoder>
+        </appender>
         <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_DIR}/${LOG_FILE}</file>
             <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -44,6 +51,7 @@
             </rollingPolicy>
         </appender>
         <root level="error">
+            <appender-ref ref="CONSOLE" />
             <appender-ref ref="ERROR_FILE" />
         </root>
     </springProfile>
