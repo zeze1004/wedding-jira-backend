@@ -4,9 +4,10 @@ services:
     build: .
     depends_on:
       - mysql
-      - redis
     ports:
       - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
   mysql:
     image: mysql:8.0.28
     platform: linux/amd64
@@ -19,11 +20,6 @@ services:
       - "3306:3306"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-  redis:
-    image: redis:alpine
-    command: redis-server --port 6379
-    ports:
-      - "6379:6379"
   nginx:
     image: nginx:latest
     ports:
