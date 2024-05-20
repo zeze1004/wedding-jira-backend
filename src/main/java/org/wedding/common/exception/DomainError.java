@@ -13,17 +13,23 @@ public enum DomainError {
 
     USER_ERROR {
         @Override
-        public UserError of(String error) { return UserError.of(error); }
+        public UserError of(String error) {
+            return UserError.of(error);
+        }
     },
 
     CARD_ERROR {
         @Override
-        public CardError of(String error) { return CardError.of(error); }
+        public CardError of(String error) {
+            return CardError.of(error);
+        }
     },
 
     TODO_ERROR {
         @Override
-        public TodoError of(String error) { return TodoError.of(error); }
+        public TodoError of(String error) {
+            return TodoError.of(error);
+        }
     };
 
     public abstract CommonError of(String error);

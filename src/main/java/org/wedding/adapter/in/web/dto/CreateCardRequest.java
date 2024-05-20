@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 @Builder
-public record CreateCardRequest (
+public record CreateCardRequest(
 
     @NotBlank(message = "CARD_TITLE_IS_REQUIRED", payload = CardError.class)
     @Size(min = 1, max = 20, message = "CARD_TITLE_SIZE_NOT_VALID", payload = CardError.class)

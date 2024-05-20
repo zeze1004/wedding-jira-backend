@@ -8,7 +8,9 @@ import org.wedding.domain.CardStatus;
 public interface ReadCardUseCase {
 
     ReadCardResponse readCardByCardId(int cardId);
+
     ReadCardResponse readCardsByCardTitle(String cardTitle);
+
     List<ReadCardResponse> readCardsStausByIdsAndStatus(List<Integer> cardIds, CardStatus cardStatus);
 
     // TODO: deadline에 따라 정렬 되는 기능은 캘린더 도메인 구현 후 추가하기

@@ -7,7 +7,7 @@ import org.wedding.domain.todo.TodoCheckStatus;
 
 import jakarta.validation.constraints.NotNull;
 
-public record UpdateTodoCommand (
+public record UpdateTodoCommand(
 
     @NotNull
     int cardId,
@@ -17,7 +17,7 @@ public record UpdateTodoCommand (
     Optional<TodoCheckStatus> todoCheckStatus
 ) implements HasCardId {
 
-        public UpdateTodoCommand(int cardId, int todoId, String todoItem, TodoCheckStatus todoCheckStatus) {
-            this(cardId, todoId, Optional.ofNullable(todoItem), Optional.ofNullable(todoCheckStatus));
-        }
+    public UpdateTodoCommand(int cardId, int todoId, String todoItem, TodoCheckStatus todoCheckStatus) {
+        this(cardId, todoId, Optional.ofNullable(todoItem), Optional.ofNullable(todoCheckStatus));
+    }
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.wedding.domain.user.User;
 
 public interface UserRepository {
+
     int save(User user);
 
     Optional<User> findById(int id);

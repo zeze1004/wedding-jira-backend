@@ -2,7 +2,8 @@ package org.wedding.application.port.in.command.cardboard;
 
 import org.wedding.domain.CardStatus;
 
-public record ReadCardCommand (
+public record ReadCardCommand(
+
     int userId,
     CardStatus cardStatus
 ) {

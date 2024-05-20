@@ -22,11 +22,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Tag(name="Auth API", description = "Auth API")
+@Tag(name = "Auth API", description = "Auth API")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final AuthUseCase authUseCase;
 
     @PostMapping("/sign-up")

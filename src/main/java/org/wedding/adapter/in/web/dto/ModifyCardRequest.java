@@ -8,7 +8,7 @@ import org.wedding.domain.CardStatus;
 import lombok.Builder;
 
 @Builder
-public record ModifyCardRequest (
+public record ModifyCardRequest(
 
     Optional<String> cardTitle,
     Optional<Long> budget,
@@ -17,7 +17,8 @@ public record ModifyCardRequest (
 ) {
 
     public ModifyCardRequest(String cardTitle, Long budget, LocalDate deadline, CardStatus cardStatus) {
-        this(Optional.ofNullable(cardTitle), Optional.ofNullable(budget), Optional.ofNullable(deadline), Optional.ofNullable(cardStatus));
+        this(Optional.ofNullable(cardTitle), Optional.ofNullable(budget), Optional.ofNullable(deadline),
+            Optional.ofNullable(cardStatus));
     }
 
     public String toString() {

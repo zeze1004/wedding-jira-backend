@@ -9,7 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record CreateCardCommand (
+public record CreateCardCommand(
+
     int userId,
     @NotNull
     String cardTitle,
@@ -25,13 +26,13 @@ public record CreateCardCommand (
     }
 
     public static Card toEntity(CreateCardCommand createCardCommand) {
-       return Card.builder()
-           .cardTitle(createCardCommand.cardTitle())
-           .budget(createCardCommand.budget())
-           .deadline(createCardCommand.deadline())
-           .cardStatus(CardStatus.BACKLOG)
-           .build();
-   }
+        return Card.builder()
+            .cardTitle(createCardCommand.cardTitle())
+            .budget(createCardCommand.budget())
+            .deadline(createCardCommand.deadline())
+            .cardStatus(CardStatus.BACKLOG)
+            .build();
+    }
 
     public String toString() {
         return """

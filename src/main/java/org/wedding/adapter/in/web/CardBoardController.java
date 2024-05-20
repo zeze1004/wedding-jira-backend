@@ -19,8 +19,8 @@ import org.wedding.adapter.in.web.dto.ModifyCardRequest;
 import org.wedding.adapter.out.dto.CardsResponse;
 import org.wedding.application.port.in.command.card.DeleteCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
-import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.ReadCardCommand;
+import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.usecase.cardboard.RequestCardUseCase;
 import org.wedding.application.service.response.cardboard.CardInfo;
 import org.wedding.common.response.ApiResponse;
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Tag(name="CardBoard API", description = "유저와 카드를 연결하는 카드보드 API")
+@Tag(name = "CardBoard API", description = "유저와 카드를 연결하는 카드보드 API")
 @RestController
 @RequestMapping("/api/v1/cardboard")
 @RequiredArgsConstructor
@@ -43,10 +43,10 @@ public class CardBoardController {
     private final RequestCardUseCase requestCardUseCase;
 
     @GetMapping("/{cardStatus}")
-    @Operation(summary = "카드 상태별 조회" , description = "카드 상태별 조회")
+    @Operation(summary = "카드 상태별 조회", description = "카드 상태별 조회")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<CardsResponse>> readCardsByStatus(@PathVariable CardStatus cardStatus) {
-        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         ReadCardCommand command = new ReadCardCommand(userId, cardStatus);
         List<CardInfo> cardInfos = cardBoardUseCase.readCardsByStatus(command);
@@ -70,8 +70,9 @@ public class CardBoardController {
     public ResponseEntity<ApiResponse<Void>> modifyCard(
         @PathVariable int cardId,
         @RequestBody @Valid ModifyCardRequest request) {
-        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ModifyCardCommand command = new ModifyCardCommand(userId, request.cardTitle(), request.budget(), request.deadline(), request.cardStatus());
+        int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ModifyCardCommand command = new ModifyCardCommand(userId, request.cardTitle(), request.budget(),
+            request.deadline(), request.cardStatus());
 
         requestCardUseCase.requestModifyCard(cardId, command);
 
@@ -84,7 +85,7 @@ public class CardBoardController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ApiResponse<Void>> deleteCard(
         @RequestBody @Valid DeleteCardRequest request) {
-        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         DeleteCardCommand command = new DeleteCardCommand(userId, request.cardId());
 
         requestCardUseCase.requestDeleteCard(command);

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.wedding.domain.CardStatus;
 
 public record CardInfo(
+
     int cardId,
     String cardTitle,
     Long budget,

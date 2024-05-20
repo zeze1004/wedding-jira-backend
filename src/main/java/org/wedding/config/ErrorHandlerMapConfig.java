@@ -6,13 +6,13 @@ import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.wedding.common.exception.DomainError;
+import org.wedding.common.exception.WeddingProjectErrorHandlerMap;
 import org.wedding.domain.card.exception.CardError;
 import org.wedding.domain.todo.exception.TodoError;
 import org.wedding.domain.user.exception.UserError;
 
 import lombok.RequiredArgsConstructor;
-import org.wedding.common.exception.DomainError;
-import org.wedding.common.exception.WeddingProjectErrorHandlerMap;
 
 @Configuration
 @RequiredArgsConstructor

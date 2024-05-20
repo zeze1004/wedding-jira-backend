@@ -21,8 +21,7 @@ public enum TodoError implements CommonError {
     TODO_NOT_UPDATED(HttpStatus.INTERNAL_SERVER_ERROR, "TODO 수정에 실패했습니다."),
     TODO_NOT_DELETED(HttpStatus.INTERNAL_SERVER_ERROR, "TODO 삭제에 실패했습니다."),
     TODO_NOT_MOVED_STATUS(HttpStatus.INTERNAL_SERVER_ERROR, "TODO 상태 변경에 실패했습니다."),
-    TODO_MAX_NUMBER_EXCEEDED(HttpStatus.UNPROCESSABLE_ENTITY,"최대 TODO 개수를 초과했습니다.")
-    ;
+    TODO_MAX_NUMBER_EXCEEDED(HttpStatus.UNPROCESSABLE_ENTITY, "최대 TODO 개수를 초과했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.CreateCardBoardCommand;
+import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.domain.user.event.UserCreatedEvent;
 
 import lombok.AllArgsConstructor;

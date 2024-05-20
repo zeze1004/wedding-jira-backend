@@ -13,10 +13,13 @@ public interface MybatisCardBoardRepositoryImpl extends CardBoardRepository {
 
     @Override
     int save(CardBoard cardBoard);
+
     @Override
     void addCardIds(int cardBoardId, int cardId);
+
     @Override
     CardBoard findCardBoardByUserId(int userId);
+
     @Override
     List<Integer> findCardIdsByUserId(int userId);
 }

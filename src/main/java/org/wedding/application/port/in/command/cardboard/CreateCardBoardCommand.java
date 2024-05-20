@@ -5,6 +5,7 @@ import java.util.List;
 import org.wedding.domain.cardboard.CardBoard;
 
 public record CreateCardBoardCommand(
+
     int userId,
     List<Integer> cardIds
 ) {

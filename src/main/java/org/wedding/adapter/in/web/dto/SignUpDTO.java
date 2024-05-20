@@ -14,6 +14,7 @@ import lombok.Builder;
 
 @Builder
 public record SignUpDTO(
+
     @NotBlank(message = "EMAIL_IS_REQUIRED", payload = UserError.class)
     @Email(message = "EMAIL_FORMAT_NOT_VALID", payload = UserError.class)
     String email,

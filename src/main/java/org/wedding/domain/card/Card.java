@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Card {
+
     private final int cardId;
     private final String cardTitle;
     private final long budget;

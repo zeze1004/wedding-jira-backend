@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Tag(name="Todo API", description = "Todo API")
+@Tag(name = "Todo API", description = "Todo API")
 @RestController
 @RequestMapping("/api/v1/todos")
 @RequiredArgsConstructor
@@ -84,16 +84,16 @@ public class TodoController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ArrayList<TodoResponse>> readAllTodoByCardId(@PathVariable int cardId) {
 
-            ArrayList<TodoResponse> response =
-                    todoUseCase.getAllTodos(cardId).stream()
-                    .map(TodoResponse::fromEntity)
-                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        ArrayList<TodoResponse> response =
+            todoUseCase.getAllTodos(cardId).stream()
+                .map(TodoResponse::fromEntity)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{cardId}/{todoId}")
-    @Operation(summary = "카드에 속한 특정 투두 조회" , description = "카드에 속한 특정 투두 조회")
+    @Operation(summary = "카드에 속한 특정 투두 조회", description = "카드에 속한 특정 투두 조회")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<TodoResponse> readTodoByCardId(@PathVariable int cardId, @PathVariable int todoId) {
 

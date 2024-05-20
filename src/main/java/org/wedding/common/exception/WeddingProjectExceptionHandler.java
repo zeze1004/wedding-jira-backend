@@ -8,13 +8,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.wedding.common.response.ApiResponse;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Payload;
 import jakarta.validation.metadata.ConstraintDescriptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.wedding.common.response.ApiResponse;
 
 @Slf4j
 @RestControllerAdvice
@@ -22,6 +22,10 @@ import org.wedding.common.response.ApiResponse;
 public class WeddingProjectExceptionHandler {
 
     private final WeddingProjectErrorHandlerMap errorHandlerMap;
+
+    private static void logging(Exception ex, ApiResponse<Void> response) {
+        log.error("{}", response.message(), ex);
+    }
 
     /**
      * ExceptionHandler
@@ -78,7 +82,8 @@ public class WeddingProjectExceptionHandler {
         ApiResponse<Void> response;
 
         if (commonError == null) { // Payload 클래스가 없을 경우 기본 에러 처리
-            String message = String.format("[MethodArgumentNotValidException] %s", ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+            String message = String.format("[MethodArgumentNotValidException] %s",
+                ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
             response = ApiResponse.createApiResponseFromCommonError(WeddingProjectError.BAD_REQUEST, message);
         } else {
             response = ApiResponse.createApiResponseFromCommonError(commonError);
@@ -97,9 +102,5 @@ public class WeddingProjectExceptionHandler {
         ConstraintDescriptor<?> constraintDescriptor = error.unwrap(ConstraintViolation.class)
             .getConstraintDescriptor();
         return constraintDescriptor.getPayload();
-    }
-
-    private static void logging(Exception ex, ApiResponse<Void> response) {
-        log.error("{}", response.message(), ex);
     }
 }

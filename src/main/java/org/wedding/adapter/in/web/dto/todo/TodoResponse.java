@@ -3,7 +3,8 @@ package org.wedding.adapter.in.web.dto.todo;
 import org.wedding.application.service.response.todo.TodoDto;
 import org.wedding.domain.todo.TodoCheckStatus;
 
-public record TodoResponse (
+public record TodoResponse(
+
     int cardId,
     int todoId,
     String todoItem,

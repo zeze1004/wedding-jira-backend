@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class UserCreatedEvent extends ApplicationEvent {
+
     private final int userId;
 
     public UserCreatedEvent(int userId) {
