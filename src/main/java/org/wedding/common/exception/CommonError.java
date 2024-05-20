@@ -7,5 +7,6 @@ import jakarta.validation.Payload;
 public interface CommonError extends Payload {
 
     HttpStatus getHttpStatus();
+
     String getMessage();
 }

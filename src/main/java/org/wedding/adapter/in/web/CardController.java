@@ -25,14 +25,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Tag(name="Card API", description = "Card API")
+@Tag(name = "Card API", description = "Card API")
 @RestController
 @RequestMapping("/api/v1/cards")
 @RequiredArgsConstructor
 public class CardController {
 
     private final CreateCardUseCase createCardUseCase;
-    private final ReadCardUseCase   readCardUseCase;
+    private final ReadCardUseCase readCardUseCase;
     private final DeleteCardUseCase deleteCardUseCase;
 
     @PostMapping()
@@ -40,8 +40,9 @@ public class CardController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ApiResponse<Void>> createCard(@RequestBody @Valid CreateCardRequest cardRequest) {
 
-        int userId = (int) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CreateCardCommand command = new CreateCardCommand(userId, cardRequest.cardTitle(), cardRequest.budget(), cardRequest.deadline());
+        int userId = (int)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CreateCardCommand command = new CreateCardCommand(userId, cardRequest.cardTitle(), cardRequest.budget(),
+            cardRequest.deadline());
 
         createCardUseCase.createCard(command);
 

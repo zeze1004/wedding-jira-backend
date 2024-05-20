@@ -66,7 +66,8 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         checkCardExistence(cardId);
 
         Card card = cardRepository.findByCardId(cardId);
-        return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus());
+        return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(),
+            card.getCardStatus());
     }
 
     @Override
@@ -75,7 +76,8 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
         checkCardTitleExistence(cardTitle);
 
         Card card = cardRepository.findByCardTitle(cardTitle);
-        return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus());
+        return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(),
+            card.getCardStatus());
     }
 
     /* TODO: 카드보드 리팩토링 후 추가
@@ -102,7 +104,8 @@ public class CardService implements CreateCardUseCase, ModifyCardUseCase, ReadCa
     }
 
     private ReadCardResponse toReadCardResponse(Card card) {
-        return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(), card.getCardStatus());
+        return new ReadCardResponse(card.getCardId(), card.getCardTitle(), card.getBudget(), card.getDeadline(),
+            card.getCardStatus());
     }
 
     public void checkCardTitleExistence(String cardTitle) {

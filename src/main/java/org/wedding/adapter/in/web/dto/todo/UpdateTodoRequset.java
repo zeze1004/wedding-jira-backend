@@ -6,7 +6,7 @@ import org.wedding.domain.todo.exception.TodoError;
 
 import jakarta.validation.constraints.PositiveOrZero;
 
-public record UpdateTodoRequset (
+public record UpdateTodoRequset(
 
     @PositiveOrZero(message = "CARD_ID_MUST_BE_POSITIVE", payload = CardError.class)
     int cardId,
@@ -16,11 +16,11 @@ public record UpdateTodoRequset (
     TodoCheckStatus todoCheckStatus
 ) {
 
-        public UpdateTodoRequset(int cardId, int todoId, String todoItem) {
-            this(cardId, todoId, todoItem, null);
-        }
+    public UpdateTodoRequset(int cardId, int todoId, String todoItem) {
+        this(cardId, todoId, todoItem, null);
+    }
 
-        public UpdateTodoRequset(int cardId, int todoId, TodoCheckStatus todoCheckStatus) {
-            this(cardId, todoId, null, todoCheckStatus);
-        }
+    public UpdateTodoRequset(int cardId, int todoId, TodoCheckStatus todoCheckStatus) {
+        this(cardId, todoId, null, todoCheckStatus);
+    }
 }

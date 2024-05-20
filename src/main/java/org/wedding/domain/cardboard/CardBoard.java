@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 @Getter
 public class CardBoard {
+
     private final int cardBoardId;
     private final int userId;
     private final List<Integer> cardIds;

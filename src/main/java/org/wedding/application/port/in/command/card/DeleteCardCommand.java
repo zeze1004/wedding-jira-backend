@@ -1,6 +1,7 @@
 package org.wedding.application.port.in.command.card;
 
 public record DeleteCardCommand(
+
     int userId,
     int cardId
 ) {

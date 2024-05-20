@@ -67,8 +67,8 @@ public class TodoService implements TodoUseCase {
     public ArrayList<TodoDto> getAllTodos(int cardId) {
 
         ArrayList<TodoDto> todoDto = todoRepository.getAllTodos(cardId).stream()
-                .map(TodoDto::fromEntity)
-                .collect(Collectors.toCollection(ArrayList::new));
+            .map(TodoDto::fromEntity)
+            .collect(Collectors.toCollection(ArrayList::new));
 
         if (todoDto.isEmpty()) {
             throw new TodoException(TodoError.TODO_NOT_FOUND);

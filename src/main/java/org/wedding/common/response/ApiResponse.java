@@ -12,6 +12,7 @@ import lombok.Builder;
 
 @Builder
 public record ApiResponse<T>(
+
     HttpStatus status,
     String message,
     @JsonInclude(value = NON_NULL)

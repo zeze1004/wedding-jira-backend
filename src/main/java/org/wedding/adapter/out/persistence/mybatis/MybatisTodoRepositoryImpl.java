@@ -13,16 +13,22 @@ public interface MybatisTodoRepositoryImpl extends TodoRepository {
 
     @Override
     int save(Todo todo);
+
     @Override
     int countTodoByCardId(int cardId);
+
     @Override
     void update(Todo todo);
+
     @Override
     Todo findByTodoId(int cardId, int todoId);
+
     @Override
     boolean existsByTodoId(int cardId, int todoId);
+
     @Override
     void deleteTodo(int cardId, int todoId);
+
     @Override
     ArrayList<Todo> getAllTodos(int cardId);
 }

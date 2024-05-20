@@ -12,7 +12,9 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
-    private static final SecretKey JWT_SECRET = Keys.hmacShaKeyFor("odee's-wedding-planner-secret-key".getBytes(StandardCharsets.UTF_8)); // TODO: 환경변수로 변경
+
+    private static final SecretKey JWT_SECRET = Keys.hmacShaKeyFor(
+        "odee's-wedding-planner-secret-key".getBytes(StandardCharsets.UTF_8)); // TODO: 환경변수로 변경
 
     public static String generateToken(int userId) {
         long now = System.currentTimeMillis();

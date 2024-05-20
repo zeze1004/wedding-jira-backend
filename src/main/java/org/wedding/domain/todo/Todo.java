@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Todo {
+
     private final int todoId;
     private final String todoItem;
     private final TodoCheckStatus todoCheckStatus;

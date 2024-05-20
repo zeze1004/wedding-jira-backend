@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 import org.wedding.domain.CardStatus;
 
-public record ReadCardResponse (
+public record ReadCardResponse(
+
     int cardId,
     String cardTitle,
     Long budget,

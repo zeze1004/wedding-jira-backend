@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-public record CreateTodoRequest (
+public record CreateTodoRequest(
 
     @PositiveOrZero(message = "CARD_ID_MUST_BE_POSITIVE", payload = CardError.class)
     int cardId,

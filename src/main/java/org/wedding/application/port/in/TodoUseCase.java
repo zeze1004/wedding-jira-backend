@@ -9,9 +9,14 @@ import org.wedding.application.port.in.command.todo.UpdateTodoCommand;
 import org.wedding.application.service.response.todo.TodoDto;
 
 public interface TodoUseCase {
+
     void createTodo(CreateTodoCommand command);
+
     void updateTodo(UpdateTodoCommand command);
+
     void deleteTodo(DeleteTodoCommand command);
+
     ArrayList<TodoDto> getAllTodos(int cardId);
+
     TodoDto readTodo(ReadTodoCommand command);
 }

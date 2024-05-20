@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wedding.application.port.in.command.card.DeleteCardCommand;
 import org.wedding.application.port.in.command.card.ModifyCardCommand;
-import org.wedding.application.port.in.usecase.card.DeleteCardUseCase;
-import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
-import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.command.cardboard.CreateCardBoardCommand;
 import org.wedding.application.port.in.command.cardboard.ReadCardCommand;
+import org.wedding.application.port.in.usecase.card.DeleteCardUseCase;
+import org.wedding.application.port.in.usecase.card.ModifyCardUseCase;
 import org.wedding.application.port.in.usecase.card.ReadCardUseCase;
+import org.wedding.application.port.in.usecase.cardboard.CardBoardUseCase;
 import org.wedding.application.port.in.usecase.cardboard.CardOwnerShipValidator;
 import org.wedding.application.port.in.usecase.cardboard.RequestCardUseCase;
 import org.wedding.application.port.out.repository.CardBoardRepository;
@@ -69,7 +69,7 @@ public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidato
     @Transactional
     @Override
     public void requestModifyCard(int cardId, ModifyCardCommand command) {
-        if(!checkCardOwner(command.userId(), cardId)) {
+        if (!checkCardOwner(command.userId(), cardId)) {
             throw new CardBoardException(CardBoardError.CARD_OWNER_NOT_MATCH);
         }
         modifyCardUseCase.modifyCard(cardId, command);
@@ -78,7 +78,7 @@ public class CardBoardService implements CardBoardUseCase, CardOwnerShipValidato
     @Transactional
     @Override
     public void requestDeleteCard(DeleteCardCommand command) {
-        if(!checkCardOwner(command.userId(), command.cardId())) {
+        if (!checkCardOwner(command.userId(), command.cardId())) {
             throw new CardBoardException(CardBoardError.CARD_OWNER_NOT_MATCH);
         }
         deleteCardUseCase.deleteCard(command.cardId());

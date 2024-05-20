@@ -15,8 +15,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class MDCInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
-        
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
+        final Object handler) throws Exception {
+
         final String requestId = UUID.randomUUID().toString();
         final String requestURI = request.getRequestURI();
         final String clientIP = getClientIP(request);
@@ -46,7 +47,8 @@ public class MDCInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception ex) throws Exception {
+    public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response,
+        final Object handler, final Exception ex) throws Exception {
         MDC.clear();
     }
 }

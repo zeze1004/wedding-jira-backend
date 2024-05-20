@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
+
     private final MDCInterceptor mdcInterceptor;
 
     @Override

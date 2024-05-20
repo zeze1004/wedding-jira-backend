@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class CardCreatedEvent extends ApplicationEvent {
+
     private final int cardId;
     private final int userId;
 
