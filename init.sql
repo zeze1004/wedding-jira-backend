@@ -36,3 +36,13 @@ CREATE TABLE IF NOT EXISTS user
     id            INT          NOT NULL PRIMARY KEY,
     partner_email VARCHAR(30)
 );
+
+-- couple 테이블 생성
+CREATE TABLE IF NOT EXISTS couple
+(
+    couple_id        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    sender_user_id   INT NOT NULL,
+    receiver_user_id INT NOT NULL,
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_couple (sender_user_id, receiver_user_id)
+);
