@@ -1,21 +1,30 @@
 version: '3.8'
 services:
   app:
-    build: .
+    image: ${IMAGE_NAME}
+    networks:
+      - app-network
     depends_on:
       - mysql
     ports:
       - "8080:8080"
     volumes:
       - ./logs:/app/logs
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/wedding
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
   mysql:
     image: mysql:8.0.28
     platform: linux/amd64
+    networks:
+      - app-network
     environment:
       MYSQL_DATABASE: wedding
-      MYSQL_USER: user
+      MYSQL_USER: root
       MYSQL_PASSWORD:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD:
     ports:
       - "3306:3306"
     volumes:
@@ -24,7 +33,13 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+    networks:
+      - app-network
     volumes:
-      - ./nginx-dev/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx-dev:/etc/nginx
     depends_on:
       - app
+
+networks:
+  app-network:
+    driver: bridge
