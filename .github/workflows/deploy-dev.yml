@@ -17,10 +17,9 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: "17"
-          distribution: "temurin" # https://github.com/actions/setup-java
+          distribution: "temurin"
           cache: gradle
 
-      ## gradle caching
       - name: Gradle Caching
         uses: actions/cache@v3
         with:
@@ -50,7 +49,9 @@ jobs:
 
       - name: Deploy using docker-compose
         run: |
+          docker-compose -f docker-compose-dev.yml down -d
           docker-compose -f docker-compose-dev.yml up -d
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/odee-project:${{ github.ref_name }}

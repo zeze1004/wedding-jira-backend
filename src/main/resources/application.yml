@@ -22,6 +22,8 @@ spring:
       on-profile: dev
   datasource:
     url: jdbc:mysql://mysql:3306/wedding
+    username: root
+    password:
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: org.wedding.*
