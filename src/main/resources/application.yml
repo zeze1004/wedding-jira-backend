@@ -1,0 +1,30 @@
+# local 프로필 설정
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/wedding
+    username: root
+    password:
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: org.wedding.*
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: org.wedding.adapter.out.persistence.mybatis
+
+---
+
+# dev 프로필 설정
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://mysql:3306/wedding
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: org.wedding.*
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: org.wedding.adapter.out.persistence.mybatis
