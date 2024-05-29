@@ -1,4 +1,4 @@
-package org.wedding.application.port.in;
+package org.wedding.application.port.in.usecase.auth;
 
 import org.wedding.adapter.in.web.dto.LoginDTO;
 import org.wedding.adapter.in.web.dto.SignUpDTO;

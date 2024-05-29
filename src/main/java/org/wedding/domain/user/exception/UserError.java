@@ -14,6 +14,9 @@ public enum UserError implements CommonError {
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
+    EMAIL_VERIFICATION_CODE_IS_INVALID(HttpStatus.BAD_REQUEST, "이메일 인증 코드가 유효하지 않습니다."),
+    EMAIL_IS_NOT_VERIFIED(HttpStatus.BAD_REQUEST, "이메일 인증이 필요합니다."),
+    EMAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 전송에 실패했습니다."),
     EMAIL_FORMAT_NOT_VALID(HttpStatus.BAD_REQUEST, "이메일 형식이 유효하지 않습니다."),
     PARTNER_EMAIL_FORMAT_NOT_VALID(HttpStatus.BAD_REQUEST, "배우자 이메일 형식이 유효하지 않습니다."),
     EMAIL_IS_REQUIRED(HttpStatus.BAD_REQUEST, "이메일을 입력해주세요."),

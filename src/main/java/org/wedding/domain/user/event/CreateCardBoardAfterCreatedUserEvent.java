@@ -5,11 +5,11 @@ import org.springframework.context.ApplicationEvent;
 import lombok.Getter;
 
 @Getter
-public class UserCreatedEvent extends ApplicationEvent {
+public class CreateCardBoardAfterCreatedUserEvent extends ApplicationEvent {
 
     private final int userId;
 
-    public UserCreatedEvent(int userId) {
+    public CreateCardBoardAfterCreatedUserEvent(int userId) {
         super(userId);
         this.userId = userId;
     }
