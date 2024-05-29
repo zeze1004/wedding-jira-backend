@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.wedding.domain.user.exception.UserError.*;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +18,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.wedding.adapter.in.web.dto.SendMailRequest;
 import org.wedding.adapter.in.web.dto.SignUpDTO;
+import org.wedding.adapter.in.web.dto.VerifyMailRequest;
 import org.wedding.application.port.in.usecase.auth.AuthUseCase;
+import org.wedding.application.port.in.usecase.auth.SendVerifyMail;
+import org.wedding.application.port.in.usecase.auth.VerifyCode;
+import org.wedding.domain.user.exception.UserError;
 import org.wedding.domain.user.exception.UserException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Disabled
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthControllerTest {
@@ -38,6 +41,10 @@ public class AuthControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private AuthUseCase authUseCase;
+    @MockBean
+    private SendVerifyMail sendMail;
+    @MockBean
+    private VerifyCode verifyCode;
 
     @BeforeEach
     void init() {
@@ -120,5 +127,64 @@ public class AuthControllerTest {
 
         // then
         verify(authUseCase, times(1)).signUp(signUpDTO);
+    }
+
+    @DisplayName("이메일 인증 코드 전송 성공")
+    @Test
+    void sendEmailSuccess() throws Exception {
+        SendMailRequest request = new SendMailRequest("test@example.com");
+
+        mockMvc.perform(post("/api/v1/auth/send-verify-mail")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk());
+
+        verify(sendMail).sendVerificationCode(anyString());
+    }
+
+    @DisplayName("이메일 인증 코드 전송 실패")
+    @Test
+    void sendEmailFailure() throws Exception {
+        doThrow(new RuntimeException("Failed to send email")).when(sendMail).sendVerificationCode(anyString());
+
+        SendMailRequest request = new SendMailRequest("test@example.com");
+
+        mockMvc.perform(post("/api/v1/auth/send-verify-mail")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isInternalServerError());
+    }
+
+    @DisplayName("이메일 인증 코드 검증 성공")
+    @Test
+    void verifyEmailSuccess() throws Exception {
+        VerifyMailRequest request = new VerifyMailRequest("test@example.com", "123456");
+
+        doNothing().when(verifyCode).verifyCode(anyString(), anyString());
+        doNothing().when(verifyCode).deleteCode(anyString());
+        doNothing().when(verifyCode).saveVerifiedUser(anyString());
+
+        mockMvc.perform(post("/api/v1/auth/verify-code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk());
+
+        verify(verifyCode).verifyCode(anyString(), anyString());
+        verify(verifyCode).deleteCode(anyString());
+        verify(verifyCode).saveVerifiedUser(anyString());
+    }
+
+    @DisplayName("이메일 인증 코드 검증 실패")
+    @Test
+    void verifyEmailFailure() throws Exception {
+        VerifyMailRequest request = new VerifyMailRequest("test@example.com", "123456");
+
+        doThrow(new UserException(UserError.EMAIL_VERIFICATION_CODE_IS_INVALID)).when(verifyCode)
+            .verifyCode(anyString(), anyString());
+
+        mockMvc.perform(post("/api/v1/auth/verify-code")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isBadRequest());
     }
 }
