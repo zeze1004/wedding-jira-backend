@@ -32,7 +32,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://db-npqmf.pub-cdb.ntruss.com:3306
+    url: jdbc:mysql://db-npqmf.pub-cdb.ntruss.com:3306/wedding
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   mail:
