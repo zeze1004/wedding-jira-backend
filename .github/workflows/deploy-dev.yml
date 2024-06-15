@@ -57,3 +57,5 @@ jobs:
           IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/odee-project:${{ github.ref_name }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
