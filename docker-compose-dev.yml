@@ -13,6 +13,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-npqmf.pub-cdb.ntruss.com:3306/wedding
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
   nginx:
     image: nginx:latest
     ports:
