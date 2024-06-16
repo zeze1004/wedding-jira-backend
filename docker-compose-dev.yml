@@ -21,10 +21,12 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - app-network
     volumes:
       - ./nginx-dev:/etc/nginx
+      - ./nginx-dev/certs:/etc/nginx/certs
     depends_on:
       - app
 
