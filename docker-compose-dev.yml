@@ -4,39 +4,29 @@ services:
     image: ${IMAGE_NAME}
     networks:
       - app-network
-    depends_on:
-      - mysql
     ports:
       - "8080:8080"
     volumes:
       - ./logs:/app/logs
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/wedding
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD:
-  mysql:
-    image: mysql:8.0.28
-    platform: linux/amd64
-    networks:
-      - app-network
-    environment:
-      MYSQL_DATABASE: wedding
-      MYSQL_USER: root
-      MYSQL_PASSWORD:
-      MYSQL_ROOT_PASSWORD:
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-npqmf.pub-cdb.ntruss.com:3306/wedding
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
   nginx:
     image: nginx:latest
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - app-network
     volumes:
       - ./nginx-dev:/etc/nginx
+      - ./nginx-dev/certs:/etc/nginx/certs
     depends_on:
       - app
 

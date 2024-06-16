@@ -1,7 +1,10 @@
+CREATE DATABASE IF NOT EXISTS wedding;
+USE wedding;
+
 -- card 테이블 생성
 CREATE TABLE IF NOT EXISTS card
 (
-    card_id     INT         NOT NULL PRIMARY KEY,
+    card_id     INT AUTO_INCREMENT PRIMARY KEY,
     card_title  VARCHAR(30) NOT NULL,
     budget      BIGINT,
     deadline    DATETIME,
@@ -11,7 +14,7 @@ CREATE TABLE IF NOT EXISTS card
 -- cardboard 테이블 생성
 CREATE TABLE IF NOT EXISTS cardboard
 (
-    cardboard_id INT NOT NULL PRIMARY KEY,
+    cardboard_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id      INT NOT NULL,
     card_ids     JSON
 );
@@ -19,7 +22,7 @@ CREATE TABLE IF NOT EXISTS cardboard
 -- todo 테이블 생성
 CREATE TABLE IF NOT EXISTS todo
 (
-    todo_id           INT         NOT NULL PRIMARY KEY,
+    todo_id           INT AUTO_INCREMENT PRIMARY KEY,
     todo_item         VARCHAR(35) NOT NULL,
     todo_check_status VARCHAR(10) NOT NULL,
     card_id           INT         NOT NULL
@@ -33,7 +36,7 @@ CREATE TABLE IF NOT EXISTS user
     name          VARCHAR(20)  NOT NULL,
     nick_name     VARCHAR(20),
     created_date  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id            INT          NOT NULL PRIMARY KEY,
+    id            INT AUTO_INCREMENT PRIMARY KEY,
     partner_email VARCHAR(30)
 );
 

@@ -9,8 +9,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: 'thwjd2717@gmail.com'
-    password: 'smtp_password'
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -32,14 +32,14 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: jdbc:mysql://mysql:3306/wedding
-    username: root
-    password:
+    url: jdbc:mysql://db-npqmf.pub-cdb.ntruss.com:3306/wedding
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   mail:
     host: smtp.gmail.com
     port: 587
-    username: 'thwjd2717@gmail.com'
-    password: 'smtp_password'
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
