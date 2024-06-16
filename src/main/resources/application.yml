@@ -23,6 +23,12 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   type-handlers-package: org.wedding.adapter.out.persistence.mybatis
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 ---
 
@@ -52,3 +58,9 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   type-handlers-package: org.wedding.adapter.out.persistence.mybatis
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
