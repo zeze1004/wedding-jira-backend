@@ -39,22 +39,22 @@ public class ModifyCardIntegTest {
     void setUp() {
         int userId = 0; // 테스트용 사용자 ID
         token = JwtUtils.generateToken(userId);
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken (
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             userId, null, Collections.emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    @DisplayName("카드 수정")
+    @DisplayName("카드의 모든 인자 수정")
     @Test
-    void modifyCard() throws Exception {
+    void modifyCardTitle() throws Exception {
         // given
         int cardId = 0; // 테스트용 카드 ID
         CardStatus modifyStatus = CardStatus.DONE;
         ModifyCardRequest modifyCardRequest = ModifyCardRequest.builder()
-                .cardTitle(Optional.of("카드 제목 수정"))
-                .budget(Optional.of(10000L))
-                .cardStatus(Optional.of(modifyStatus))
-                .build();
+            .cardTitle(Optional.of("카드 제목 수정"))
+            .budget(Optional.of(10000L))
+            .cardStatus(Optional.of(modifyStatus))
+            .build();
 
         String request = objectMapper.writeValueAsString(modifyCardRequest);
 
