@@ -69,4 +69,28 @@ public class ModifyCardIntegTest {
         resultActions.andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("카드가 수정되었습니다."));
     }
+
+    @DisplayName("카드 상태만 수정")
+    @Test
+    void modifyCardStatus() throws Exception {
+        // given
+        int cardId = 0; // 테스트용 카드 ID
+        CardStatus modifyStatus = CardStatus.DONE;
+        ModifyCardRequest modifyCardRequest = ModifyCardRequest.builder()
+            .cardStatus(Optional.of(modifyStatus))
+            .build();
+
+        String request = objectMapper.writeValueAsString(modifyCardRequest);
+
+        // when
+        ResultActions resultActions =
+            mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/cardboard/{cardId}", cardId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .content(request));
+
+        // then
+        resultActions.andExpect(status().isOk())
+            .andExpect(jsonPath("$.message").value("카드가 수정되었습니다."));
+    }
 }
