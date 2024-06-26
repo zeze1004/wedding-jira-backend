@@ -12,6 +12,7 @@ import org.wedding.application.port.in.usecase.auth.CheckExistMail;
 import org.wedding.application.port.in.usecase.auth.CreateVerificationCode;
 import org.wedding.application.port.in.usecase.auth.SendVerifyMail;
 import org.wedding.application.port.in.usecase.auth.VerifyCode;
+import org.wedding.domain.VerificationCode;
 import org.wedding.domain.user.exception.UserError;
 import org.wedding.domain.user.exception.UserException;
 
@@ -31,6 +32,9 @@ public class EmailService implements SendVerifyMail, CreateVerificationCode, Ver
     public void sendVerificationCode(String email) {
 
         checkExistMail.isEmailExist(email);
+
+        // DB에 저장하는 코드
+        VerificationCode verificationDBCode = new VerificationCode(email, generateVerificationCode());
 
         String verificationCode = generateVerificationCode();
         Cache cache = getVerificationCache("verificationCode");

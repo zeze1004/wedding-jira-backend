@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.wedding.adapter.out.persistence.mybatis.MybatisVerificationCodeRepositoryImpl">
+    <insert id="insertVerificationCode" parameterType="org.wedding.domain.VerificationCode">
+        INSERT INTO verification_codes (email, verification_code)
+        VALUES (#{email}, #{verificationCode}) ON DUPLICATE KEY
+        UPDATE verification_code = #{verificationCode}, created_at = CURRENT_TIMESTAMP
+    </insert>
+
+    <select id="selectVerificationCode" parameterType="string" resultType="string">
+        SELECT verification_code
+        FROM verification_codes
+        WHERE email = #{email}
+    </select>
+</mapper>
