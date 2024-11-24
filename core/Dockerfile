@@ -3,11 +3,12 @@ FROM openjdk:17-slim as build
 WORKDIR /workspace/app
 
 # Gradle Wrapper & 소스 코드 복사
+# TODO: 경로 수정
 COPY gradlew .
 COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
+COPY untitled/build.gradle .
+COPY ../settings.gradle .
+COPY ../src src
 
 # 애플리케이션 빌드
 RUN ./gradlew bootJar -x test
@@ -20,7 +21,7 @@ WORKDIR /app
 COPY --from=build /workspace/app/build/libs/wedding-0.0.1-SNAPSHOT.jar app.jar
 
 # init.sql 파일 복사
-COPY init.sql /docker-entrypoint-initdb.d/init.sql
+COPY ../init.sql /docker-entrypoint-initdb.d/init.sql
 
 # 로그 디렉토리 생성 및 권한 설정
 RUN mkdir -p /app/logs && chmod -R 755 /app/logs

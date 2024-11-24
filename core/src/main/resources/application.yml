@@ -1,0 +1,66 @@
+# local 프로필 설정
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/wedding
+    username: root
+    password:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: org.wedding.*
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: org.wedding.adapter.out.persistence.mybatis
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+---
+
+# dev 프로필 설정
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://db-npqmf.pub-cdb.ntruss.com:3306/wedding
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: org.wedding.*
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: org.wedding.adapter.out.persistence.mybatis
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
