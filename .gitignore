@@ -31,3 +31,6 @@ replay_pid*
 /wrapper/
 /wedding/
 /.tmp/
+
+.env
+
