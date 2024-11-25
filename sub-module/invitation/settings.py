@@ -29,6 +29,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+APPEND_SLASH = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,13 +40,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'image_manager',  # 이미지 관리 앱
+    'invitation',  # 모바일 초대장 관리 앱
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -75,8 +79,12 @@ WSGI_APPLICATION = "invitation.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.mysql',  # MySQL 백엔드
+        'NAME': 'wedding',  # 데이터베이스 이름
+        'USER': 'root',  # MySQL 사용자 이름
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',  # 로컬 MySQL 서버
+        'PORT': '3306',
     }
 }
 
